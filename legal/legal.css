@@ -1,0 +1,21 @@
+/* Páginas legales (plantillas). Mismo aspecto sobrio que el juego. */
+:root{color-scheme:dark;--bg:#0b0908;--panel:#14110f;--line:#4a3526;--text:#d6c8a8;--muted:#8f8066;--red:#b12a2a;--gold:#b08a3a}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Courier New","Lucida Console",ui-monospace,Menlo,monospace;
+  padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+main{max-width:760px;margin:0 auto}
+h1{font-size:1.5em;letter-spacing:.06em;text-transform:uppercase;margin:.6em 0 .2em;color:#e8dcc0}
+h2{font-size:1.05em;letter-spacing:.04em;margin:1.6em 0 .3em;color:#e8dcc0;border-bottom:2px solid var(--line);padding-bottom:.2em}
+p{margin:.5em 0}ul{margin:.4em 0 .4em 1.2em;padding:0}li{margin:.35em 0}
+a{color:#e8dcc0}
+.muted{color:var(--muted)}
+.top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.langs{display:flex;gap:6px;flex-wrap:wrap}
+.btn{display:inline-block;background:#1e1a18;color:#e8dcc0;border:3px solid #8f8066;padding:.45em .9em;font:inherit;font-size:.85em;letter-spacing:.06em;text-decoration:none;cursor:pointer;min-height:40px}
+.btn:hover{border-color:#e8dcc0}.btn.small{padding:.3em .7em;min-height:36px}.btn.on{background:#5c1515;border-color:#e8dcc0}
+.btn:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.banner{margin:16px 0 4px;padding:10px 14px;border:3px solid var(--red);background:#3a0c0c;color:#f0b8b0;font-weight:bold}
+.ph{background:#2b1d14;border-bottom:2px dotted var(--gold);color:#f0d9a0;padding:0 .15em}
+.others{margin-top:2.2em;padding-top:1em;border-top:2px solid var(--line);display:flex;gap:18px;flex-wrap:wrap}
+@media (max-width:520px){body{font-size:15px}.langs .btn{flex:1 1 40%;text-align:center}}

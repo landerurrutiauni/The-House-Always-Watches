@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="THE HOUSE ALWAYS WATCHES — roguelike de cartas y casino maldito en píxel art de terror.">
+<title>THE HOUSE ALWAYS WATCHES</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230b0908'/%3E%3Cpath d='M2 8q6-6 12 0q-6 6-12 0z' fill='%23b12a2a'/%3E%3Crect x='7' y='6' width='2' height='4' fill='%23050404'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/ui/game.css">
+<!-- Opcional: sobreescribe la configuración SIN tocar los módulos (ver src/config.js):
+<script>window.HOUSE_CONFIG = { OPTIONAL_CATEGORIES: [] };</script>
+-->
+</head>
+<body>
+<div id="stage">
+  <div id="bg" aria-hidden="true"></div>
+  <div id="fx-vignette" aria-hidden="true"></div>
+  <div id="fx-scan" aria-hidden="true"></div>
+  <div id="shell">
+    <header id="hud" hidden></header>
+    <main id="view" tabindex="-1"></main>
+  </div>
+  <div id="toasts" aria-hidden="true"></div>
+  <div id="whispers" aria-hidden="true"></div>
+  <div id="modal-root"></div>
+</div>
+<div id="live" class="sr" aria-live="polite"></div>
+<noscript><p style="color:#d6c8a8;padding:2em;font-family:monospace">THE HOUSE ALWAYS WATCHES needs JavaScript. / El juego necesita JavaScript.</p></noscript>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

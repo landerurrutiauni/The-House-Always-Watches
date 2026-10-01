@@ -1,0 +1,149 @@
+# Núcleo del juego: palos, cartas, mods, manos, combos, reglas, apuestas, objetos, herramientas, personajes — A
+suit.blood|Sangre|Blood|Sang|Blut
+suit.eye|Ojo|Eye|Œil|Auge
+suit.tooth|Diente|Tooth|Dent|Zahn
+suit.key|Llave|Key|Clé|Schlüssel
+suit.blood.fx|+1,5 mult por carta. Cuesta 1 de Salud.|+1.5 mult per card. Costs 1 Health.|+1,5 mult par carte. Coûte 1 Santé.|+1,5 Mult pro Karte. Kostet 1 Gesundheit.
+suit.eye.fx|+6 fichas y revela 1 carta del mazo.|+6 chips and reveals 1 card of the deck.|+6 jetons et révèle 1 carte du paquet.|+6 Chips und deckt 1 Karte des Stapels auf.
+suit.tooth.fx|+3 fichas. Crece +1 cada vez que puntúa.|+3 chips. Grows +1 each time it scores.|+3 jetons. Gagne +1 à chaque point marqué.|+3 Chips. Wächst um +1 bei jeder Wertung.
+suit.key.fx|+4 fichas y +2 de Escudo.|+4 chips and +2 Shield.|+4 jetons et +2 de Bouclier.|+4 Chips und +2 Schild.
+card.base|{rank} de {suit}|{rank} of {suit}|{suit} {rank}|{suit} {rank}
+card.la_mujer.name|La Mujer de Rojo|The Woman in Red|La Femme en Rouge|Die Frau in Rot
+card.la_mujer.desc|Comodín total. ×4 al puntuar. +25 Deuda y −6 Cordura.|Total wild. ×4 when scoring. +25 Debt and −6 Sanity.|Joker total. ×4 en marquant. +25 Dette et −6 Raison.|Voller Joker. ×4 beim Werten. +25 Schulden und −6 Verstand.
+card.el_ahogado.name|El Ahogado|The Drowned Man|Le Noyé|Der Ertrunkene
+card.el_ahogado.desc|+40 fichas (+80 si tu Cordura es menor de 40). −4 Cordura.|+40 chips (+80 if your Sanity is below 40). −4 Sanity.|+40 jetons (+80 si ta Raison est sous 40). −4 Raison.|+40 Chips (+80 bei Verstand unter 40). −4 Verstand.
+card.la_septima.name|La Séptima|The Seventh|La Septième|Die Siebte
+card.la_septima.desc|+7 fichas. Multiplica ×(1 + 0,5 por muerte), máx. ×5.|+7 chips. Multiplies ×(1 + 0.5 per death), max ×5.|+7 jetons. Multiplie ×(1 + 0,5 par mort), max ×5.|+7 Chips. Multipliziert ×(1 + 0,5 pro Tod), max. ×5.
+card.la_deuda.name|La Deuda|The Debt|La Dette|Die Schuld
+card.la_deuda.desc|Fichas = Deuda ÷ 6 (máx. 90). +10 Deuda.|Chips = Debt ÷ 6 (max 90). +10 Debt.|Jetons = Dette ÷ 6 (max 90). +10 Dette.|Chips = Schulden ÷ 6 (max. 90). +10 Schulden.
+card.el_hambre.name|El Hambre|The Hunger|La Faim|Der Hunger
+card.el_hambre.desc|+6 mult. Cuesta 3 de Salud.|+6 mult. Costs 3 Health.|+6 mult. Coûte 3 Santé.|+6 Mult. Kostet 3 Gesundheit.
+card.sangre_pacto.name|Pacto de Sangre|Blood Pact|Pacte de Sang|Blutpakt
+card.sangre_pacto.desc|+3 mult. Cuesta 2 de Salud.|+3 mult. Costs 2 Health.|+3 mult. Coûte 2 Santé.|+3 Mult. Kostet 2 Gesundheit.
+card.ojo_vigia.name|Ojo Vigía|Watchful Eye|Œil de Garde|Wachsames Auge
+card.ojo_vigia.desc|+12 fichas. Revela 3 cartas del mazo.|+12 chips. Reveals 3 cards of the deck.|+12 jetons. Révèle 3 cartes du paquet.|+12 Chips. Deckt 3 Karten des Stapels auf.
+card.colmillo.name|Colmillo|Fang|Croc|Fangzahn
+card.colmillo.desc|+8 fichas. Crece +2 cada vez que puntúa (máx. +40).|+8 chips. Grows +2 each time it scores (max +40).|+8 jetons. Gagne +2 à chaque point (max +40).|+8 Chips. Wächst um +2 pro Wertung (max. +40).
+card.llave_maestra.name|Llave Maestra|Master Key|Clé Maîtresse|Hauptschlüssel
+card.llave_maestra.desc|+10 fichas y +4 de Escudo.|+10 chips and +4 Shield.|+10 jetons et +4 de Bouclier.|+10 Chips und +4 Schild.
+card.dado_trucado.name|Dado Trucado|Loaded Die|Dé Pipé|Gezinkter Würfel
+card.dado_trucado.desc|+6 fichas. Comodín de palo.|+6 chips. Suit wild.|+6 jetons. Joker de couleur.|+6 Chips. Joker für die Farbe.
+card.moneda_gemela.name|Moneda Gemela|Twin Coin|Pièce Jumelle|Zwillingsmünze
+card.moneda_gemela.desc|+4 fichas. Ganas 4 de Dinero.|+4 chips. Earn 4 Money.|+4 jetons. Gagne 4 d’Argent.|+4 Chips. Bringt 4 Geld.
+card.carta_doble.name|Carta Doble|Double Card|Carte Double|Doppelkarte
+card.carta_doble.desc|Repite el efecto de la carta que puntúa justo antes.|Repeats the effect of the card scored just before it.|Répète l’effet de la carte comptée juste avant.|Wiederholt den Effekt der direkt zuvor gewerteten Karte.
+card.corazon.name|Corazón|Heart|Cœur|Herz
+card.corazon.desc|+2 mult. Recuperas 2 de Salud.|+2 mult. Heal 2 Health.|+2 mult. Rend 2 Santé.|+2 Mult. Heilt 2 Gesundheit.
+card.hueso_liso.name|Hueso Liso|Smooth Bone|Os Lisse|Glatter Knochen
+card.hueso_liso.desc|+20 fichas.|+20 chips.|+20 jetons.|+20 Chips.
+card.sombra.name|Sombra|Shadow|Ombre|Schatten
+card.sombra.desc|+5 fichas. Comodín de valor. +1 de Escudo.|+5 chips. Rank wild. +1 Shield.|+5 jetons. Joker de valeur. +1 de Bouclier.|+5 Chips. Joker für den Wert. +1 Schild.
+card.cursed|Maldita|Cursed|Maudite|Verflucht
+mod.edge.name|Filo|Edge|Tranchant|Schneide
+mod.edge.desc|+10 fichas al puntuar.|+10 chips when scoring.|+10 jetons en marquant.|+10 Chips beim Werten.
+mod.red.name|Sello rojo|Red seal|Sceau rouge|Rotes Siegel
+mod.red.desc|+4 mult al puntuar.|+4 mult when scoring.|+4 mult en marquant.|+4 Mult beim Werten.
+mod.gold.name|Dorada|Gilded|Dorée|Vergoldet
+mod.gold.desc|Ganas 3 de Dinero al puntuar.|Earn 3 Money when scoring.|Gagne 3 d’Argent en marquant.|Bringt 3 Geld beim Werten.
+mod.glass.name|Cristal|Glass|Verre|Glas
+mod.glass.desc|×2 al puntuar. 25% de romperse.|×2 when scoring. 25% chance to break.|×2 en marquant. 25 % de se briser.|×2 beim Werten. 25 % Bruchgefahr.
+mod.hex.name|Maleficio|Hex|Maléfice|Fluch
+mod.hex.desc|+30 fichas. −2 Cordura.|+30 chips. −2 Sanity.|+30 jetons. −2 Raison.|+30 Chips. −2 Verstand.
+hand.high|Carta alta|High card|Carte haute|Hohe Karte
+hand.pair|Pareja|Pair|Paire|Paar
+hand.twopair|Doble pareja|Two pair|Double paire|Zwei Paare
+hand.three|Trío|Three of a kind|Brelan|Drilling
+hand.straight|Escalera|Straight|Quinte|Straße
+hand.flush|Color|Flush|Couleur|Flush
+hand.full|Full|Full house|Full|Full House
+hand.four|Póker|Four of a kind|Carré|Vierling
+hand.sflush|Escalera de color|Straight flush|Quinte flush|Straight Flush
+hand.five|Quintilla|Five of a kind|Cinq identiques|Fünfling
+combo.mirada.name|LA MIRADA|THE GAZE|LE REGARD|DER BLICK
+combo.mirada.desc|3 o más Ojos: +30 fichas y revelas 3 cartas.|3 or more Eyes: +30 chips and reveal 3 cards.|3 Œils ou plus : +30 jetons et 3 cartes révélées.|3 oder mehr Augen: +30 Chips und 3 Karten aufgedeckt.
+combo.ritual.name|EL RITUAL|THE RITUAL|LE RITUEL|DAS RITUAL
+combo.ritual.desc|3 o más Sangres: +6 mult. Cuesta 3 de Salud.|3 or more Bloods: +6 mult. Costs 3 Health.|3 Sangs ou plus : +6 mult. Coûte 3 Santé.|3 oder mehr Blut: +6 Mult. Kostet 3 Gesundheit.
+combo.deuda.name|LA DEUDA|THE DEBT|LA DETTE|DIE SCHULD
+combo.deuda.desc|3 o más Dientes: +4 mult (+1 por cada 60 de Deuda, máx. +10). +15 Deuda.|3 or more Teeth: +4 mult (+1 per 60 Debt, max +10). +15 Debt.|3 Dents ou plus : +4 mult (+1 par 60 de Dette, max +10). +15 Dette.|3 oder mehr Zähne: +4 Mult (+1 pro 60 Schulden, max. +10). +15 Schulden.
+combo.puertas.name|LAS SIETE PUERTAS|THE SEVEN DOORS|LES SEPT PORTES|DIE SIEBEN TÜREN
+combo.puertas.desc|5 cartas cuya suma es múltiplo de 7: +30 fichas y +7 mult.|5 cards whose total is a multiple of 7: +30 chips and +7 mult.|5 cartes dont la somme est un multiple de 7 : +30 jetons et +7 mult.|5 Karten, deren Summe ein Vielfaches von 7 ist: +30 Chips und +7 Mult.
+combo.cerradura.name|LA CERRADURA|THE LOCK|LA SERRURE|DAS SCHLOSS
+combo.cerradura.desc|3 o más Llaves: +20 fichas y +4 de Escudo.|3 or more Keys: +20 chips and +4 Shield.|3 Clés ou plus : +20 jetons et +4 de Bouclier.|3 oder mehr Schlüssel: +20 Chips und +4 Schild.
+combo.arcoiris.name|LOS CUATRO PALOS|THE FOUR SUITS|LES QUATRE COULEURS|DIE VIER FARBEN
+combo.arcoiris.desc|Los 4 palos en la jugada: +8 mult y ganas 5 de Dinero.|All 4 suits in the play: +8 mult and earn 5 Money.|Les 4 couleurs dans le coup : +8 mult et gagne 5 d’Argent.|Alle 4 Farben im Spiel: +8 Mult und 5 Geld.
+rule.blind_eyes.name|Ojos ciegos|Blind eyes|Yeux aveugles|Blinde Augen
+rule.blind_eyes.desc|Los Ojos no puntúan ni revelan cartas.|Eyes neither score nor reveal cards.|Les Œils ne marquent pas et ne révèlent rien.|Augen werten nicht und decken nichts auf.
+rule.no_repeat.name|Sin repetir|No repeats|Sans répétition|Keine Wiederholung
+rule.no_repeat.desc|Repetir la mano anterior puntúa la mitad.|Repeating the previous hand scores half.|Répéter la main précédente ne vaut que la moitié.|Die vorige Hand zu wiederholen zählt nur halb.
+rule.cold_blood.name|Sangre fría|Cold blood|Sang froid|Kaltes Blut
+rule.cold_blood.desc|La Sangre no da multiplicador.|Blood gives no multiplier.|Le Sang ne donne aucun multiplicateur.|Blut gibt keinen Multiplikator.
+rule.drown.name|Ahogo|Drowning|Noyade|Ertrinken
+rule.drown.desc|Cada jugada cuesta 3 de Cordura.|Every play costs 3 Sanity.|Chaque coup coûte 3 de Raison.|Jeder Spielzug kostet 3 Verstand.
+rule.watched.name|Vigilado|Watched|Surveillé|Beobachtet
+rule.watched.desc|Sin apuestas y sin bolsillo.|No stakes and no pocket.|Pas de mise et pas de poche.|Keine Einsätze und keine Tasche.
+rule.interest.name|Interés|Interest|Intérêt|Zinsen
+rule.interest.desc|El objetivo sube un 8% con cada jugada.|The target rises 8% with every play.|L’objectif monte de 8 % à chaque coup.|Das Ziel steigt mit jedem Zug um 8 %.
+rule.remember.name|Memoria|Memory|Mémoire|Gedächtnis
+rule.remember.desc|Repetir cualquier mano ya jugada puntúa ×0,7.|Repeating any hand already played scores ×0.7.|Répéter une main déjà jouée vaut ×0,7.|Jede bereits gespielte Hand zählt nur ×0,7.
+rule.tax.name|Impuesto|Tax|Impôt|Steuer
+rule.tax.desc|Cada jugada cuesta 5 de Dinero (o suma Deuda).|Every play costs 5 Money (or adds Debt).|Chaque coup coûte 5 d’Argent (ou ajoute de la Dette).|Jeder Zug kostet 5 Geld (oder erhöht die Schulden).
+rule.mist.name|Niebla|Mist|Brume|Nebel
+rule.mist.desc|2 cartas de tu mano están ocultas.|2 cards in your hand are hidden.|2 cartes de ta main sont cachées.|2 Karten deiner Hand sind verdeckt.
+rule.greedy.name|Codicia|Greed|Cupidité|Gier
+rule.greedy.desc|Objetivo +20%. Recompensa +50%.|Target +20%. Reward +50%.|Objectif +20 %. Récompense +50 %.|Ziel +20 %. Belohnung +50 %.
+stake.none.name|Sin apuesta|No stake|Sans mise|Kein Einsatz
+stake.none.desc|Juegas seguro.|Play it safe.|Tu joues prudemment.|Du spielst auf Nummer sicher.
+stake.blood.name|Apostar Sangre|Stake Blood|Miser du Sang|Blut setzen
+stake.blood.desc|×1,25. Pierdes 8 de Salud.|×1.25. Lose 8 Health.|×1,25. Perds 8 de Santé.|×1,25. Verlierst 8 Gesundheit.
+stake.sanity.name|Apostar Cordura|Stake Sanity|Miser la Raison|Verstand setzen
+stake.sanity.desc|×1,25. Pierdes 6 de Cordura.|×1.25. Lose 6 Sanity.|×1,25. Perds 6 de Raison.|×1,25. Verlierst 6 Verstand.
+stake.debt.name|Apostar Deuda|Stake Debt|Miser la Dette|Schulden setzen
+stake.debt.desc|×1,4. Ganas 35 de Deuda.|×1.4. Gain 35 Debt.|×1,4. Gagne 35 de Dette.|×1,4. Erhältst 35 Schulden.
+stake.money.name|Apostar Dinero|Stake Money|Miser l’Argent|Geld setzen
+stake.money.desc|×1,2. Pierdes 12 de Dinero.|×1.2. Lose 12 Money.|×1,2. Perds 12 d’Argent.|×1,2. Verlierst 12 Geld.
+item.moneda_mordida.name|Moneda mordida|Bitten coin|Pièce mordue|Angebissene Münze
+item.moneda_mordida.desc|+5 de Dinero por ronda ganada. Las cartas Doradas dan +2 más.|+5 Money per round won. Gilded cards give +2 more.|+5 d’Argent par manche gagnée. Les cartes Dorées donnent +2 de plus.|+5 Geld pro gewonnener Runde. Vergoldete Karten geben +2 mehr.
+item.espejo_roto.name|Espejo roto|Broken mirror|Miroir brisé|Zerbrochener Spiegel
+item.espejo_roto.desc|+2 mult. Empiezas con −2 de Cordura. Puedes rehacer una decisión por partida (−5 Cordura).|+2 mult. Start with −2 Sanity. Redo one decision per run (−5 Sanity).|+2 mult. Tu commences à −2 de Raison. Refaire une décision par partie (−5 Raison).|+2 Mult. Start mit −2 Verstand. Eine Entscheidung pro Partie wiederholbar (−5 Verstand).
+item.llave_hueso.name|Llave de hueso|Bone key|Clé d’os|Knochenschlüssel
+item.llave_hueso.desc|Escudo inicial de 4. Abre la puerta oculta. Permite el final de la Puerta.|Starting Shield of 4. Opens the hidden door. Enables the Door ending.|Bouclier initial de 4. Ouvre la porte cachée. Permet la fin de la Porte.|Start-Schild 4. Öffnet die verborgene Tür. Ermöglicht das Ende der Tür.
+item.ceniza.name|Ceniza|Ash|Cendre|Asche
+item.ceniza.desc|+15 fichas por jugada. −2 Cordura al terminar cada sala.|+15 chips per play. −2 Sanity after each room.|+15 jetons par coup. −2 Raison après chaque salle.|+15 Chips pro Zug. −2 Verstand nach jedem Raum.
+item.ficha_negra.name|Ficha negra|Black chip|Jeton noir|Schwarzer Chip
+item.ficha_negra.desc|Las apuestas multiplican +0,15 más. Puedes deshacer una decisión pagando 50 de Deuda.|Stakes multiply +0.15 more. Undo a decision by paying 50 Debt.|Les mises multiplient +0,15 de plus. Défais une décision contre 50 de Dette.|Einsätze multiplizieren +0,15 mehr. Entscheidung für 50 Schulden zurücknehmen.
+item.ojo_vidrio.name|Ojo de vidrio|Glass eye|Œil de verre|Glasauge
+item.ojo_vidrio.desc|+1 carta en mano. La Niebla no te afecta.|+1 card in hand. Mist does not affect you.|+1 carte en main. La Brume ne t’affecte pas.|+1 Karte auf der Hand. Nebel wirkt nicht auf dich.
+item.campanilla.name|Campanilla|Little bell|Clochette|Glöckchen
+item.campanilla.desc|+1 descarte por ronda.|+1 discard per round.|+1 défausse par manche.|+1 Ablage pro Runde.
+item.guante_crupier.name|Guante del Crupier|Dealer’s glove|Gant du Croupier|Handschuh des Croupiers
+item.guante_crupier.desc|+1 jugada por ronda.|+1 play per round.|+1 coup par manche.|+1 Zug pro Runde.
+item.reloj_parado.name|Reloj parado|Stopped clock|Horloge arrêtée|Stehengebliebene Uhr
+item.reloj_parado.desc|Los objetivos bajan un 8%. La deuda crece un 50% más rápido.|Targets drop 8%. Debt grows 50% faster.|Les objectifs baissent de 8 %. La dette croît 50 % plus vite.|Ziele sinken um 8 %. Schulden wachsen 50 % schneller.
+item.diente_leche.name|Diente de leche|Milk tooth|Dent de lait|Milchzahn
+item.diente_leche.desc|Los Dientes crecen +1 más por jugada.|Teeth grow +1 more per play.|Les Dents gagnent +1 de plus par coup.|Zähne wachsen +1 mehr pro Zug.
+item.cuchilla_oxidada.name|Cuchilla oxidada|Rusty blade|Lame rouillée|Rostige Klinge
+item.cuchilla_oxidada.desc|La Sangre da +1 mult más, pero cuesta +1 de Salud.|Blood gives +1 more mult but costs +1 Health.|Le Sang donne +1 mult de plus mais coûte +1 Santé.|Blut gibt +1 Mult mehr, kostet aber +1 Gesundheit.
+item.libro_cuentas.name|Libro de cuentas|Ledger|Livre de comptes|Rechnungsbuch
+item.libro_cuentas.desc|El interés de la deuda se reduce a la mitad.|Debt interest is halved.|L’intérêt de la dette est réduit de moitié.|Schuldzinsen werden halbiert.
+tool.testigo.name|Testigo|Witness|Témoin|Zeuge
+tool.testigo.desc|Duelo: revela el número real de balas y si te han mentido.|Duel: reveals the real number of bullets and whether you were lied to.|Duel : révèle le vrai nombre de balles et si on t’a menti.|Duell: zeigt die echte Zahl der Kugeln und ob man dich belogen hat.
+tool.mala_memoria.name|Mala memoria|Bad memory|Mauvaise mémoire|Schlechtes Gedächtnis
+tool.mala_memoria.desc|Duelo: el rival olvida su turno.|Duel: the foe forgets its turn.|Duel : l’adversaire oublie son tour.|Duell: der Gegner vergisst seinen Zug.
+tool.contrato.name|Contrato|Contract|Contrat|Vertrag
+tool.contrato.desc|Duelo: si te mintieron, el rival pierde una marca. Si no, +20 Deuda.|Duel: if you were lied to, the foe loses a mark. If not, +20 Debt.|Duel : si on t’a menti, l’adversaire perd une marque. Sinon, +20 Dette.|Duell: Wurdest du belogen, verliert der Gegner eine Marke. Sonst +20 Schulden.
+tool.sal.name|Sal|Salt|Sel|Salz
+tool.sal.desc|Ronda: anula la regla del oponente.|Round: cancels the opponent’s rule.|Manche : annule la règle de l’adversaire.|Runde: hebt die Regel des Gegners auf.
+tool.vela_corta.name|Vela corta|Short candle|Bougie courte|Kurze Kerze
+tool.vela_corta.desc|Pasiva: si mueres, te enciende de nuevo con el 40% de Salud (−10 Cordura).|Passive: if you die, relights you with 40% Health (−10 Sanity).|Passif : si tu meurs, te rallume avec 40 % de Santé (−10 Raison).|Passiv: Stirbst du, brennt sie dich mit 40 % Gesundheit neu an (−10 Verstand).
+char.dealer|El Crupier|The Dealer|Le Croupier|Der Croupier
+char.girl|La Chica del Ojo Cosido|The Girl with the Stitched Eye|La Fille à l’Œil Cousu|Das Mädchen mit dem vernähten Auge
+char.chair|El Hombre de la Silla|The Man in the Chair|L’Homme à la Chaise|Der Mann auf dem Stuhl
+char.child|El Niño|The Child|L’Enfant|Das Kind
+char.merchant|El Vendedor|The Vendor|Le Vendeur|Der Händler
+char.woman|La Mujer de Rojo|The Woman in Red|La Femme en Rouge|Die Frau in Rot
+char.drowned|El Ahogado|The Drowned Man|Le Noyé|Der Ertrunkene
+char.archivist|La Archivista|The Archivist|L’Archiviste|Die Archivarin
+opp.gambler_a|Jugador de corbata torcida|Gambler with a crooked tie|Joueur à la cravate de travers|Spieler mit schiefer Krawatte
+opp.gambler_b|Jugadora sin reflejo|Gambler with no reflection|Joueuse sans reflet|Spielerin ohne Spiegelbild
+opp.gambler_c|Jugador sin cara|Faceless gambler|Joueur sans visage|Gesichtsloser Spieler
+char.unknown|???|???|???|???

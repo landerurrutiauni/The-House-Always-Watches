@@ -1,0 +1,290 @@
+# Interfaz (menús, HUD, mesa, duelo, tienda, ajustes, ayuda…) — B
+ui.continue|CONTINUAR|CONTINUE|CONTINUER|WEITER
+ui.back|VOLVER|BACK|RETOUR|ZURÜCK
+ui.close|CERRAR|CLOSE|FERMER|SCHLIESSEN
+ui.confirm|CONFIRMAR|CONFIRM|CONFIRMER|BESTÄTIGEN
+ui.cancel|CANCELAR|CANCEL|ANNULER|ABBRECHEN
+ui.skip|SALTAR|SKIP|PASSER|ÜBERSPRINGEN
+ui.tap|Toca para continuar|Tap to continue|Touche pour continuer|Tippen zum Fortfahren
+ui.new|NUEVO|NEW|NOUVEAU|NEU
+ui.accept|ACEPTAR|ACCEPT|ACCEPTER|ANNEHMEN
+ui.reject|RECHAZAR|REJECT|REFUSER|ABLEHNEN
+ui.hidden|OPCIÓN OCULTA|HIDDEN OPTION|OPTION CACHÉE|VERBORGENE OPTION
+ui.swipe_hint|Desliza ← o → · teclas A / D|Swipe ← or → · keys A / D|Glisse ← ou → · touches A / D|Wische ← oder → · Tasten A / D
+ui.memory_new|Recuerdo: {name}|Memory: {name}|Souvenir : {name}|Erinnerung: {name}
+ui.res.health|Salud|Health|Santé|Gesundheit
+ui.res.sanity|Cordura|Sanity|Raison|Verstand
+ui.res.money|Dinero|Money|Argent|Geld
+ui.res.debt|Deuda|Debt|Dette|Schulden
+ui.res.shield|Escudo|Shield|Bouclier|Schild
+ui.out.card|Carta: {name}|Card: {name}|Carte : {name}|Karte: {name}
+ui.out.item|Objeto: {name}|Item: {name}|Objet : {name}|Gegenstand: {name}
+ui.out.tool|Herramienta: {name}|Tool: {name}|Outil : {name}|Werkzeug: {name}
+ui.out.tool_full|Sin hueco para la herramienta: la vendes por la mitad|No room for the tool: sold for half price|Pas de place pour l’outil : vendu à moitié prix|Kein Platz für das Werkzeug: zum halben Preis verkauft
+ui.out.level|{name} sube de nivel|{name} levels up|{name} monte de niveau|{name} steigt auf
+ui.out.mod|{card}: {mod}|{card}: {mod}|{card} : {mod}|{card}: {mod}
+ui.out.remove|Pierdes: {name}|You lose: {name}|Tu perds : {name}|Du verlierst: {name}
+ui.out.know|Conocimiento: {name}|Knowledge: {name}|Connaissance : {name}|Wissen: {name}
+ui.out.know_old|Ya lo sabías: {name}|You already knew: {name}|Tu le savais déjà : {name}|Du wusstest es schon: {name}
+ui.out.gamble_won|La casa sonríe: ganas la apuesta.|The house smiles: you win the bet.|La maison sourit : tu gagnes le pari.|Das Haus lächelt: Du gewinnst die Wette.
+ui.out.gamble_lost|La casa gana esta vez.|The house wins this time.|La maison gagne cette fois.|Diesmal gewinnt das Haus.
+ui.out.boss|{name} te reta a una partida.|{name} challenges you to a game.|{name} te défie à une partie.|{name} fordert dich zu einer Partie heraus.
+ui.redo.espejo_roto|Rehacer con el Espejo roto (−5 Cordura)|Redo with the Broken mirror (−5 Sanity)|Refaire avec le Miroir brisé (−5 Raison)|Mit dem Zerbrochenen Spiegel wiederholen (−5 Verstand)
+ui.redo.ficha_negra|Deshacer con la Ficha negra (+50 Deuda)|Undo with the Black chip (+50 Debt)|Défaire avec le Jeton noir (+50 Dette)|Mit dem Schwarzen Chip zurücknehmen (+50 Schulden)
+menu.tagline|La casa siempre mira.|The house is always watching.|La maison regarde toujours.|Das Haus sieht immer zu.
+menu.new|NUEVA PARTIDA|NEW GAME|NOUVELLE PARTIE|NEUES SPIEL
+menu.continue|CONTINUAR|CONTINUE|CONTINUER|WEITERSPIELEN
+menu.reset|REINICIAR PROGRESO|RESET PROGRESS|RÉINITIALISER LA PROGRESSION|FORTSCHRITT ZURÜCKSETZEN
+menu.settings|AJUSTES|SETTINGS|PARAMÈTRES|EINSTELLUNGEN
+menu.secret|???|???|???|???
+menu.cookies|Cookies|Cookies|Cookies|Cookies
+menu.legal.privacy|Privacidad|Privacy|Confidentialité|Datenschutz
+menu.legal.cookies|Política de cookies|Cookie policy|Politique de cookies|Cookie-Richtlinie
+menu.legal.terms|Términos|Terms|Conditions|Bedingungen
+menu.version|v{v}|v{v}|v{v}|v{v}
+menu.deaths|{n} muertes|{n} deaths|{n} morts|{n} Tode
+menu.confirm_new.title|Nueva partida|New game|Nouvelle partie|Neues Spiel
+menu.confirm_new.text|Abandonarás el descenso actual. Conservas recuerdos, conocimiento y finales.|You will abandon the current descent. You keep memories, knowledge and endings.|Tu abandonneras la descente en cours. Tu gardes souvenirs, connaissances et fins.|Du gibst den aktuellen Abstieg auf. Erinnerungen, Wissen und Enden bleiben erhalten.
+menu.confirm_reset.title|Reiniciar progreso|Reset progress|Réinitialiser la progression|Fortschritt zurücksetzen
+menu.confirm_reset.text|Esto borrará TODO el progreso: muertes, recuerdos, conocimiento y finales.|This will erase EVERYTHING: deaths, memories, knowledge and endings.|Ceci effacera TOUT : morts, souvenirs, connaissances et fins.|Dies löscht ALLES: Tode, Erinnerungen, Wissen und Enden.
+menu.confirm_reset.text2|¿Seguro? No se puede deshacer.|Are you sure? This cannot be undone.|Es-tu sûr ? C’est irréversible.|Bist du sicher? Das lässt sich nicht rückgängig machen.
+wings.title|Elige dónde despertar|Choose where to wake|Choisis où te réveiller|Wähle, wo du erwachst
+wings.boss|Custodia: {name}|Guarded by: {name}|Gardé par : {name}|Bewacht von: {name}
+wings.cleared|completada|cleared|terminée|abgeschlossen
+wings.locked|Cerrada. La casa aún no te deja pasar.|Locked. The house won’t let you in yet.|Fermée. La maison ne te laisse pas encore entrer.|Verschlossen. Das Haus lässt dich noch nicht hinein.
+map.title|Sala {n}/{total}|Room {n}/{total}|Salle {n}/{total}|Raum {n}/{total}
+map.pick|Elige tu próxima sala.|Choose your next room.|Choisis ta prochaine salle.|Wähle deinen nächsten Raum.
+map.enter|ENTRAR|ENTER|ENTRER|EINTRETEN
+map.opp|Rival: {name}|Opponent: {name}|Adversaire : {name}|Gegner: {name}
+map.shotgun|Duelo de la escopeta. Apuestas algo tuyo.|Shotgun duel. You stake something of yours.|Duel au fusil. Tu mises quelque chose.|Schrotflintenduell. Du setzt etwas Eigenes.
+map.info.event|Algo te espera. No sabes qué.|Something awaits. You don’t know what.|Quelque chose t’attend. Tu ne sais pas quoi.|Etwas wartet auf dich. Du weißt nicht was.
+map.info.merchant|Un vendedor de cosas que no deberían venderse.|A seller of things that should not be sold.|Un vendeur de choses qui ne devraient pas se vendre.|Ein Verkäufer von Dingen, die man nicht verkaufen sollte.
+map.info.rest|Un rincón para recuperar el aliento.|A corner to catch your breath.|Un coin pour reprendre son souffle.|Eine Ecke zum Durchatmen.
+map.info.secret|Una puerta de hueso que nadie más ve.|A bone door nobody else sees.|Une porte d’os que personne d’autre ne voit.|Eine Knochentür, die sonst niemand sieht.
+map.visited|visitada|visited|visitée|besucht
+map.locked|fuera de alcance|out of reach|hors de portée|außer Reichweite
+node.game|Mesa de cartas|Card table|Table de cartes|Kartentisch
+node.event|Suceso|Event|Événement|Ereignis
+node.merchant|El Vendedor|The Vendor|Le Vendeur|Der Händler
+node.rest|Descanso|Rest|Repos|Rast
+node.shotgun|La escopeta|The shotgun|Le fusil|Die Schrotflinte
+node.secret|Puerta de hueso|Bone door|Porte d’os|Knochentür
+node.boss|Guardián|Guardian|Gardien|Wächter
+table.play|JUGAR|PLAY|JOUER|SPIELEN
+table.discard|DESCARTAR|DISCARD|DÉFAUSSER|ABLEGEN
+table.stash|BOLSILLO|POCKET|POCHE|TASCHE
+table.unstash|SACAR|TAKE OUT|SORTIR|HERAUS
+table.salt|USAR SAL|USE SALT|UTILISER SEL|SALZ NUTZEN
+table.help|GUÍA|GUIDE|GUIDE|LEITFADEN
+table.score|Puntos|Score|Points|Punkte
+table.plays|Jugadas|Plays|Coups|Züge
+table.discards|Descartes|Discards|Défausses|Ablagen
+table.pocket|Bolsillo|Pocket|Poche|Tasche
+table.deck|Mazo: {n}|Deck: {n}|Paquet : {n}|Stapel: {n}
+table.peek|Próximas cartas|Next cards|Prochaines cartes|Nächste Karten
+table.chips|FICHAS|CHIPS|JETONS|CHIPS
+table.mult|MULT|MULT|MULT|MULT
+table.preview_none|Elige de 1 a 5 cartas para ver la jugada.|Pick 1 to 5 cards to see the play.|Choisis 1 à 5 cartes pour voir le coup.|Wähle 1 bis 5 Karten, um den Zug zu sehen.
+table.enough|¡Con esto llegas al objetivo!|This reaches the target!|Ça atteint l’objectif !|Damit erreichst du das Ziel!
+table.tap_info|Toca una carta para ver qué hace.|Tap a card to see what it does.|Touche une carte pour voir ce qu’elle fait.|Tippe eine Karte an, um zu sehen, was sie tut.
+table.hand_label|Tu mano|Your hand|Ta main|Deine Hand
+table.hidden_card|Carta oculta|Hidden card|Carte cachée|Verdeckte Karte
+table.hidden_desc|La Niebla la oculta: puedes jugarla a ciegas.|Mist hides it: you can play it blind.|La Brume la cache : tu peux la jouer à l’aveugle.|Nebel verdeckt sie: Du kannst sie blind spielen.
+table.no_rule|Sin reglas especiales.|No special rules.|Aucune règle spéciale.|Keine Sonderregeln.
+table.odds|Probabilidad estimada de victoria: {p}%|Estimated chance to win: {p}%|Chance de victoire estimée : {p} %|Geschätzte Siegchance: {p} %
+table.boss|GUARDIÁN|GUARDIAN|GARDIEN|WÄCHTER
+table.final|LA ÚLTIMA MANO|THE LAST HAND|LA DERNIÈRE MAIN|DIE LETZTE HAND
+table.glass_broke|Una carta de cristal se ha roto.|A glass card shattered.|Une carte de verre s’est brisée.|Eine Glaskarte ist zerbrochen.
+help.title|Guía rápida|Quick guide|Guide rapide|Kurzanleitung
+help.goal|Llega al OBJETIVO de puntos antes de quedarte sin jugadas. Si no lo logras, la casa cobra.|Reach the point TARGET before you run out of plays. If you don’t, the house collects.|Atteins l’OBJECTIF de points avant de manquer de coups. Sinon, la maison encaisse.|Erreiche das Punkteziel, bevor dir die Züge ausgehen. Sonst kassiert das Haus.
+help.score|Cada jugada puntúa FICHAS × MULT. La mano (pareja, trío, escalera…) da la base; cada carta y cada combinación suman más. Mira siempre el coste antes de jugar.|Each play scores CHIPS × MULT. The hand (pair, three of a kind, straight…) sets the base; every card and combo adds more. Always check the cost before playing.|Chaque coup marque JETONS × MULT. La main (paire, brelan, quinte…) donne la base ; chaque carte et combinaison ajoute. Vérifie toujours le coût avant de jouer.|Jeder Zug zählt CHIPS × MULT. Die Hand (Paar, Drilling, Straße …) gibt die Basis; jede Karte und Kombination addiert mehr. Prüfe vor dem Spielen immer die Kosten.
+help.hands|Manos (fichas × mult)|Hands (chips × mult)|Mains (jetons × mult)|Hände (Chips × Mult)
+help.suits|Palos|Suits|Couleurs|Farben
+help.combos|Combinaciones especiales|Special combos|Combinaisons spéciales|Sonderkombinationen
+help.stakes_title|Apuestas|Stakes|Mises|Einsätze
+help.stakes|Apostar multiplica la jugada, pero cuesta Salud, Cordura, Dinero o Deuda. Algunas reglas las prohíben.|Staking multiplies the play but costs Health, Sanity, Money or Debt. Some rules forbid it.|Miser multiplie le coup mais coûte Santé, Raison, Argent ou Dette. Certaines règles l’interdisent.|Einsätze vervielfachen den Zug, kosten aber Gesundheit, Verstand, Geld oder Schulden. Manche Regeln verbieten sie.
+help.tips_title|Consejos|Tips|Conseils|Tipps
+help.tips|Descarta cartas malas, guarda una en el Bolsillo para la jugada perfecta y cuida la Cordura: si baja demasiado, la casa empieza a mentirte.|Discard weak cards, keep one in the Pocket for the perfect play, and watch your Sanity: when it drops too low, the house starts lying to you.|Défausse les mauvaises cartes, garde-en une en Poche pour le coup parfait et surveille ta Raison : quand elle baisse trop, la maison se met à te mentir.|Lege schwache Karten ab, behalte eine in der Tasche für den perfekten Zug und achte auf deinen Verstand: Sinkt er zu stark, beginnt das Haus zu lügen.
+duel.title|LA ESCOPETA|THE SHOTGUN|LE FUSIL|DIE SCHROTFLINTE
+duel.final|LA ÚLTIMA BALA|THE LAST BULLET|LA DERNIÈRE BALLE|DIE LETZTE KUGEL
+duel.setup.sub|¿Qué pones sobre la mesa?|What do you put on the table?|Que mets-tu sur la table ?|Was legst du auf den Tisch?
+duel.setup.note|Si ganas: +10 Dinero extra. Si pierdes: −12 Salud además de la apuesta. Nadie te obliga a creer lo que anuncian.|If you win: +10 extra Money. If you lose: −12 Health on top of the stake. Nobody makes you believe what they announce.|Si tu gagnes : +10 d’Argent en plus. Si tu perds : −12 de Santé en plus de la mise. Personne ne t’oblige à croire ce qu’on annonce.|Bei Sieg: +10 Geld extra. Bei Niederlage: −12 Gesundheit zusätzlich zum Einsatz. Niemand zwingt dich, der Ansage zu glauben.
+duel.stake.money.name|{n} de Dinero|{n} Money|{n} d’Argent|{n} Geld
+duel.stake.money.win|Si ganas: +25 Dinero|If you win: +25 Money|Si tu gagnes : +25 d’Argent|Bei Sieg: +25 Geld
+duel.stake.money.lose|Si pierdes: −{n} Dinero|If you lose: −{n} Money|Si tu perds : −{n} d’Argent|Bei Niederlage: −{n} Geld
+duel.stake.sanity.name|{n} de Cordura|{n} Sanity|{n} de Raison|{n} Verstand
+duel.stake.sanity.win|Si ganas: +8 Cordura|If you win: +8 Sanity|Si tu gagnes : +8 de Raison|Bei Sieg: +8 Verstand
+duel.stake.sanity.lose|Si pierdes: −{n} Cordura|If you lose: −{n} Sanity|Si tu perds : −{n} de Raison|Bei Niederlage: −{n} Verstand
+duel.stake.debt.name|{n} de Deuda|{n} Debt|{n} de Dette|{n} Schulden
+duel.stake.debt.win|Si ganas: −60 Deuda|If you win: −60 Debt|Si tu gagnes : −60 de Dette|Bei Sieg: −60 Schulden
+duel.stake.debt.lose|Si pierdes: +{n} Deuda|If you lose: +{n} Debt|Si tu perds : +{n} de Dette|Bei Niederlage: +{n} Schulden
+duel.stake.card.name|Una carta de tu mazo|A card from your deck|Une carte de ton paquet|Eine Karte aus deinem Stapel
+duel.stake.card.win|Si ganas: una carta especial|If you win: a special card|Si tu gagnes : une carte spéciale|Bei Sieg: eine Spezialkarte
+duel.stake.card.lose|Si pierdes: pierdes una carta|If you lose: you lose a card|Si tu perds : tu perds une carte|Bei Niederlage: du verlierst eine Karte
+duel.marks_you|Tus marcas|Your marks|Tes marques|Deine Marken
+duel.marks_foe|Marcas del rival|Foe’s marks|Marques de l’adversaire|Marken des Gegners
+duel.announce|{name} anuncia: {n} de 6 cámaras cargadas.|{name} announces: {n} of 6 chambers loaded.|{name} annonce : {n} chambres chargées sur 6.|{name} sagt an: {n} von 6 Kammern geladen.
+duel.announce_note|Puede estar mintiendo.|It may be lying.|Il ment peut-être.|Es könnte lügen.
+duel.chambers|Cámaras|Chambers|Chambres|Kammern
+duel.turn_you|Tu turno|Your turn|À toi|Du bist dran
+duel.turn_foe|Turno del rival…|Foe’s turn…|Tour de l’adversaire…|Zug des Gegners …
+duel.shoot_foe|DISPARAR AL RIVAL|SHOOT THE FOE|TIRER SUR L’ADVERSAIRE|AUF DEN GEGNER SCHIESSEN
+duel.shoot_table|TENTAR A LA MESA|TEMPT THE TABLE|TENTER LA TABLE|DEN TISCH VERSUCHEN
+duel.listen|ESCUCHAR (−{c} Cordura)|LISTEN (−{c} Sanity)|ÉCOUTER (−{c} Raison)|LAUSCHEN (−{c} Verstand)
+duel.heard_loaded|Crees oír… una bala.|You think you hear… a bullet.|Tu crois entendre… une balle.|Du glaubst, … eine Kugel zu hören.
+duel.heard_empty|Crees oír… vacío.|You think you hear… nothing.|Tu crois entendre… le vide.|Du glaubst, … Leere zu hören.
+duel.truth|Testigo: había {n} balas reales.|Witness: there were {n} real bullets.|Témoin : il y avait {n} vraies balles.|Zeuge: Es waren {n} echte Kugeln.
+duel.truth.lied|Te mintieron.|You were lied to.|On t’a menti.|Man hat dich belogen.
+duel.truth.honest|Decía la verdad.|It told the truth.|Il disait vrai.|Es sagte die Wahrheit.
+duel.ev.p_shot_hit|Disparas: {name} pierde una marca.|You shoot: {name} loses a mark.|Tu tires : {name} perd une marque.|Du schießt: {name} verliert eine Marke.
+duel.ev.p_shot_click|Clic. La cámara estaba vacía.|Click. The chamber was empty.|Clic. La chambre était vide.|Klick. Die Kammer war leer.
+duel.ev.p_table_safe|La Mesa calla. Sigues con el turno.|The Table stays silent. You keep your turn.|La Table se tait. Tu gardes la main.|Der Tisch schweigt. Du bleibst am Zug.
+duel.ev.p_table_backfire|La Mesa te devuelve la bala: pierdes una marca.|The Table sends the bullet back: you lose a mark.|La Table te renvoie la balle : tu perds une marque.|Der Tisch schickt die Kugel zurück: Du verlierst eine Marke.
+duel.ev.f_shot_hit|{name} dispara: pierdes una marca.|{name} shoots: you lose a mark.|{name} tire : tu perds une marque.|{name} schießt: Du verlierst eine Marke.
+duel.ev.f_shot_click|{name} dispara. Clic.|{name} shoots. Click.|{name} tire. Clic.|{name} schießt. Klick.
+duel.ev.f_table_safe|{name} tienta a la Mesa. Nada.|{name} tempts the Table. Nothing.|{name} tente la Table. Rien.|{name} versucht den Tisch. Nichts.
+duel.ev.f_table_backfire|La Mesa se vuelve contra {name}: pierde una marca.|The Table turns on {name}: it loses a mark.|La Table se retourne contre {name} : il perd une marque.|Der Tisch wendet sich gegen {name}: Es verliert eine Marke.
+duel.ev.skipped|{name} olvida su turno.|{name} forgets its turn.|{name} oublie son tour.|{name} vergisst seinen Zug.
+duel.ev.reload|La escopeta se recarga.|The shotgun reloads.|Le fusil se recharge.|Die Schrotflinte lädt nach.
+duel.contract.lied|El contrato muerde: {name} pierde una marca.|The contract bites: {name} loses a mark.|Le contrat mord : {name} perd une marque.|Der Vertrag beißt: {name} verliert eine Marke.
+duel.contract.honest|No mentía: la Deuda sube 20.|It wasn’t lying: Debt rises by 20.|Ce n’était pas un mensonge : la Dette monte de 20.|Es log nicht: Die Schulden steigen um 20.
+duel.tool.memory|El rival olvidará su próximo turno.|The foe will forget its next turn.|L’adversaire oubliera son prochain tour.|Der Gegner vergisst seinen nächsten Zug.
+result.win|RONDA GANADA|ROUND WON|MANCHE GAGNÉE|RUNDE GEWONNEN
+result.lose|RONDA PERDIDA|ROUND LOST|MANCHE PERDUE|RUNDE VERLOREN
+result.duel_win|DUELO GANADO|DUEL WON|DUEL GAGNÉ|DUELL GEWONNEN
+result.duel_lose|DUELO PERDIDO|DUEL LOST|DUEL PERDU|DUELL VERLOREN
+result.score|{score} / {target} puntos|{score} / {target} points|{score} / {target} points|{score} / {target} Punkte
+reward.title|Elige una recompensa|Choose a reward|Choisis une récompense|Wähle eine Belohnung
+reward.boss_title|El guardián cae. Elige un objeto.|The guardian falls. Choose an item.|Le gardien tombe. Choisis un objet.|Der Wächter fällt. Wähle einen Gegenstand.
+reward.level|Sube de nivel: {hand}|Level up: {hand}|Monte de niveau : {hand}|Stufe steigt: {hand}
+reward.level_desc|Pasa a {chips} fichas × {mult} mult.|Becomes {chips} chips × {mult} mult.|Passe à {chips} jetons × {mult} mult.|Wird zu {chips} Chips × {mult} Mult.
+reward.mod|Marca una carta: {mod}|Mark a card: {mod}|Marque une carte : {mod}|Eine Karte markieren: {mod}
+reward.skip|NO ELEGIR (+{n} Dinero)|SKIP (+{n} Money)|PASSER (+{n} d’Argent)|ÜBERSPRINGEN (+{n} Geld)
+shop.line|«Todo tiene precio. Hasta lo que ya no tienes.»|“Everything has a price. Even what you no longer have.”|« Tout a un prix. Même ce que tu n’as plus. »|„Alles hat einen Preis. Sogar, was du nicht mehr hast.“
+shop.buy|COMPRAR · {price}|BUY · {price}|ACHETER · {price}|KAUFEN · {price}
+shop.take|ACEPTAR|TAKE IT|ACCEPTER|ANNEHMEN
+shop.sold|VENDIDO|SOLD|VENDU|VERKAUFT
+shop.leave|SALIR|LEAVE|SORTIR|VERLASSEN
+shop.heal.name|Vendas|Bandages|Bandages|Verbände
+shop.heal.desc|Recuperas 35 de Salud.|Heal 35 Health.|Rend 35 de Santé.|Heilt 35 Gesundheit.
+shop.level.name|Lección|Lesson|Leçon|Lektion
+shop.level.desc|Sube el nivel de una mano al azar.|Levels up a random hand.|Fait monter une main au hasard.|Steigert eine zufällige Hand um eine Stufe.
+shop.remove.name|Purga|Purge|Purge|Säuberung
+shop.remove.desc|Elimina una carta base al azar de tu mazo.|Removes a random base card from your deck.|Retire une carte de base au hasard de ton paquet.|Entfernt eine zufällige Basiskarte aus deinem Stapel.
+shop.loan.name|Préstamo|Loan|Prêt|Darlehen
+shop.loan.desc|Recibes {amount} de Dinero y +{debt} de Deuda.|Receive {amount} Money and +{debt} Debt.|Reçois {amount} d’Argent et +{debt} de Dette.|Erhalte {amount} Geld und +{debt} Schulden.
+rest.title|Un lugar donde parar|A place to stop|Un endroit où s’arrêter|Ein Ort zum Innehalten
+rest.sub|La casa parece quieta. Solo parece.|The house seems still. It only seems.|La maison semble calme. Elle ne fait que sembler.|Das Haus wirkt still. Es wirkt nur so.
+rest.heal.name|Dormir|Sleep|Dormir|Schlafen
+rest.heal.desc|Recuperas 35 de Salud.|Heal 35 Health.|Rend 35 de Santé.|Heilt 35 Gesundheit.
+rest.calm.name|Respirar|Breathe|Respirer|Atmen
+rest.calm.desc|Recuperas 25 de Cordura.|Regain 25 Sanity.|Regagne 25 de Raison.|Gewinnt 25 Verstand zurück.
+rest.pay.name|Pagar deuda|Pay debt|Payer la dette|Schulden zahlen
+rest.pay.desc|Pagas {n} de Dinero y reduces {n} de Deuda.|Pay {n} Money and reduce Debt by {n}.|Paie {n} d’Argent et réduis la Dette de {n}.|Zahle {n} Geld und senke die Schulden um {n}.
+rest.study.name|Estudiar las cartas|Study the cards|Étudier les cartes|Karten studieren
+rest.study.desc|−8 Cordura. Sube el nivel de una mano.|−8 Sanity. Levels up a hand.|−8 de Raison. Fait monter une main.|−8 Verstand. Steigert eine Hand um eine Stufe.
+rest.skip|SEGUIR SIN DESCANSAR|MOVE ON WITHOUT RESTING|CONTINUER SANS SE REPOSER|OHNE RAST WEITER
+rest.done.heal|Duermes sin soñar. Recuperas {n} de Salud.|You sleep without dreaming. Heal {n} Health.|Tu dors sans rêver. Tu regagnes {n} de Santé.|Du schläfst traumlos. {n} Gesundheit zurück.
+rest.done.calm|Respiras hondo. Recuperas {n} de Cordura.|You breathe deeply. Regain {n} Sanity.|Tu respires profondément. Tu regagnes {n} de Raison.|Du atmest tief. {n} Verstand zurück.
+rest.done.pay|Pagas {n}. La deuda baja, pero no desaparece.|You pay {n}. The debt shrinks, but doesn’t vanish.|Tu paies {n}. La dette baisse, sans disparaître.|Du zahlst {n}. Die Schulden sinken, verschwinden aber nicht.
+rest.done.study|Estudias hasta que las cartas te devuelven la mirada. {hand} sube de nivel.|You study until the cards look back. {hand} levels up.|Tu étudies jusqu’à ce que les cartes te regardent. {hand} monte de niveau.|Du studierst, bis die Karten zurückblicken. {hand} steigt eine Stufe.
+boss.title|GUARDIÁN|GUARDIAN|GARDIEN|WÄCHTER
+boss.rules|Reglas de esta partida|Rules of this game|Règles de cette partie|Regeln dieser Partie
+boss.weakened|debilitada|weakened|affaiblie|geschwächt
+boss.no_rules|Sin reglas especiales|No special rules|Aucune règle spéciale|Keine Sonderregeln
+boss.fight|JUGAR LA PARTIDA|PLAY THE GAME|JOUER LA PARTIE|PARTIE SPIELEN
+finale.stage1|LA ÚLTIMA MANO|THE LAST HAND|LA DERNIÈRE MAIN|DIE LETZTE HAND
+finale.stage2|LA ÚLTIMA BALA|THE LAST BULLET|LA DERNIÈRE BALLE|DIE LETZTE KUGEL
+door.title|La Puerta|The Door|La Porte|Die Tür
+door.hint|Cada final pide algo distinto. Elige con cuidado.|Each ending asks for something different. Choose carefully.|Chaque fin exige quelque chose de différent. Choisis avec soin.|Jedes Ende verlangt etwas anderes. Wähle mit Bedacht.
+door.open|Disponible|Available|Disponible|Verfügbar
+door.seen|Final ya visto|Ending already seen|Fin déjà vue|Ende bereits gesehen
+door.req.deuda|Siempre disponible.|Always available.|Toujours disponible.|Immer verfügbar.
+door.req.puerta|Requiere: la Llave de hueso.|Requires: the Bone key.|Requiert : la Clé d’os.|Erfordert: den Knochenschlüssel.
+door.req.crupier|Requiere: 3 pistas sobre el Crupier.|Requires: 3 clues about the Dealer.|Requiert : 3 indices sur le Croupier.|Erfordert: 3 Hinweise auf den Croupier.
+door.req.partida|Requiere: «Los jugadores» y haber conocido a 5 personajes.|Requires: “The players” and having met 5 characters.|Requiert : « Les joueurs » et avoir rencontré 5 personnages.|Erfordert: „Die Spieler“ und 5 getroffene Figuren.
+door.req.espectador|Requiere: «Alguien mira» y «Tu reflejo».|Requires: “Someone is watching” and “Your reflection”.|Requiert : « Quelqu’un regarde » et « Ton reflet ».|Erfordert: „Jemand sieht zu“ und „Dein Spiegelbild“.
+door.req.verdad|Requiere: 5 finales vistos y «Todas las puertas son la misma».|Requires: 5 endings seen and “All the doors are the same”.|Requiert : 5 fins vues et « Toutes les portes sont la même ».|Erfordert: 5 gesehene Enden und „Alle Türen sind dieselbe“.
+ending.n|FINAL {n} / {total}|ENDING {n} / {total}|FIN {n} / {total}|ENDE {n} / {total}
+ending.first|NUEVO FINAL|NEW ENDING|NOUVELLE FIN|NEUES ENDE
+ending.memories|Recuerdos ganados|Memories gained|Souvenirs gagnés|Gewonnene Erinnerungen
+ending.to_menu|VOLVER AL MENÚ|BACK TO MENU|RETOUR AU MENU|ZURÜCK ZUM MENÜ
+ending.true_hint|Has visto cinco finales. Queda una puerta más.|You have seen five endings. One more door remains.|Tu as vu cinq fins. Il reste une porte.|Du hast fünf Enden gesehen. Eine Tür bleibt noch.
+death.title|HAS MUERTO|YOU DIED|TU ES MORT|DU BIST GESTORBEN
+death.sub|La partida no ha terminado.|The game is not over.|La partie n’est pas finie.|Die Partie ist nicht vorbei.
+death.debt|DEUDA ACTUAL|CURRENT DEBT|DETTE ACTUELLE|AKTUELLE SCHULDEN
+death.memories|RECUERDOS CONSERVADOS|MEMORIES KEPT|SOUVENIRS CONSERVÉS|BEHALTENE ERINNERUNGEN
+death.knowledge|CONOCIMIENTO|KNOWLEDGE|CONNAISSANCES|WISSEN
+death.deaths|Muertes {n}|Deaths {n}|Morts {n}|Tode {n}
+death.none|Ninguno todavía. Sigue muriendo con cuidado.|None yet. Keep dying carefully.|Aucun pour l’instant. Continue de mourir avec soin.|Noch keine. Stirb weiter mit Bedacht.
+death.retry|VOLVER A LA MESA|BACK TO THE TABLE|RETOUR À LA TABLE|ZURÜCK AN DEN TISCH
+archive.title|???|???|???|???
+archive.endings|Finales|Endings|Fins|Enden
+archive.chars|Personajes|Characters|Personnages|Figuren
+archive.memories|Recuerdos|Memories|Souvenirs|Erinnerungen
+archive.knowledge|Conocimiento|Knowledge|Connaissances|Wissen
+archive.stats|Estadísticas|Statistics|Statistiques|Statistiken
+archive.unknown|???|???|???|???
+archive.stat.deaths|Muertes|Deaths|Morts|Tode
+archive.stat.runs|Descensos terminados|Runs finished|Descentes terminées|Abgeschlossene Abstiege
+archive.stat.roundsWon|Rondas ganadas|Rounds won|Manches gagnées|Runden gewonnen
+archive.stat.roundsLost|Rondas perdidas|Rounds lost|Manches perdues|Runden verloren
+archive.stat.duelsWon|Duelos ganados|Duels won|Duels gagnés|Duelle gewonnen
+archive.stat.duelsLost|Duelos perdidos|Duels lost|Duels perdus|Duelle verloren
+archive.stat.anomalies|Anomalías|Anomalies|Anomalies|Anomalien
+hud.health|Salud|Health|Santé|Gesundheit
+hud.sanity|Cordura|Sanity|Raison|Verstand
+hud.money|Dinero|Money|Argent|Geld
+hud.debt|Deuda|Debt|Dette|Schulden
+hud.lives|Velas|Lives|Vies|Leben
+hud.items|Objetos|Items|Objets|Gegenstände
+hud.tools|Herramientas|Tools|Outils|Werkzeuge
+hud.deck|Mazo|Deck|Paquet|Stapel
+hud.inventory|Inventario|Inventory|Inventaire|Inventar
+hud.levels|Niveles de mano|Hand levels|Niveaux de main|Handstufen
+hud.settings|Ajustes|Settings|Paramètres|Einstellungen
+hud.no_items|Nada todavía.|Nothing yet.|Rien pour l’instant.|Noch nichts.
+settings.title|Ajustes|Settings|Paramètres|Einstellungen
+settings.language|Idioma|Language|Langue|Sprache
+settings.audio|Audio|Audio|Audio|Audio
+settings.music|Música|Music|Musique|Musik
+settings.sfx|Efectos|Effects|Effets|Effekte
+settings.ambient|Ambiente|Ambience|Ambiance|Atmosphäre
+settings.mute_music|Silenciar música|Mute music|Couper la musique|Musik stummschalten
+settings.mute_sfx|Silenciar efectos|Mute effects|Couper les effets|Effekte stummschalten
+settings.reduce_intense|Reducir sonidos intensos|Reduce intense sounds|Réduire les sons intenses|Intensive Klänge reduzieren
+settings.display|Pantalla y accesibilidad|Display and accessibility|Affichage et accessibilité|Anzeige und Barrierefreiheit
+settings.text_size|Tamaño del texto|Text size|Taille du texte|Textgröße
+settings.quality|Calidad gráfica|Graphics quality|Qualité graphique|Grafikqualität
+settings.q.high|Alta|High|Haute|Hoch
+settings.q.medium|Media|Medium|Moyenne|Mittel
+settings.q.low|Baja|Low|Basse|Niedrig
+settings.contrast|Alto contraste|High contrast|Contraste élevé|Hoher Kontrast
+settings.reduce_effects|Reducir efectos (sin parpadeos ni sacudidas)|Reduce effects (no flicker or shaking)|Réduire les effets (sans clignotements ni secousses)|Effekte reduzieren (kein Flackern oder Wackeln)
+settings.vibration|Vibración|Vibration|Vibration|Vibration
+settings.privacy|Privacidad|Privacy|Confidentialité|Datenschutz
+settings.cookies|Preferencias de cookies|Cookie preferences|Préférences des cookies|Cookie-Einstellungen
+whisper.1|TE ESTÁN MIRANDO|THEY ARE WATCHING YOU|ON TE REGARDE|SIE SEHEN DIR ZU
+whisper.2|NO ERA ESA LA CARTA|THAT WAS NOT THE CARD|CE N’ÉTAIT PAS CETTE CARTE|DAS WAR NICHT DIE KARTE
+whisper.3|CUENTA OTRA VEZ|COUNT AGAIN|COMPTE ENCORE|ZÄHL NOCH EINMAL
+whisper.4|YA HAS ESTADO AQUÍ|YOU HAVE BEEN HERE BEFORE|TU ES DÉJÀ VENU ICI|DU WARST SCHON HIER
+whisper.5|LA CASA SABE TU NOMBRE|THE HOUSE KNOWS YOUR NAME|LA MAISON CONNAÎT TON NOM|DAS HAUS KENNT DEINEN NAMEN
+whisper.6|NO MIRES ATRÁS|DO NOT LOOK BEHIND YOU|NE REGARDE PAS DERRIÈRE|SIEH NICHT ZURÜCK
+whisper.7|TODAS LAS PUERTAS SON LA MISMA|ALL THE DOORS ARE THE SAME|TOUTES LES PORTES SONT LA MÊME|ALLE TÜREN SIND DIESELBE
+whisper.8|¿QUIÉN REPARTE?|WHO IS DEALING?|QUI DISTRIBUE ?|WER GIBT AUS?
+cookies.title|Cookies y almacenamiento|Cookies and storage|Cookies et stockage|Cookies und Speicher
+cookies.text|Usamos almacenamiento local necesario para guardar tu partida y tus ajustes. Los servicios opcionales solo se cargan si das tu permiso. Puedes cambiarlo cuando quieras.|We use necessary local storage to save your game and settings. Optional services are only loaded if you give your permission. You can change this at any time.|Nous utilisons le stockage local nécessaire pour sauvegarder ta partie et tes paramètres. Les services optionnels ne sont chargés qu’avec ton accord. Tu peux changer ce choix à tout moment.|Wir verwenden notwendigen lokalen Speicher, um dein Spiel und deine Einstellungen zu sichern. Optionale Dienste werden nur mit deiner Erlaubnis geladen. Du kannst das jederzeit ändern.
+cookies.more|Más información|More information|Plus d’informations|Mehr Informationen
+cookies.accept|ACEPTAR TODAS|ACCEPT ALL|TOUT ACCEPTER|ALLE AKZEPTIEREN
+cookies.reject|RECHAZAR OPCIONALES|REJECT OPTIONAL|REFUSER LES OPTIONNELS|OPTIONALE ABLEHNEN
+cookies.config|CONFIGURAR|CONFIGURE|CONFIGURER|KONFIGURIEREN
+cookies.save|GUARDAR ELECCIÓN|SAVE CHOICE|ENREGISTRER LE CHOIX|AUSWAHL SPEICHERN
+cookies.always|siempre activas|always on|toujours actifs|immer aktiv
+cookies.necessary.name|Necesarias|Necessary|Nécessaires|Notwendig
+cookies.necessary.desc|Guardan tu partida, idioma y ajustes en tu dispositivo. No se pueden desactivar.|They store your game, language and settings on your device. They cannot be turned off.|Elles enregistrent ta partie, ta langue et tes paramètres sur ton appareil. Elles ne peuvent pas être désactivées.|Sie speichern Spiel, Sprache und Einstellungen auf deinem Gerät. Sie lassen sich nicht abschalten.
+cookies.analytics.name|Analítica|Analytics|Analyse|Analyse
+cookies.analytics.desc|Miden el uso del juego para mejorarlo. Desactivadas por defecto.|They measure how the game is used to improve it. Off by default.|Elles mesurent l’usage du jeu pour l’améliorer. Désactivées par défaut.|Sie messen die Nutzung des Spiels, um es zu verbessern. Standardmäßig aus.
+debug.title|Depuración|Debug|Débogage|Debug
+ui.fullscreen|PANTALLA COMPLETA|FULLSCREEN|PLEIN ÉCRAN|VOLLBILD
+ui.fullscreen_exit|SALIR DE PANTALLA COMPLETA|EXIT FULLSCREEN|QUITTER LE PLEIN ÉCRAN|VOLLBILD BEENDEN
+settings.fullscreen|Pantalla completa|Fullscreen|Plein écran|Vollbild
