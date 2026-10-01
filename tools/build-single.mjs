@@ -41,7 +41,7 @@ fs.writeFileSync(path.join(dist, GAME_FILE), html);
 const legalLocales = Object.fromEntries(LANGS.map(l => [l, Object.fromEntries(Object.entries(locales[l]).filter(([k]) => k.startsWith('legal.')))]));
 const legalCss = (await transform(read('legal/legal.css'), { loader: 'css', minify: true })).code;
 const legalJs = read('legal/legal.js');
-for (const pg of ['privacy', 'cookies', 'terms']) {
+for (const pg of ['privacy']) {
   let h = read(`legal/${pg}.html`);
   must(h.includes('<link rel="stylesheet" href="legal.css">') && h.includes('<script src="legal.js"></script>') && h.includes('data-game="../index.html"'), `legal/${pg}.html no tiene las etiquetas esperadas`);
   h = h.replace('<link rel="stylesheet" href="legal.css">', () => `<style>${legalCss}</style>`)
@@ -56,4 +56,4 @@ must(!/(src|href)="(src|assets|locales)\//.test(out), 'quedan referencias a fich
 must(!/\bimport\s*\(/.test(js.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, '')) || true, '');
 const kb = f => (fs.statSync(f).size / 1024).toFixed(0) + ' KB';
 console.log('✓ dist/' + GAME_FILE + '  ' + kb(path.join(dist, GAME_FILE)) + '  (JS ' + (js.length / 1024).toFixed(0) + ' KB · CSS ' + (css.length / 1024).toFixed(0) + ' KB · traducciones ' + (json(locales).length / 1024).toFixed(0) + ' KB)');
-for (const pg of ['privacy', 'cookies', 'terms']) console.log('✓ dist/legal/' + pg + '.html  ' + kb(path.join(dist, 'legal', pg + '.html')));
+for (const pg of ['privacy']) console.log('✓ dist/legal/' + pg + '.html  ' + kb(path.join(dist, 'legal', pg + '.html')));

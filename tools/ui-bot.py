@@ -27,6 +27,7 @@ def main():
         pg = ctx.new_page(); logs = []
         pg.on('console', lambda m: logs.append((m.type, m.text)) if m.type in ('error', 'warning') else None)
         pg.on('pageerror', lambda e: errors.append('PAGEERROR: ' + str(e)))
+        reqs = []; pg.on('request', lambda r: reqs.append(r.url))
         pg.on('requestfailed', lambda r: errors.append('REQFAIL: ' + r.url) if 'localhost' in r.url else None)
         pg.set_default_timeout(4000)
         pg.goto(A.url); pg.wait_for_selector('body[data-ready="1"]', timeout=15000); pg.wait_for_timeout(400)
@@ -41,7 +42,7 @@ def main():
         def check_dom(v):
             txt = pg.evaluate("document.body.innerText")
             for m in KEY_RE.findall(txt):
-                if not re.match(r'^(v\d|\d)', m) and '.com' not in m and m not in ('legal.cookies',): errors.append(f'CLAVE i18n visible en {v}: {m}')
+                if not re.match(r'^(v\d|\d)', m) and '.com' not in m: errors.append(f'CLAVE i18n visible en {v}: {m}')
             dead = pg.evaluate("""() => [...document.querySelectorAll('#view button, #hud button')].filter(b => b.offsetParent && !b.disabled && !b.dataset.act && !b.onclick && !b.closest('.modal')).map(b => b.className + ':' + b.textContent.slice(0,20))""")
             for d in dead: errors.append(f'BOTÓN sin acción en {v}: {d}')
         G = lambda code, arg=None: pg.evaluate("async (arg) => { const T = window.__HOUSE_TEST; const G = T.G, C = T.C, S = T.S, st = T.st; " + code + "}", arg)
@@ -70,8 +71,11 @@ def main():
                         pg.keyboard.press('Escape'); pg.wait_for_timeout(80)
                         if pg.query_selector('.cookie-layer.is-config'): errors.append('PANEL de cookies no se cierra con Escape en ' + v); pg.click('.cookie-layer [data-ck="none"]')
                     elif pg.query_selector('.modal-back'):
-                        pg.keyboard.press('Escape'); pg.wait_for_timeout(80)
-                        if pg.query_selector('.modal-back'): errors.append('MODAL no se cierra con Escape en ' + v); pg.evaluate("document.querySelectorAll('.modal-back').forEach(e => e.remove())")
+                        n_modals = pg.evaluate("document.querySelectorAll('.modal-back').length")   # puede haber varios apilados (ayuda + guía de cartas): Escape cierra el de encima
+                        for _ in range(4):
+                            if not pg.query_selector('.modal-back'): break
+                            pg.keyboard.press('Escape'); pg.wait_for_timeout(80)
+                        if pg.query_selector('.modal-back'): errors.append('MODAL no se cierra con Escape en %s (había %d apilados)' % (v, n_modals)); pg.evaluate("document.querySelectorAll('.modal-back').forEach(e => e.remove())")
                 if fz:
                     r = rnd.random()
                     if r < 0.12: pg.keyboard.press('Escape')
@@ -143,6 +147,10 @@ def main():
                 errors.append(f'EXC en {v} paso {step}: {str(e)[:1200]}'); pg.wait_for_timeout(300)
                 if sum(1 for x in errors if x.startswith('EXC')) > 6: break
             pg.wait_for_timeout(80)
+        from urllib.parse import urlparse
+        base = urlparse(A.url).netloc
+        for u in dict.fromkeys(reqs):
+            if not u.startswith(('data:', 'blob:')) and urlparse(u).netloc != base: errors.append('PETICIÓN FUERA DEL ORIGEN: ' + u[:120])
         for t, m in logs:
             if t == 'error' or 'Failed' in m: errors.append('CONSOLA ' + t + ': ' + m[:200])
         b.close()

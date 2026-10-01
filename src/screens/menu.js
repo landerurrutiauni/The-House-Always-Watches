@@ -33,7 +33,7 @@ export function openSettings() {
       h('div', { class: 'set-row' }, h('label', null, t('settings.quality')), seg('quality', [['high', t('settings.q.high')], ['medium', t('settings.q.medium')], ['low', t('settings.q.low')]])),
       tog('contrast', t('settings.contrast')), tog('reduceEffects', t('settings.reduce_effects')), tog('vibration', t('settings.vibration')), fsRow()),
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.privacy')), h('div', { class: 'row' }, canOpenPreferences() ? h('button', { class: 'btn', type: 'button', onclick: () => openPreferences() }, t('settings.cookies')) : null,
-      h('a', { class: 'btn ghost', href: 'legal/privacy.html', target: '_blank', rel: 'noopener' }, t('menu.legal.privacy')), h('a', { class: 'btn ghost', href: 'legal/cookies.html', target: '_blank', rel: 'noopener' }, t('menu.legal.cookies')), h('a', { class: 'btn ghost', href: 'legal/terms.html', target: '_blank', rel: 'noopener' }, t('menu.legal.terms')))),
+      h('a', { class: 'btn ghost', href: 'legal/privacy.html', target: '_blank', rel: 'noopener' }, t('menu.legal.privacy')))),
     h('div', { class: 'row' }, h('button', { class: 'btn primary', type: 'button', onclick: () => closeTopModal() }, t('ui.close'))));
   let off = null;
   const m = modal(body, { title: t('settings.title'), onClose: () => { if (off) { off(); off = null; } } });
@@ -49,11 +49,12 @@ function menuScreen() {
   const main = h('div', { class: 'menu-main' }, title, h('p', { class: 'tagline' }, t('menu.tagline')),
     ms.hasSave ? btn(t('menu.continue'), 'menu_continue', null, 'primary') : btn(t('menu.new'), 'menu_new', null, 'primary'),
     ms.hasSave ? btn(t('menu.new'), 'menu_new', null, '') : btn(t('menu.continue'), 'menu_continue', null, '', { disabled: true }),
+    btn(t('menu.howto'), 'howto', null, ''),
     btn(t('menu.settings'), 'settings', null, ''),
     fsButton('text', ''),
     btn(t('menu.reset'), 'menu_reset', null, 'ghost danger', { disabled: !ms.hasSave }),
     ms.secretButton ? btn(t('menu.secret'), 'menu_archive', null, 'ghost secret-btn', { 'aria-label': t('archive.title') }) : null,
-    h('div', { class: 'menu-foot' }, h('a', { href: 'legal/privacy.html', target: '_blank', rel: 'noopener' }, t('menu.legal.privacy')), h('a', { href: 'legal/cookies.html', target: '_blank', rel: 'noopener' }, t('menu.legal.cookies')), h('a', { href: 'legal/terms.html', target: '_blank', rel: 'noopener' }, t('menu.legal.terms')), canOpenPreferences() ? h('button', { type: 'button', 'data-act': 'cookies' }, t('menu.cookies')) : null),
+    h('div', { class: 'menu-foot' }, h('a', { href: 'legal/privacy.html', target: '_blank', rel: 'noopener' }, t('menu.legal.privacy')), canOpenPreferences() ? h('button', { type: 'button', 'data-act': 'cookies' }, t('menu.cookies')) : null),
     h('div', { class: 'ver' }, t('menu.version', { v: CONFIG.VERSION }), ms.deaths ? ' · ' + t('menu.deaths', { n: ms.deaths }) : ''));
   const ch = characterEl('dealer', { scale: narrow ? 3 : (window.innerHeight < 780 ? 5 : (big ? 8 : 6)) });
   return h('section', { class: 'scr menu' }, main, h('div', { class: 'char-wrap', 'aria-hidden': 'true' }, ch));

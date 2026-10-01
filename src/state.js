@@ -19,7 +19,7 @@ export function defaultMeta() {
     runsStarted: 0, runsFinished: 0,
     endings: [], memories: [], knowledge: [],
     unlockedCards: [], unlockedItems: [], wingsCleared: [],
-    carryDebt: 0, introSeen: false, tutorial: {},
+    carryDebt: 0, introSeen: false, tutorial: {}, hints: {},
     mutations: 0,
     stats: { roundsWon: 0, roundsLost: 0, duelsWon: 0, duelsLost: 0, anomalies: 0, bossesDown: [] },
     lastRun: null

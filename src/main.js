@@ -13,6 +13,7 @@ import { register as regMenu } from './screens/menu.js';
 import { register as regRun } from './screens/run.js';
 import { register as regTable } from './screens/table.js';
 import { register as regDuel } from './screens/duel.js';
+import './screens/howto.js';   // registra la acción «howto» (menú, barra superior y tecla ?)
 import { initDebug } from './debug.js';
 import * as COMBAT from './combat.js';
 import * as SHOT from './shotgun.js';
@@ -34,6 +35,7 @@ function render(v) {
   renderHud(S.hud ? v.hud : null);
   const same = prevType === v.type && S.sameKeep;
   const el = S.render(v);
+  if (typeof v.hintKey === 'string' && v.hintKey.startsWith('hint.')) G.markHint(v.hintKey);   // pista de una sola vez: ya se ha mostrado
   if (same) el.classList.add('same');
   const view = $('#view'); view.replaceChildren(el); if (!same) view.scrollTop = 0;
   current = { S, el, v }; prevType = v.type;
@@ -60,6 +62,7 @@ async function boot() {
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Escape') { if (dismissConfig() || closeTopModal()) e.preventDefault(); return; }
     if (hasModal() || isTypingTarget(e.target)) return;
+    if (e.key === '?' && act.howto) { e.preventDefault(); act.howto(); return; }
     const v = G.getView(); if (!v || !current) return; const el = current.el, k = e.key.toLowerCase();
     if (v.type === 'event' && v.phase === 'choose' && el._key) { const map = { a: 'b', arrowleft: 'b', d: 'a', arrowright: 'a', h: 'h' }; if (map[k]) { e.preventDefault(); el._key(map[k]); return; } }
     if (el._keys && el._keys(e)) { e.preventDefault(); return; }

@@ -8,7 +8,7 @@
     "serve": "python3 -m http.server 8080",
     "i18n": "node tools/build-locales.mjs && node tools/check-i18n.mjs",
     "build": "node tools/build-locales.mjs && node tools/build-single.mjs",
-    "check": "node tools/check-i18n.mjs && node tools/test-logic.mjs && node tools/test-game.mjs 6 1",
+    "check": "node tools/check-i18n.mjs && node tools/test-logic.mjs && node tools/test-help.mjs && node tools/test-game.mjs 6 1",
     "test:ui": "python3 tools/ui-bot.py --fast --steps 300 --budget 120",
     "test:features": "python3 tools/test-features.py",
     "test:single": "python3 tools/test-single.py",

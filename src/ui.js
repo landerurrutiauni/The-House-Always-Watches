@@ -134,6 +134,7 @@ export function renderHud(hud) {
     st('debt', 'ledger', 'hud.debt', hud.debt),
     hud.lives > 0 ? st('lives', 'candle', 'hud.lives', '×' + hud.lives) : null,
     h('span', { class: 'hud-inv' }, ...hud.tools.map(id => h('span', { class: 'chip tool', title: t(`tool.${id}.name`) + ': ' + t(`tool.${id}.desc`) }, sigil(id, '', PAL.g1))), inv),
+    h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'howto', 'aria-label': t('hud.howto'), title: t('hud.howto') }, ico('help')),
     fsButton('icon', 'small ghost'),
     h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'settings', 'aria-label': t('hud.settings'), title: t('hud.settings') }, ico('gear'))
   );

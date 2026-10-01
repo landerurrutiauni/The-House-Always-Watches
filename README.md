@@ -10,7 +10,7 @@ Roguelike de cartas con casino maldito, terror y pixel art procedural. **Vertica
 
 **Online (GitHub Pages).** El repositorio se sirve tal cual desde la rama `main` (carpeta raíz): `index.html` carga los módulos ES directamente, sin paso de compilación. Para actualizarlo basta con hacer `git push`.
 
-**Un solo archivo.** Abre `dist/the-house-always-watches.html` con doble clic. Lleva todo incrustado y funciona desde `file://` o subido a cualquier hosting estático. Si quieres las páginas legales, sube también la carpeta `dist/legal/` (son autónomas).
+**Un solo archivo.** Abre `dist/the-house-always-watches.html` con doble clic. Lleva todo incrustado y funciona desde `file://` o subido a cualquier hosting estático. Si quieres la página de privacidad, sube también la carpeta `dist/legal/` (es autónoma).
 
 **Proyecto modular en local.**
 
@@ -22,6 +22,13 @@ npm run serve        # = python3 -m http.server 8080
 Los módulos ES necesitan HTTP: abrir `index.html` con doble clic **no** funciona (usa el archivo único).
 
 Para regenerar el archivo único tras tocar el código: `npm install` (una vez, instala esbuild) y `npm run build`.
+
+## Ayuda y tutorial
+
+- **Tutorial integrado en la historia.** La primera mesa de cartas que pisas es un tutorial guiado por el Crupier: mano preparada, objetivo bajo y perder no cuesta nada (puedes repetir). Da 5 pistas según juegas (elegir cartas, palos y combinaciones, costes, descartes/Bolsillo/apuestas, objetivo). Los primeros duelos de la escopeta traen 3 pistas más.
+- **Pantalla «Cómo se juega».** Botón **CÓMO SE JUEGA** en el menú, icono **?** en la barra superior durante la partida y la tecla `?`. Explica el objetivo, el mapa, los recursos (Salud, Cordura, Dinero, Deuda, Escudo), las mesas de cartas, los sucesos, el duelo, la tienda y los descansos, y qué pasa al morir. Son secciones plegables; desde ahí se abre también la guía de manos y palos.
+- **Guía de cartas.** Botón **? GUÍA** en cada mesa: objetivo, puntuación, tabla de manos con tus niveles, palos, combinaciones y apuestas.
+- **Pistas de una sola vez.** La primera vez que aparece un mapa, un suceso, una tienda, un descanso o un Guardián, el Crupier añade una pista corta. Se marcan como vistas cuando se muestran de verdad y se guardan en el perfil: no vuelven al morir ni con NUEVA PARTIDA; REINICIAR PROGRESO las restablece.
 
 ## Pantalla completa
 
@@ -38,6 +45,7 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 | Mesa de cartas | Tocar cartas (hasta 5), JUGAR / DESCARTAR / BOLSILLO / apuesta | `1`–`9` elegir carta · `Enter` jugar · `Retroceso` descartar |
 | Duelo de la escopeta | DISPARAR AL RIVAL / TENTAR A LA MESA / ESCUCHAR | `F` disparar · `T` tentar a la mesa · `L` escuchar |
 | Mapa | Tocar un nodo para ver qué es; tocarlo otra vez (o ENTRAR) para entrar | — |
+| Ayuda «Cómo se juega» | Botón del menú o **?** de la barra superior | `?` |
 | Cualquier panel | ✕ | `Esc` |
 
 ## Qué contiene
@@ -48,9 +56,9 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 - **Duelo de la escopeta ficticia**: 6 cámaras, anuncio que puede mentir, tentar a la Mesa o escuchar. Es una mecánica abstracta de «marcas»; no hay violencia explícita.
 - 8 personajes, 5 jefes, 6 finales (5 + el final verdadero), La Puerta, 12 recuerdos permanentes y 13 piezas de conocimiento.
 - Morir no es Game Over: pantalla DEUDA ACTUAL / RECUERDOS CONSERVADOS y nuevo descenso con meta-progresión.
-- Tutorial integrado en la historia (el Crupier enseña jugando) e intro «¿Estás despierto?».
+- Intro «¿Estás despierto?», tutorial, pantalla «Cómo se juega» y pistas de una sola vez.
 - Música dinámica por capas y efectos de sonido sintetizados con Web Audio.
-- Idiomas es / en / fr / de al 100 % (794 claves × 4) con cambio en caliente.
+- Idiomas es / en / fr / de al 100 % (783 claves × 4) con cambio en caliente.
 
 ## Estructura
 
@@ -58,11 +66,12 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 index.html              punto de entrada (versión modular, la que sirve GitHub Pages)
 assets/ui/game.css      maquetación, efectos, accesibilidad, pantallas grandes
 src/                    lógica (state, cards, combat, shotgun, map, content, effects, game, save, i18n)
-                        y capa web (sprites, audio, music, sfx, fx, fullscreen, ui, cookies, privacy, debug, main, screens/)
+                        y capa web (sprites, audio, music, sfx, fx, fullscreen, ui, cookies, privacy, debug, main,
+                        screens/: menu, run, table, duel, howto)
 locales-src/*.txt       textos fuente: clave|es|en|fr|de
 locales/*.json          generado por tools/build-locales.mjs (no editar a mano)
-legal/                  páginas legales (PLANTILLAS, no son asesoramiento legal)
-dist/                   generado: archivo único + páginas legales autónomas
+legal/                  página «Privacidad y aviso» (única página legal)
+dist/                   generado: archivo único + página de privacidad autónoma
 tools/                  construcción y pruebas
 ```
 
@@ -73,11 +82,11 @@ Los textos se editan en `locales-src/` y se regeneran con `npm run i18n` (tambi�
 | Comando | Qué hace |
 |---|---|
 | `npm run serve` | Servidor local en el puerto 8080 |
-| `npm run build` | Regenera `locales/` y `dist/` (archivo único + legales) |
+| `npm run build` | Regenera `locales/` y `dist/` (archivo único + página de privacidad) |
 | `npm run i18n` | Fusiona textos y comprueba paridad es/en/fr/de |
-| `npm run check` | i18n + tests de lógica + partidas simuladas sin interfaz |
+| `npm run check` | i18n + tests de lógica + tests de ayuda y pistas + partidas simuladas sin interfaz |
 | `npm run test:ui` | Bot que juega con clics reales en Chromium (necesita `npm run serve`, `pip install playwright` y `playwright install chromium`) |
-| `npm run test:features` | Sin terceros, consentimiento opcional, persistencia, audio, accesibilidad, idiomas, pantalla completa y depuración en Chromium (necesita el servidor) |
+| `npm run test:features` | Sin terceros ni cookies, consentimiento opcional, persistencia, audio, accesibilidad, idiomas, pantalla completa, ayuda y pistas, y depuración en Chromium (necesita el servidor) |
 | `npm run test:single` | Prueba el archivo único abierto como `file://` |
 | `npm run balance` | Simulación de equilibrio con un bot voraz |
 
@@ -87,18 +96,18 @@ Sin tocar los módulos, define `window.HOUSE_CONFIG` **antes** de cargar el jueg
 
 ## Sin anuncios ni servicios de terceros
 
-- El juego **no incluye publicidad**: no hay huecos de anuncios, ni script de Google, ni señales de Consent Mode. Las pruebas comprueban que el arranque solo hace peticiones al propio origen y que el código y los textos no contienen restos de AdSense.
+- El juego **no incluye publicidad**: no hay huecos de anuncios, ni script de Google, ni señales de Consent Mode. Las pruebas comprueban que ni el arranque ni una partida hacen peticiones fuera del propio origen, que no se escriben cookies y que el código y los textos no contienen restos de AdSense.
 - Como no queda ningún servicio opcional, **no se muestra banner de cookies**. Lo único que se guarda es la partida y los ajustes, en `localStorage` de tu navegador (`thaw.save.v1` y `thaw.settings.v1`); el juego no envía datos a ningún servidor.
 - Si algún día añades un servicio opcional (por ejemplo, analítica):
   1. Declara su categoría en `OPTIONAL_CATEGORIES` (p. ej. `['analytics']`; hacen falta las claves i18n `cookies.<categoría>.name` y `.desc`).
   2. Cárgalo siempre con `loadThirdParty(categoría, src)` de `src/privacy.js`: solo se inyecta si la persona lo aceptó.
   3. Con categorías declaradas vuelve a aparecer el banner (ACEPTAR TODAS / RECHAZAR OPCIONALES / CONFIGURAR) y los botones «Cookies» del menú y de Ajustes.
-  4. Actualiza las páginas legales.
-- Si volvieras a poner publicidad de Google en el EEE, Reino Unido o Suiza, Google exige un CMP certificado e integrado con el IAB TCF (<https://support.google.com/adsense/answer/13554020>); este banner propio no lo es.
+  4. Actualiza la página «Privacidad y aviso».
+- Si volvieras a poner publicidad de Google en el EEE, Reino Unido o Suiza, Google exige un CMP certificado e integrado con el IAB TCF (<https://support.google.com/adsense/answer/13554020>); el banner propio no lo es.
 
-## Privacidad y páginas legales
+## Privacidad y aviso
 
-`legal/privacy.html`, `legal/cookies.html` y `legal/terms.html` son **PLANTILLAS con huecos `[entre corchetes]`**. **No son asesoramiento legal.** Sustitúyelas por textos revisados por un profesional antes de publicar el juego con fines serios. Se muestran en es/en/fr/de y llevan un aviso rojo de plantilla.
+`legal/privacy.html` es una única página corta, en es/en/fr/de, que describe lo que el juego hace hoy: qué guarda en tu navegador, que no usa servicios de terceros ni cookies, que el alojamiento (GitHub Pages) puede registrar visitas por su cuenta, y el aviso de contenido (ficción de terror, dinero ficticio, efectos de parpadeo). **No incluye datos de contacto ni de titular.** Son afirmaciones sobre el comportamiento del juego, que las pruebas comprueban; **no las ha revisado ningún profesional**. Si cambias algo (analítica, anuncios, cuentas, formularios) o cambias de alojamiento, actualiza `locales-src/c-legal.txt`.
 
 ## Modo depuración (oculto)
 
@@ -112,13 +121,14 @@ Ajustes: volumen de música / efectos / ambiente, silenciar, reducir sonidos int
 
 Todo en Chromium (Playwright) y en Node:
 
-- 47 tests de lógica y partidas simuladas sin interfaz con varias semillas (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
+- 47 tests de lógica, 31 de ayuda y pistas, y partidas simuladas sin interfaz con varias semillas (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
 - Un bot que juega con clics reales (modo normal y aleatorio con teclas y clics al azar), en 1280×720, 1920×1080, 390×844, 360×640, 844×390 y 820×1180, en los 4 idiomas, sobre la versión modular y sobre el archivo único abierto como `file://`.
-- 56 comprobaciones de funciones transversales (sin terceros, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente, pantalla completa, depuración) y 14 sobre el archivo único.
+- 77 comprobaciones de funciones transversales (sin terceros ni cookies, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente, pantalla completa, ayuda y pistas, depuración), 14 sobre el archivo único y una simulación de GitHub Pages bajo subruta.
 
 ## Límites y lo que no se ha probado
 
-- **Ningún humano ha jugado ni escuchado el juego.** El equilibrio solo se ha ajustado contra un bot voraz (victoria del 100 % en la primera sala al 54 % contra el jefe de ala); la dificultad real, el ritmo y la música no se han validado con personas.
+- **Ningún humano ha jugado ni escuchado el juego**, ni se ha probado el tutorial y las pistas con una persona nueva. El equilibrio solo se ha ajustado contra un bot voraz (victoria del 100 % en la primera sala al 54 % contra el jefe de ala); la dificultad real, el ritmo y la música no se han validado con personas.
+- Tras el tutorial no hay curva de aprendizaje: las reglas de los rivales salen al azar desde la primera sala; con las filas sube sobre todo el objetivo de puntos.
 - **Solo Chromium.** No se ha probado en Firefox ni Safari ni en dispositivos móviles reales (solo emulación táctil); la pantalla completa tampoco.
 - El audio se verificó midiendo señal en la salida de un navegador sin pantalla, no escuchándolo.
 - No hay licencia definida (por defecto, todos los derechos reservados): añade la que quieras.

@@ -150,13 +150,19 @@ function resumeRun() {
 function pickPrev(node) { return gs.run.pos; }
 
 // ---------------- Mapa ----------------
+// Pistas de una sola vez: la primera vez que aparece cada tipo de pantalla se añade una pista del Crupier a la vista (hintKey).
+// peekHint() solo consulta; la interfaz llama a markHint() cuando la ha mostrado de verdad, y entonces no vuelve a salir
+// (se guarda en la meta del perfil: sobrevive a muertes y a NUEVA PARTIDA; REINICIAR PROGRESO la borra).
+function peekHint(name) { const h = gs.meta.hints; return h && h[name] ? null : 'hint.' + name; }
+export function markHint(key) { const name = String(key).replace(/^hint\./, ''); if (!gs.meta.hints) gs.meta.hints = {}; gs.meta.hints[name] = true; }
+
 export function showMap() {
   const run = gs.run;
   run.phase = 'map';
   const avail = available(run.map, run.pos, FX.secretUnlocked());
   return setView({
     type: 'map', map: run.map, pos: run.pos, visited: run.visited.slice(), avail, secretVisible: FX.secretUnlocked(),
-    wing: run.wing, row: currentRow(), music: gs.player.sanity < 25 ? 'low_sanity' : 'exploration'
+    wing: run.wing, row: currentRow(), hintKey: peekHint('map'), music: gs.player.sanity < 25 ? 'low_sanity' : 'exploration'
   });
 }
 
@@ -236,7 +242,7 @@ function showEvent(id, node) {
   if (ev.hid && FX.checkReq(ev.hid.req)) opts.push({ k: 'h', key: 'event.' + id + '.h', hidden: true });
   const secret = !!(ev.secret || node.kind === 'secret');
   return setView({
-    type: 'event', id, who: ev.who || null, bg: ev.bg || 'corridor', phase: 'choose',
+    type: 'event', id, who: ev.who || null, bg: ev.bg || 'corridor', phase: 'choose', hintKey: peekHint('event'),
     titleKey: 'event.' + id + '.title', textKey: 'event.' + id + '.text', options: opts, secret,
     music: secret ? 'secret' : (gs.player.sanity < 25 ? 'horror' : 'dialogue')
   });
@@ -547,7 +553,7 @@ function shopView() {
     if (e.kind === 'loan') can = !e.sold;
     return Object.assign({}, e, { index: i, can });
   });
-  return setView({ type: 'merchant', stock, music: 'dialogue', bg: 'shop', who: 'merchant' });
+  return setView({ type: 'merchant', stock, music: 'dialogue', bg: 'shop', who: 'merchant', hintKey: peekHint('merchant') });
 }
 export function enterMerchant(node) {
   const run = gs.run; const rng = rngFor(run.seed, 'shop', node.id);
@@ -577,7 +583,7 @@ function restView(done) {
     { k: 'pay', ok: payable > 0, amount: payable },
     { k: 'study', ok: p.sanity > REST_AMOUNTS.study + 2, amount: REST_AMOUNTS.study }
   ];
-  return setView(Object.assign({ type: 'rest', options, music: 'dialogue', bg: 'rest' }, done ? { phase: 'done', done } : { phase: 'choose' }));
+  return setView(Object.assign({ type: 'rest', options, music: 'dialogue', bg: 'rest' }, done ? { phase: 'done', done } : { phase: 'choose', hintKey: peekHint('rest') }));
 }
 export function enterRest() { return restView(null); }
 export function restChoose(k) {
@@ -597,7 +603,7 @@ export function enterBoss(node) {
   const id = node.opp.id, b = BOSSES[id];
   G.bossCtx = { node, id };
   if (!G.node || G.node.id !== node.id) G.node = node;
-  return setView({ type: 'boss_intro', boss: id, lineKey: 'boss.' + id + '.a', bg: b.bg, secret: !!b.secret, rules: bossRules(id), weakened: bossWeakened(id), music: 'boss' });
+  return setView({ type: 'boss_intro', boss: id, lineKey: 'boss.' + id + '.a', bg: b.bg, secret: !!b.secret, rules: bossRules(id), weakened: bossWeakened(id), hintKey: peekHint('boss'), music: 'boss' });
 }
 export function bossStart() {
   const bc = G.bossCtx; if (!bc) return G.view;

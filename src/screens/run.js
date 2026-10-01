@@ -12,6 +12,7 @@ const oppName = id => (String(id).startsWith('gambler') ? t('opp.' + (id === 'ga
 const ruleList = (rules, weak = []) => [].concat(rules || []).map(r => h('span', { class: 'tag red', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`)))
   .concat(weak.map(r => h('span', { class: 'tag good', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + ' · ' + t('boss.weakened'))));
 const primary = (label, a, arg) => btn(label, a, arg, 'primary', { 'data-primary': '1' });
+const hintBox = key => (key ? h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(key)) : null);   // pista de una sola vez
 
 // ---------------- Mapa ----------------
 const KIND_ICON = { game: 'node_game', event: 'node_event', merchant: 'node_merchant', rest: 'node_rest', shotgun: 'node_shotgun', secret: 'node_secret', boss: 'node_boss' };
@@ -30,7 +31,7 @@ function mapScreen(v) {
   const rows = v.map.rows, N = rows.length, box = h('div', { class: 'map-box' }); const pos = {};
   rows.forEach((row, r) => { const vis = row.filter(n => !n.secret); vis.forEach((n, i) => { pos[n.id] = [(i + 1) / (vis.length + 1), 1 - (r + 0.5) / N]; }); row.filter(n => n.secret).forEach(n => { pos[n.id] = [0.92, 1 - (r + 0.5) / N]; }); });
   const svgNS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
-  const info = h('div', { class: 'panel map-info', 'aria-live': 'polite' }, nodeInfo(null));
+  const info = h('div', { class: 'panel map-info' + (v.hintKey ? ' hint' : ''), 'aria-live': 'polite' }, v.hintKey ? [h('small', null, t('char.dealer')), t(v.hintKey)] : nodeInfo(null));
   const enter = btn(t('map.enter'), 'map_enter', null, 'primary', { disabled: true, 'data-primary': '1' });
   for (const row of rows) for (const n of row) {
     if (n.secret && !v.secretVisible) continue;
@@ -46,7 +47,7 @@ function mapScreen(v) {
   act.map_sel = id => {
     const n = rows.flat().find(x => x.id === id); if (!n) return;
     if (mapSel === id) { G.chooseNode(id); return; }
-    mapSel = id; box.querySelectorAll('.node').forEach(b => b.classList.toggle('sel', b.dataset.arg === id)); info.replaceChildren(nodeInfo(n)); enter.disabled = false; announce(t('node.' + n.kind));
+    mapSel = id; box.querySelectorAll('.node').forEach(b => b.classList.toggle('sel', b.dataset.arg === id)); info.replaceChildren(nodeInfo(n)); info.classList.remove('hint'); enter.disabled = false; announce(t('node.' + n.kind));
   };
   act.map_enter = () => { if (mapSel) G.chooseNode(mapSel); };
   return h('section', { class: 'scr mapscr' }, h('p', { class: 'muted center', style: 'margin:2px' }, t('map.title', { n: Math.max(0, v.row) + 1, total: N }) + ' · ' + t(`wing.${v.wing}.name`)), box, info, h('div', { class: 'row center' }, enter));
@@ -54,11 +55,11 @@ function mapScreen(v) {
 
 // ---------------- Eventos ----------------
 function eventScreen(v) {
-  const who = v.who && v.who !== 'dealer_x' ? characterEl(v.who, { scale: 4 }) : null;
+  const who = v.who && v.who !== 'dealer_x' ? characterEl(v.who, { scale: sc(4, 3) }) : null;
   const text = h('p', { class: 'ev-text' }), title = h('h2', { class: 'ev-title' }, t(v.titleKey));
   const body = h('div', { class: 'ev-body panel' }, title, text);
   const card = h('div', { class: 'ev-card' + (who ? '' : ' nochar') }, who, body);
-  const root = h('section', { class: 'scr evscr' }, card);
+  const root = h('section', { class: 'scr evscr' }, v.phase === 'choose' ? hintBox(v.hintKey) : null, card);
   const raw = t(v.textKey), shown = fx.corrupt(raw);
   if (v.phase === 'choose') {
     const choices = h('div', { class: 'choices', style: 'opacity:0;pointer-events:none' });
@@ -106,6 +107,7 @@ function merchantScreen(v) {
     e.sold ? h('span', { class: 'tag' }, t('shop.sold')) : btn(e.kind === 'loan' ? t('shop.take') : t('shop.buy', { price: e.price }), 'shop_buy', e.index, e.kind === 'loan' ? 'danger small' : 'small', { disabled: !e.can })); });
   return h('section', { class: 'scr resscr', style: 'justify-content:flex-start' },
     h('div', { class: 'shop-top panel' }, characterEl('merchant', { scale: 3 }), h('div', null, h('h2', { class: 'ev-title' }, t('char.merchant')), h('p', { class: 'say', style: 'margin:0' }, t('shop.line')))),
+    hintBox(v.hintKey),
     h('div', { class: 'shop-list' }, ...list), primary(t('shop.leave'), 'shop_leave'));
 }
 act.shop_buy = i => { const before = gs.player.money; G.buy(+i); };
@@ -119,6 +121,7 @@ function restScreen(v) {
     return h('section', { class: 'scr resscr' }, h('h2', { class: 'bigtitle' }, t('rest.title')), h('p', { class: 'say' }, t('rest.done.' + d.k, { n: d.amount, hand: d.extra ? t('hand.' + d.extra) : '' })), primary(t('ui.continue'), 'rest_continue'));
   }
   return h('section', { class: 'scr resscr' }, h('h2', { class: 'bigtitle' }, t('rest.title')), h('p', { class: 'say' }, t('rest.sub')),
+    hintBox(v.hintKey),
     h('div', { class: 'rest-opts' }, ...v.options.map(o => h('button', { type: 'button', class: 'btn', 'data-act': 'rest_pick', 'data-arg': o.k, disabled: !o.ok }, h('b', null, ico(icons[o.k]), ' ', t(`rest.${o.k}.name`)), h('span', { class: 'muted' }, t(`rest.${o.k}.desc`, { n: o.amount }))))),
     btn(t('rest.skip'), 'rest_continue', null, 'ghost'));
 }
@@ -165,8 +168,8 @@ function bossScreen(v) {
   const line = h('p', { class: 'say' });
   typewriter(line, t(v.lineKey), { speed: 22 });
   if (v.secret) setTimeout(() => fx.glitch(), 300);
-  return h('section', { class: 'scr resscr' }, h('p', { class: 'muted' }, t('boss.title')), characterEl(v.boss, { scale: sc(6, 3) }), h('h2', { class: 'bigtitle' }, t('char.' + v.boss)), line,
-    h('div', { class: 'panel' }, h('b', null, t('boss.rules')), h('div', { class: 'rules', style: 'justify-content:center' }, ...(ruleList(v.rules, v.weakened).length ? ruleList(v.rules, v.weakened) : [h('span', { class: 'muted' }, t('boss.no_rules'))]))), primary(t('boss.fight'), 'boss_start'));
+  return h('section', { class: 'scr resscr bossscr' }, h('p', { class: 'muted' }, t('boss.title')), characterEl(v.boss, { scale: sc(6, window.innerHeight < 800 ? 2 : 3) }), h('h2', { class: 'bigtitle' }, t('char.' + v.boss)), line,
+    h('div', { class: 'panel' }, h('b', null, t('boss.rules')), h('div', { class: 'rules', style: 'justify-content:center' }, ...(ruleList(v.rules, v.weakened).length ? ruleList(v.rules, v.weakened) : [h('span', { class: 'muted' }, t('boss.no_rules'))]))), hintBox(v.hintKey), primary(t('boss.fight'), 'boss_start'));
 }
 act.boss_start = () => G.bossStart();
 function finaleScreen(v) {

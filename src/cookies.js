@@ -38,7 +38,7 @@ export function showBanner(mode = 'banner') {
   root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', mode === 'config' ? 'true' : 'false'); root.setAttribute('aria-label', t('cookies.title'));
   const box = el('div', 'cookie-box'); root.appendChild(box);
   box.appendChild(el('h2', 'cookie-title', t('cookies.title')));
-  const p = el('p', 'cookie-text', t('cookies.text') + ' '); const a = el('a', null, t('cookies.more')); a.href = 'legal/cookies.html'; a.target = '_blank'; a.rel = 'noopener'; p.appendChild(a); box.appendChild(p);
+  const p = el('p', 'cookie-text', t('cookies.text') + ' '); const a = el('a', null, t('cookies.more')); a.href = 'legal/privacy.html'; a.target = '_blank'; a.rel = 'noopener'; p.appendChild(a); box.appendChild(p);
   const bar = el('div', 'cookie-btns'), mk = (cls, label, ck) => { const b = el('button', 'btn ' + cls, label); b.type = 'button'; b.dataset.ck = ck; return b; };
   if (mode === 'config') {
     const list = el('div', 'cookie-cats');
