@@ -73,8 +73,9 @@ export function t(key, vars) {
   return s;
 }
 export const missingKeys = () => [...missing];
+export const rankName = r => (r === 1 || r >= 11 ? t('rank.' + r) : String(r));   // As, Jota, Reina, Rey (o el número)
 export function cardName(c) {
   if (!c) return '';
   if (c.sp) return t('card.' + c.id + '.name');
-  return t('card.base', { rank: c.rank, suit: t('suit.' + c.suit) });
+  return t('card.base', { rank: rankName(c.rank), suit: t('suit.' + c.suit) });
 }

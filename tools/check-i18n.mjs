@@ -44,6 +44,10 @@ Object.keys(C.MEMORIES).forEach(m => { need.add(`mem.${m}.name`); need.add(`mem.
 C.KNOWLEDGE.forEach(k => { need.add(`know.${k}.name`); need.add(`know.${k}.text`); });
 C.ENDING_ORDER.forEach(e => ['title', 'text', 'epi'].forEach(s => need.add(`ending.${e}.${s}`)));
 Object.keys(C.WING_INFO).forEach(w => { need.add(`wing.${w}.name`); need.add(`wing.${w}.desc`); });
+const MIS = await import('../src/missions.js'), ACHV = await import('../src/achievements.js');
+MIS.MISSION_IDS.forEach(id => need.add(`mission.${id}`));
+ACHV.EGGS.forEach(id => { need.add(`egg.${id}.name`); need.add(`egg.${id}.text`); need.add(`egg.${id}.hint`); });
+C.CHARACTERS.forEach(id => { need.add(`char.${id}`); need.add(`bio.${id}`); });
 for (const k of need) if (!(k in L.en)) err(`el contenido exige la clave: ${k}`);
 
 // 3) claves literales en el código y el HTML

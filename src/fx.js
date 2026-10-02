@@ -18,13 +18,26 @@ export const fx = {
     fx.setTier(tier, true);
   },
   shake() { if (reduced()) return; const a = $('#view'); if (!a) return; a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake'); setTimeout(() => a.classList.remove('shake'), 400); },
-  flash(color = '#8a1c1c') { const d = document.createElement('div'); d.className = 'flash'; d.style.background = color; if (reduced()) d.style.animationDuration = '.12s'; document.body.appendChild(d); setTimeout(() => d.remove(), 350); },
+  // Destello de pantalla. Con «reducir efectos» no se muestra (accesibilidad: sin destellos). `a` = opacidad inicial.
+  flash(color = '#8a1c1c', a = 0.6) { if (reduced()) return; const d = document.createElement('div'); d.className = 'flash'; d.style.background = color; d.style.setProperty('--fa', String(a)); document.body.appendChild(d); setTimeout(() => d.remove(), 350); },
   glitch(el, ms = 500) { if (reduced()) return; el = el || $('#view'); if (!el) return; el.classList.add('glitch'); setTimeout(() => el.classList.remove('glitch'), ms); },
   float(target, text, cls = '') {
     const r = target && target.getBoundingClientRect ? target.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
     const s = document.createElement('span'); s.className = 'float ' + cls; s.textContent = text;
     s.style.left = Math.round(r.left + r.width / 2) + 'px'; s.style.top = Math.round(r.top + r.height / 2) + 'px';
     document.body.appendChild(s); setTimeout(() => s.remove(), 1250);
+  },
+  // Texto grande de jugada potente / combo (decorativo). tier 1..3.
+  banner(text, tier = 1) { const b = document.createElement('div'); b.className = 'fxbanner t' + tier; b.textContent = text; b.setAttribute('aria-hidden', 'true'); document.body.appendChild(b); setTimeout(() => b.remove(), 1450); return b; },
+  // Brasas que suben desde un elemento (jugadas muy potentes).
+  embers(target, n = 14) {
+    if (reduced() || typeof document === 'undefined') return;
+    const r = target && target.getBoundingClientRect ? target.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('span'); s.className = 'ember'; s.style.left = Math.round(r.left + Math.random() * r.width) + 'px'; s.style.top = Math.round(r.top + r.height * (0.4 + Math.random() * 0.5)) + 'px';
+      s.style.setProperty('--dx', Math.round(Math.random() * 120 - 60) + 'px'); s.style.setProperty('--dy', Math.round(-(60 + Math.random() * 140)) + 'px'); s.style.animationDelay = (Math.random() * 0.25).toFixed(2) + 's';
+      document.body.appendChild(s); setTimeout(() => s.remove(), 1700);
+    }
   },
   vibrate(p = 40) { try { if (settings.vibration && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* no soportado */ } },
   setTier(n, force) {

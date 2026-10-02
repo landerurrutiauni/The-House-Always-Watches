@@ -2,7 +2,9 @@
 import * as G from '../game.js';
 import { gs, settings } from '../state.js';
 import { t } from '../i18n.js';
-import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc } from '../ui.js';
+import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc, jokerEl, jokerDesc, modal } from '../ui.js';
+import { rewardText, list as missionList } from '../missions.js';
+import { WING_INFO } from '../content.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
 import { makeCard, SPECIALS } from '../cards.js';
 import { fx } from '../fx.js';
@@ -50,7 +52,11 @@ function mapScreen(v) {
     mapSel = id; box.querySelectorAll('.node').forEach(b => b.classList.toggle('sel', b.dataset.arg === id)); info.replaceChildren(nodeInfo(n)); info.classList.remove('hint'); enter.disabled = false; announce(t('node.' + n.kind));
   };
   act.map_enter = () => { if (mapSel) G.chooseNode(mapSel); };
-  return h('section', { class: 'scr mapscr' }, h('p', { class: 'muted center', style: 'margin:2px' }, t('map.title', { n: Math.max(0, v.row) + 1, total: N }) + ' · ' + t(`wing.${v.wing}.name`)), box, info, h('div', { class: 'row center' }, enter));
+  const missLabel = () => { const l = missionList(); return t('mission.btn', { n: l.filter(m => m.done).length, m: l.length }); };
+  act.map_missions = () => { const miss = missionList(); const b = document.querySelector('[data-act="map_missions"]'); if (b) b.textContent = missLabel(); modal(h('div', { class: 'miss-list' }, ...miss.map(m => h('div', { class: 'miss' + (m.done ? ' done' : ''), 'data-mission': m.id },
+    h('b', null, (m.done ? '✓ ' : '') + t('mission.' + m.id)), h('span', { class: 'miss-n' }, t('mission.progress', { n: m.n, m: m.need })), h('div', { class: 'muted' }, t('mission.reward_label', { r: rewardText(m.reward) })))), h('p', { class: 'muted', style: 'font-size:.85em' }, t('mission.note'))), { title: t('mission.title', { wing: t(`wing.${v.wing}.name`) }) }); };
+  const missBtn = (v.missions || []).length ? h('button', { type: 'button', class: 'btn ghost', 'data-act': 'map_missions' }, missLabel()) : null;
+  return h('section', { class: 'scr mapscr' }, h('p', { class: 'muted center', style: 'margin:2px' }, t('map.title', { n: Math.max(0, v.row) + 1, total: N }) + ' · ' + t(`wing.${v.wing}.name`)), box, info, h('div', { class: 'row center' }, missBtn, enter));
 }
 
 // ---------------- Eventos ----------------
@@ -68,7 +74,7 @@ function eventScreen(v) {
     choices.append(mk('b', 'reject', '← ' + t('ui.reject') + '  [A]'), mk('a', 'accept', t('ui.accept') + ' →  [D]'));
     const hid = opt('h'); if (hid) choices.append(h('button', { type: 'button', class: 'btn choice hid', 'data-act': 'ev_choose', 'data-arg': 'h' }, h('span', { class: 'dir' }, '☠ ' + t('ui.hidden') + '  [H]'), h('span', { class: 'lbl' }, t(hid.key))));
     const show = () => { choices.style.opacity = '1'; choices.style.pointerEvents = 'auto'; };
-    const ctl = typewriter(text, shown, { speed: 12, onDone: show });
+    const ctl = typewriter(text, shown, { speed: 12, voice: v.who || 'narrator', onDone: show });
     root.append(choices, h('p', { class: 'swipe-hint' }, t('ui.swipe_hint')));
     body.addEventListener('click', () => { if (!ctl.done) ctl.skip(); });
     // Deslizar (táctil): izquierda = rechazar, derecha = aceptar
@@ -80,7 +86,7 @@ function eventScreen(v) {
     card._choose = k => { if (!ctl.done) ctl.skip(); if (opt(k)) G.eventChoose(k); };
     root._key = k => card._choose(k);
   } else {
-    typewriter(text, shown, { speed: 10 });
+    typewriter(text, shown, { speed: 10, voice: v.who || 'narrator' });
     const res = h('div', { class: 'outcomes' }, ...v.outcomes.map(outcomeEl).filter(Boolean));
     body.append(res);
     const row = h('div', { class: 'row center' });
@@ -96,6 +102,7 @@ act.ev_continue = () => G.eventContinue();
 
 // ---------------- Tienda ----------------
 function shopEntry(e) {
+  if (e.kind === 'joker') return { name: t(`joker.${e.id}.name`), desc: jokerDesc(e.id), art: jokerEl(e.id, { static: true }) };
   if (e.kind === 'item') return { name: t(`item.${e.id}.name`), desc: t(`item.${e.id}.desc`), art: sigil(e.id, 'big') };
   if (e.kind === 'tool') return { name: t(`tool.${e.id}.name`), desc: t(`tool.${e.id}.desc`), art: sigil(e.id, 'big', PAL.g1) };
   if (e.kind === 'card') { const sp = SPECIALS[e.id]; const c = makeCard(e.id); return { name: t(`card.${e.id}.name`), desc: t(`card.${e.id}.desc`), art: cardEl(c, { static: true, noname: true }), sp }; }
@@ -104,7 +111,7 @@ function shopEntry(e) {
 }
 function merchantScreen(v) {
   const list = v.stock.map(e => { const s = shopEntry(e); return h('div', { class: 'panel shop-item' }, s.art, h('div', { class: 'txt' }, h('b', null, s.name), h('small', null, s.desc)),
-    e.sold ? h('span', { class: 'tag' }, t('shop.sold')) : btn(e.kind === 'loan' ? t('shop.take') : t('shop.buy', { price: e.price }), 'shop_buy', e.index, e.kind === 'loan' ? 'danger small' : 'small', { disabled: !e.can })); });
+    e.sold ? h('span', { class: 'tag' }, t('shop.sold')) : btn(e.kind === 'loan' ? t('shop.take') : (e.kind === 'joker' && !e.can && v.hud.money >= e.price ? t('shop.joker.full') : t('shop.buy', { price: e.price })), 'shop_buy', e.index, e.kind === 'loan' ? 'danger small' : 'small', { disabled: !e.can })); });
   return h('section', { class: 'scr resscr', style: 'justify-content:flex-start' },
     h('div', { class: 'shop-top panel' }, characterEl('merchant', { scale: 3 }), h('div', null, h('h2', { class: 'ev-title' }, t('char.merchant')), h('p', { class: 'say', style: 'margin:0' }, t('shop.line')))),
     hintBox(v.hintKey),
@@ -135,6 +142,7 @@ function rewardScreen(v) {
     if (c.type === 'card') { const card = makeCard(c.id); art = cardEl(card, { static: true, noname: false }); name = t(`card.${c.id}.name`); desc = t(`card.${c.id}.desc`); }
     else if (c.type === 'level') { const s = handStats(c.hand); art = ico('cards', 'big'); name = t('reward.level', { hand: t('hand.' + c.hand) }); desc = t('reward.level_desc', { chips: s.chips + 8, mult: s.mult + 1 }); }
     else if (c.type === 'mod') { const base = gs.deck.find(x => x.uid === c.uid) || makeCard(c.card); art = cardEl(Object.assign({}, base, { mods: (base.mods || []).concat([c.mod]) }), { static: true }); name = t('reward.mod', { mod: t(`mod.${c.mod}.name`) }); desc = t(`mod.${c.mod}.desc`); }
+    else if (c.type === 'joker') { art = jokerEl(c.id, { static: true }); name = t('reward.joker', { name: t(`joker.${c.id}.name`) }); desc = jokerDesc(c.id); }
     else { art = sigil(c.id, 'big'); name = t(`item.${c.id}.name`); desc = t(`item.${c.id}.desc`); }
     return h('button', { type: 'button', class: 'rcard', 'data-act': 'reward_pick', 'data-arg': i }, art, h('b', null, name), h('small', { class: 'muted' }, desc));
   });
@@ -166,7 +174,7 @@ act.result_continue = () => G.resultContinue();
 // ---------------- Jefe / final ----------------
 function bossScreen(v) {
   const line = h('p', { class: 'say' });
-  typewriter(line, t(v.lineKey), { speed: 22 });
+  typewriter(line, t(v.lineKey), { speed: 22, voice: v.boss });
   if (v.secret) setTimeout(() => fx.glitch(), 300);
   return h('section', { class: 'scr resscr bossscr' }, h('p', { class: 'muted' }, t('boss.title')), characterEl(v.boss, { scale: sc(6, window.innerHeight < 800 ? 2 : 3) }), h('h2', { class: 'bigtitle' }, t('char.' + v.boss)), line,
     h('div', { class: 'panel' }, h('b', null, t('boss.rules')), h('div', { class: 'rules', style: 'justify-content:center' }, ...(ruleList(v.rules, v.weakened).length ? ruleList(v.rules, v.weakened) : [h('span', { class: 'muted' }, t('boss.no_rules'))]))), hintBox(v.hintKey), primary(t('boss.fight'), 'boss_start'));
@@ -175,7 +183,7 @@ act.boss_start = () => G.bossStart();
 function finaleScreen(v) {
   let i = 0, ctl = null; const line = h('p', { class: 'say', style: 'min-height:4em' });
   const cont = primary(t('ui.continue'), 'finale_next'); cont.style.visibility = 'hidden';
-  const show = () => { ctl = typewriter(line, t(v.lineKeys[i]), { speed: 28, onDone: () => { if (i >= v.lineKeys.length - 1) cont.style.visibility = 'visible'; } }); };
+  const show = () => { ctl = typewriter(line, t(v.lineKeys[i]), { speed: 28, voice: 'dealer', onDone: () => { if (i >= v.lineKeys.length - 1) cont.style.visibility = 'visible'; } }); };
   const root = h('section', { class: 'scr resscr', tabindex: 0 }, h('p', { class: 'muted' }, t('finale.stage' + v.stage)), characterEl('dealer', { scale: sc(6, 3) }), line, h('p', { class: 'muted', style: 'font-size:.8em' }, t('ui.tap')), cont);
   root.addEventListener('click', e => { if (e.target.closest('[data-act]')) return; if (ctl && !ctl.done) { ctl.skip(); return; } if (i < v.lineKeys.length - 1) { i++; show(); } });
   show(); return root;
@@ -183,7 +191,7 @@ function finaleScreen(v) {
 act.finale_next = () => G.finaleContinue();
 
 export function register(S) {
-  S.map = { render: mapScreen, hud: true, bgFrom: v => (v.wing === 'pasillo' ? 'corridor' : v.wing === 'sotano' ? 'basement' : 'casino') };
+  S.map = { render: mapScreen, hud: true, bgFrom: v => (WING_INFO[v.wing] ? WING_INFO[v.wing].bg : 'casino') };
   S.event = { render: eventScreen, hud: true, bgFrom: v => v.bg };
   S.merchant = { render: merchantScreen, hud: true, bg: 'shop' };
   S.rest = { render: restScreen, hud: true, bg: 'rest' };

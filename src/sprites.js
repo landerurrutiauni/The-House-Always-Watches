@@ -7,6 +7,7 @@
 //   backgroundCanvas(kind, w, h, seed) → <canvas>      fondos low-res adaptados al tamaño de pantalla
 //   setCharactersActive(bool)                          activa/desactiva la animación (reducir efectos)
 import { hashStr, mulberry32 } from './rng.js';
+import { rankLabel } from './cards.js';
 
 export const PAL = {
   k0: '#050404', k1: '#0b0908', k2: '#14110f', c1: '#1e1a18', c2: '#2a2522', c3: '#3a3330', c4: '#4d4540',
@@ -101,6 +102,8 @@ function sigil(id) {
   for (let y = 0; y < n; y++) { const row = []; for (let x = 0; x < 5; x++) row.push(rnd() < (x === 4 ? 0.7 : 0.48) ? 1 : 0); for (let x = 3; x >= 0; x--) row.push(row[x]); cells.push(row); }
   cells[4][4] = 1; return cells.map(r => r.map(v => (v ? '#' : '.')).join(''));
 }
+// Adornos de las figuras (J = sombrero con pluma, Q = corona de tres puntas, K = corona grande)
+const COURT = { 11: ['..#####..', '.#######.', '....#....'], 12: ['.#..#..#.', '.##.#.##.', '#########', '.#######.'], 13: ['#...#...#', '##.###.##', '#########', '#########'] };
 const _cardCache = new Map();
 export function cardURL(card) {
   const key = card.id + '|' + (card.mods || []).join(',') + (card.sp ? '' : '');
@@ -112,7 +115,7 @@ export function cardURL(card) {
   const rnd = mulberry32(hashStr(card.id)); for (let i = 0; i < 26; i++) P(g, 2 + Math.floor(rnd() * (CW - 4)), 2 + Math.floor(rnd() * (CH_ - 4)), rnd() < 0.5 ? PAL.t2 : PAL.t4);
   R(g, 3, 3, CW - 6, CH_ - 6, mix(paper, '#000000', 0.0)); // marco interior
   g.fillStyle = cursed ? PAL.r3 : PAL.t1; g.fillRect(3, 3, CW - 6, 1); g.fillRect(3, CH_ - 4, CW - 6, 1); g.fillRect(3, 3, 1, CH_ - 6); g.fillRect(CW - 4, 3, 1, CH_ - 6);
-  const rk = card.sp && (card.id === 'sombra' || card.id === 'la_mujer') ? '*' : String(card.rank);
+  const rk = card.sp && (card.id === 'sombra' || card.id === 'la_mujer') ? '*' : rankLabel(card.rank);
   drawText(g, rk, 5, 6, ink, 1); blit(g, ICONS[card.suit], 5, 15, ink);
   // esquina inferior derecha (girada)
   g.save(); g.translate(CW, CH_); g.rotate(Math.PI); drawText(g, rk, 5, 6, ink, 1); blit(g, ICONS[card.suit], 5, 15, ink); g.restore();
@@ -123,6 +126,10 @@ export function cardURL(card) {
   } else {
     const ic = ICONS[card.suit], w = ic[0].length, h = ic.length, sc = 2, ox = Math.round((CW - w * sc) / 2), oy = Math.round((CH_ - h * sc) / 2);
     blit(g, ic, ox + 1, oy + 1, mix(paper, '#000', 0.25), sc); blit(g, ic, ox, oy, ink, sc);
+    // Figuras: corona o sombrero sobre el palo. As: filetes arriba y abajo.
+    const cr = COURT[card.rank];
+    if (cr) { const cx = Math.round((CW - cr[0].length) / 2), cy = oy - cr.length - 2; blit(g, cr, cx + 1, cy + 1, mix(paper, '#000', 0.25)); blit(g, cr, cx, cy, ink); }
+    if (card.rank === 1) { R(g, 15, oy - 4, 10, 1, ink); R(g, 15, oy + h * sc + 3, 10, 1, ink); R(g, 17, oy - 6, 6, 1, ink); R(g, 17, oy + h * sc + 5, 6, 1, ink); }
   }
   if (cursed) { for (let x = 4; x < CW - 4; x += 3 + Math.floor(rnd() * 3)) { const l = 2 + Math.floor(rnd() * 5); R(g, x, 4, 1, l, PAL.r3); } }
   if (mods.includes('edge')) { g.strokeStyle = PAL.w3; g.lineWidth = 1; g.strokeRect(0.5, 0.5, CW - 1, CH_ - 1); R(g, 0, 0, CW, 1, PAL.w3); R(g, 0, 0, 1, CH_, PAL.w2); }
@@ -222,6 +229,51 @@ const CHARS = {
     arms(g, PAL.b2, PAL.b1, 31, 52, PAL.t3); R(g, 11, 40, 26, 17, PAL.b3); R(g, 12, 41, 24, 15, PAL.t3); R(g, 11, 40, 3, 17, PAL.r2); for (let y = 44; y < 54; y += 3) R(g, 17, y, 14, 1, PAL.t1);
     R(g, 21, 23, 6, 6, PAL.t3); head(g, 24, 16, 7, 8, PAL.t3, PAL.t2); R(g, 16, 8, 16, 4, PAL.w1); ell(g, 24, 6, 4, 3, PAL.w1); R(g, 15, 10, 3, 7, PAL.w1); R(g, 31, 10, 3, 7, PAL.w1);
     ring(g, 20, 16.5, 3, 2.4, PAL.k0); ring(g, 28, 16.5, 3, 2.4, PAL.k0); R(g, 23, 16, 2, 1, PAL.k0); R(g, 21, 22, 6, 1, PAL.t1); P(g, 24, 19, PAL.t1); R(g, 34, 14, 1, 6, PAL.r3);
+  } },
+  nun: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[13, 28], [35, 28], [42, 64], [6, 64]], PAL.k2); poly(g, [[27, 28], [35, 28], [42, 64], [30, 64]], PAL.k0);
+    poly(g, [[18, 28], [30, 28], [28, 40], [20, 40]], PAL.w2);
+    arms(g, PAL.k2, PAL.k0, 31, 53, PAL.t4);
+    for (let y = 33; y < 56; y += 3) P(g, 24 + Math.round(Math.sin(y * 0.8) * 2), y, PAL.r3);
+    R(g, 23, 52, 3, 8, PAL.g1); R(g, 21, 54, 7, 2, PAL.g1);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.t4, PAL.t3);
+    R(g, 14, 6, 20, 8, PAL.k1); R(g, 13, 8, 4, 24, PAL.k1); R(g, 31, 8, 4, 24, PAL.k0); R(g, 16, 12, 16, 3, PAL.w3);
+    R(g, 21, 23, 6, 1, PAL.t1); P(g, 24, 20, PAL.t2);
+  } },
+  cook: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[9, 28], [39, 28], [45, 64], [3, 64]], PAL.w2); poly(g, [[28, 28], [39, 28], [45, 64], [31, 64]], PAL.w1);
+    for (const [x, y] of [[14, 40], [22, 48], [30, 38], [18, 56], [34, 54]]) R(g, x, y, 4, 3, PAL.r3);
+    R(g, 5, 28, 6, 22, PAL.w3); R(g, 37, 28, 6, 22, PAL.w1); R(g, 5, 50, 6, 5, PAL.t3); R(g, 37, 50, 6, 5, PAL.t2);
+    R(g, 40, 36, 6, 10, PAL.w1); R(g, 41, 37, 4, 7, PAL.w2); R(g, 42, 46, 2, 7, PAL.b2);
+    R(g, 20, 24, 8, 5, PAL.t3); head(g, 24, 17, 8, 8, PAL.t3, PAL.t2);
+    R(g, 15, 6, 18, 5, PAL.w3); ell(g, 24, 4, 9, 4, PAL.w3); R(g, 15, 10, 18, 3, PAL.w2); R(g, 17, 22, 14, 2, PAL.b1);
+  } },
+  nurse: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[14, 28], [34, 28], [41, 64], [7, 64]], PAL.w3); poly(g, [[27, 28], [34, 28], [41, 64], [29, 64]], PAL.w1);
+    R(g, 23, 38, 2, 10, PAL.r3); R(g, 20, 42, 8, 2, PAL.r3);
+    arms(g, PAL.w3, PAL.w1, 30, 52, PAL.t3);
+    R(g, 5, 38, 9, 13, PAL.b3); R(g, 6, 39, 7, 11, PAL.t4); for (let y = 41; y < 49; y += 3) R(g, 7, y, 5, 1, PAL.t1);
+    R(g, 21, 23, 6, 5, PAL.t3); head(g, 24, 17, 7, 8, PAL.t3, PAL.t2);
+    R(g, 15, 7, 18, 4, PAL.w3); R(g, 23, 7, 2, 4, PAL.r4); R(g, 22, 8, 4, 2, PAL.r4); R(g, 14, 10, 4, 12, PAL.k1); R(g, 30, 10, 4, 12, PAL.k0);
+    R(g, 18, 21, 12, 6, '#9fb0aa'); R(g, 18, 21, 12, 1, PAL.w2); P(g, 17, 22, PAL.w2); P(g, 30, 22, PAL.w2);
+  } },
+  puppet: { eye: { y: 19, dx: 5, w: 4, h: 4, kind: 'white' }, draw(g) {
+    R(g, 8, 0, 32, 2, PAL.t1); for (const x of [14, 24, 34]) R(g, x, 2, 1, 9, PAL.t1);
+    poly(g, [[14, 40], [34, 40], [38, 64], [10, 64]], PAL.k2); poly(g, [[26, 40], [34, 40], [38, 64], [28, 64]], PAL.k0);
+    poly(g, [[19, 40], [29, 40], [24, 52]], PAL.w2); poly(g, [[21, 41], [27, 41], [24, 45]], PAL.r3);
+    R(g, 8, 42, 5, 14, PAL.k2); R(g, 35, 42, 5, 14, PAL.k0); R(g, 8, 56, 5, 4, PAL.b4); R(g, 35, 56, 5, 4, PAL.b3);
+    head(g, 24, 23, 10, 11, PAL.b4, PAL.b3);
+    R(g, 14, 11, 20, 5, PAL.k1); R(g, 13, 13, 3, 8, PAL.k1); R(g, 32, 13, 3, 8, PAL.k0);
+    ell(g, 16, 28, 3, 2, PAL.r3); ell(g, 32, 28, 3, 2, PAL.r3);
+    R(g, 16, 32, 16, 5, PAL.k0); R(g, 17, 33, 14, 3, PAL.r2); for (let x = 18; x < 31; x += 3) R(g, x, 33, 1, 3, PAL.k0);
+  } },
+  pianist: { eye: { y: 16, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[11, 28], [37, 28], [43, 56], [5, 56]], PAL.k1); poly(g, [[27, 28], [37, 28], [43, 56], [29, 56]], PAL.k0);
+    poly(g, [[19, 28], [29, 28], [24, 44]], PAL.w2); R(g, 21, 29, 6, 2, PAL.r3); P(g, 24, 32, PAL.r3);
+    R(g, 6, 30, 6, 20, PAL.k1); R(g, 36, 30, 6, 20, PAL.k0); R(g, 5, 50, 8, 3, PAL.w2); R(g, 35, 50, 8, 3, PAL.w1);
+    R(g, 2, 54, 44, 10, PAL.w3); R(g, 2, 54, 44, 1, PAL.k0); for (let x = 5; x < 44; x += 5) R(g, x, 54, 1, 10, PAL.w1); for (const x of [7, 12, 22, 27, 37]) R(g, x, 54, 3, 6, PAL.k0);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 16, 7, 8, PAL.t4, PAL.t3); R(g, 16, 7, 16, 4, PAL.k0); R(g, 15, 9, 3, 6, PAL.k0); R(g, 30, 9, 3, 6, PAL.k0);
+    R(g, 21, 21, 6, 1, PAL.t1); P(g, 24, 19, PAL.t2);
   } }
 };
 const _bodyCache = {};
@@ -289,12 +341,12 @@ function floorPersp(g, w, y0, h, ca, cb, fade) {
     for (let x = 0; x < w; x++) { const u = (x - w / 2) * z / (w * 0.055), v = z * 1.1; const col = ((Math.floor(u) + Math.floor(v)) & 1) ? ca : cb; P(g, x, y, t < fade && BAYER[(y & 3) * 4 + (x & 3)] / 16 > t / fade ? PAL.k1 : col); }
   }
 }
-function lights(g, w, h, list) { // luz aditiva con difuminado ordenado (se mantiene pixelada)
+function lights(g, w, h, list, tint = [232, 190, 120]) { // luz aditiva con difuminado ordenado (se mantiene pixelada)
   const im = g.getImageData(0, 0, w, h), d = im.data;
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     let I = 0; for (const L of list) { const dx = (x - L.x) / (L.rx || L.r), dy = (y - L.y) / (L.ry || L.r), q = dx * dx + dy * dy; if (q < 1) I += Math.pow(1 - q, 1.4) * L.a; }
     if (I <= 0) continue; const q = Math.min(1, I) * 3, steps = Math.floor(q) + (q % 1 > BAYER[(y & 3) * 4 + (x & 3)] / 16 ? 1 : 0), i = (y * w + x) * 4, k = Math.min(1, steps * 0.22);
-    d[i] = d[i] + (232 - d[i]) * k * 0.9; d[i + 1] = d[i + 1] + (190 - d[i + 1]) * k * 0.85; d[i + 2] = d[i + 2] + (120 - d[i + 2]) * k * 0.7;
+    d[i] = d[i] + (tint[0] - d[i]) * k * 0.9; d[i + 1] = d[i + 1] + (tint[1] - d[i + 1]) * k * 0.85; d[i + 2] = d[i + 2] + (tint[2] - d[i + 2]) * k * 0.7;
   }
   g.putImageData(im, 0, 0);
 }
@@ -385,12 +437,91 @@ const SCENES = {
     R(g, dx, dy + dh - 1, dw, 2, PAL.t4); lights(g, w, h, [{ x: w / 2, y: dy + dh, rx: dw * 1.2, ry: dh * 0.5, a: 0.9 }]); specks(g, w, h, rnd, Math.round(w * h / 600), PAL.t2);
   }
 };
+
+SCENES.chapel = function (g, w, h, rnd) {
+  const fy = Math.round(h * 0.6), gx = Math.round(w / 2), rx = Math.max(6, Math.round(w * 0.085)), gy = Math.round(h * 0.05), gh = Math.round(h * 0.46);
+  vgrad(g, w, 0, fy, '#0c0f15', '#1c222d');
+  for (let y = 0, r = 0; y < fy; y += 8, r++) for (let x = -(r % 2) * 10; x < w; x += 20) { R(g, x, y + 7, 20, 1, '#080a0f'); R(g, x + 19, y, 1, 8, '#080a0f'); if ((x * 7 + y * 3) % 5 === 0) R(g, x + 2, y + 2, 4, 2, '#222a36'); }
+  const cy0 = gy + rx, inArch = (x, y) => (y >= cy0 ? Math.abs(x - gx) <= rx && y <= gy + gh : ((x - gx) / rx) ** 2 + ((y - cy0) / rx) ** 2 <= 1);
+  const cols = ['#8a1c1c', '#b08a3a', '#3a6a8a', '#4a7a4a', '#6a3a7a', '#a8431f'];
+  for (let y = gy - 2; y <= gy + gh + 1; y++) for (let x = gx - rx - 3; x <= gx + rx + 3; x++) {
+    if (inArch(x, y)) { const cx = Math.floor((x - gx + rx) / 5), cyy = Math.floor((y - gy) / 6); P(g, x, y, ((x - gx + rx) % 5 === 0 || (y - gy) % 6 === 0 || Math.abs(x - gx) <= 0) ? '#0a0c11' : cols[(cx * 3 + cyy * 2) % cols.length]); }
+    else if (inArch(x - 2, y) || inArch(x + 2, y) || inArch(x, y - 2)) P(g, x, y, '#06070a');
+  }
+  const aL = (i) => Math.round(w * (0.075 + i * 0.05));
+  g.globalAlpha = 0.1; poly(g, [[gx - rx, gy + gh], [gx + rx, gy + gh], [gx + rx * 2.6, h], [gx - rx * 2.6, h]], '#8fb0d8'); g.globalAlpha = 1;
+  floorPersp(g, w, fy, h, '#232833', '#171a22', 0.25); R(g, 0, fy - 1, w, 2, '#06070a');
+  poly(g, [[gx - w * 0.035, fy], [gx + w * 0.035, fy], [gx + w * 0.17, h], [gx - w * 0.17, h]], PAL.r2); poly(g, [[gx - w * 0.01, fy], [gx + w * 0.01, fy], [gx + w * 0.03, h], [gx - w * 0.03, h]], PAL.r3);
+  for (let i = 0; i < 4; i++) {
+    const y = fy + 4 + Math.round(i * (h - fy) / 4.2), th = 4 + i * 3, ah = Math.round(w * (0.05 + i * 0.045)), lw = gx - ah;
+    R(g, 0, y, lw, th, PAL.b2); R(g, 0, y, lw, 2, PAL.b3); R(g, 0, y + th, lw, 2, PAL.k0); R(g, gx + ah, y, w - gx - ah, th, PAL.b2); R(g, gx + ah, y, w - gx - ah, 2, PAL.b3); R(g, gx + ah, y + th, w - gx - ah, 2, PAL.k0);
+    R(g, 0, y - th - 3, lw, 3, PAL.b1); R(g, gx + ah, y - th - 3, w - gx - ah, 3, PAL.b1);
+  }
+  const ay = fy - Math.round(h * 0.07), aw = Math.round(w * 0.2);
+  R(g, gx - aw / 2, ay, aw, Math.round(h * 0.07), PAL.w2); R(g, gx - aw / 2, ay, aw, 2, PAL.w3); R(g, gx - aw / 2, ay + Math.round(h * 0.07) - 1, aw, 1, PAL.w1); R(g, gx - 1, ay + 2, 2, Math.round(h * 0.07) - 3, PAL.r3);
+  const L = [{ x: gx, y: gy + gh * 0.45, r: h * 0.5, a: 0.5 }];
+  for (const s of [-1, 1]) { const cx = Math.round(gx + s * w * 0.15); R(g, cx, ay - Math.round(h * 0.1), 2, Math.round(h * 0.1) + Math.round(h * 0.07), PAL.t3); R(g, cx - 1, ay - Math.round(h * 0.1) - 1, 4, 1, PAL.t2); P(g, cx, ay - Math.round(h * 0.1) - 3, PAL.g1); P(g, cx + 1, ay - Math.round(h * 0.1) - 2, '#ff9a3a'); P(g, cx, ay - Math.round(h * 0.1) - 2, '#ffd24a'); L.push({ x: cx, y: ay - Math.round(h * 0.1), r: h * 0.22, a: 0.8 }); }
+  lights(g, w, h, L); specks(g, w, h, rnd, Math.round(w * h / 700), '#9fb0c8');
+};
+SCENES.kitchen = function (g, w, h, rnd) {
+  const fy = Math.round(h * 0.64), sx = Math.round(w * 0.52), sw = Math.round(w * 0.32), sh = Math.round(h * 0.22);
+  R(g, 0, 0, w, fy, '#18211f');
+  for (let y = 0, r = 0; y < fy; y += 6, r++) for (let x = (r % 2) * 4; x < w; x += 8) R(g, x, y, 7, 5, ((x * 3 + y * 5) % 11 === 0) ? '#34463f' : (r % 3 ? '#27342f' : '#2c3b36'));
+  R(g, 0, Math.round(h * 0.34), w, 2, PAL.k0); R(g, 0, Math.round(h * 0.34) + 2, w, 1, '#3d554c');
+  for (let i = 0; i < 6; i++) { const x = Math.round(w * (0.05 + i * 0.075)), L = Math.round(h * (0.1 + (i % 3) * 0.05)); R(g, x, 0, 1, L, PAL.c4); ell(g, x, L + 5, 3, 6, i % 2 ? PAL.r3 : PAL.r2); R(g, x - 1, L - 1, 3, 2, PAL.c4); }
+  for (let i = 0; i < 4; i++) { const x = Math.round(w * (0.5 + i * 0.1)), y = Math.round(h * 0.12 + (i % 2) * 5); R(g, x, 0, 1, y, PAL.c4); ell(g, x, y + 5, 6, 5, PAL.c3); ell(g, x, y + 5, 4, 3, PAL.k1); R(g, x + 5, y + 3, 5, 1, PAL.c4); }
+  floorPersp(g, w, fy, h, PAL.w1, PAL.c3, 0.2); R(g, 0, fy - 1, w, 2, PAL.k0);
+  R(g, sx, fy - sh, sw, sh, PAL.c3); R(g, sx, fy - sh, sw, 2, PAL.c4); R(g, sx, fy - sh + 2, sw, 1, PAL.k0); R(g, sx + 3, fy - sh + 6, sw - 6, sh - 10, PAL.c2); R(g, sx + 5, fy - sh + 8, sw - 10, sh - 14, PAL.k1);
+  R(g, sx - 2, fy - sh - Math.round(h * 0.12), sw + 4, 4, PAL.c4); poly(g, [[sx, fy - sh - Math.round(h * 0.12) + 4], [sx + sw, fy - sh - Math.round(h * 0.12) + 4], [sx + sw - 4, fy - sh - 2], [sx + 4, fy - sh - 2]], PAL.c2);
+  for (let i = 0; i < 3; i++) { const bx = sx + sw * (0.2 + i * 0.3), by = fy - sh - 3; ell(g, bx, by + 1, 6, 2, PAL.k0); for (let f = 0; f < 7; f++) P(g, bx - 4 + f * 1.3, by - (f % 3), f % 2 ? '#ffb04a' : '#e0583a'); }
+  const px = Math.round(sx + sw * 0.5), py = fy - sh - 8; R(g, px - 7, py, 14, 8, PAL.c3); R(g, px - 8, py - 1, 16, 2, PAL.c4); R(g, px - 6, py - 3, 12, 2, '#6e4a2a'); for (let k = 0; k < 6; k++) P(g, px - 4 + k * 2 + (k % 2), py - 7 - (k % 3) * 2, k % 2 ? '#8a948f' : '#5f6e69');
+  const tx = Math.round(w * 0.08), tw = Math.round(w * 0.3); R(g, tx, fy - Math.round(h * 0.09), tw, 4, PAL.c4); R(g, tx + 2, fy - Math.round(h * 0.09) + 4, 3, Math.round(h * 0.09), PAL.c3); R(g, tx + tw - 5, fy - Math.round(h * 0.09) + 4, 3, Math.round(h * 0.09), PAL.c3);
+  for (let i = 0; i < 4; i++) { const kx = tx + 6 + i * Math.round(tw / 5); poly(g, [[kx, fy - Math.round(h * 0.09) - 1], [kx + 7, fy - Math.round(h * 0.09) - 1], [kx + 7, fy - Math.round(h * 0.09) - 4], [kx + 1, fy - Math.round(h * 0.09) - 7]], PAL.w1); R(g, kx + 7, fy - Math.round(h * 0.09) - 4, 3, 3, PAL.b2); }
+  lights(g, w, h, [{ x: sx + sw / 2, y: fy - sh * 0.9, r: h * 0.55, a: 0.95 }, { x: w * 0.2, y: h * 0.08, r: h * 0.4, a: 0.45 }]); specks(g, w, h, rnd, Math.round(w * h / 800), '#aab6b0');
+};
+SCENES.infirmary = function (g, w, h, rnd) {
+  const fy = Math.round(h * 0.64);
+  vgrad(g, w, 0, fy, '#1b2623', '#2b3a36'); R(g, 0, Math.round(h * 0.42), w, fy - Math.round(h * 0.42), '#34453f'); R(g, 0, Math.round(h * 0.42), w, 2, '#51675e'); R(g, 0, Math.round(h * 0.42) + 2, w, 1, PAL.k0);
+  for (let x = 0; x < w; x += 12) R(g, x, Math.round(h * 0.42) + 3, 1, fy - Math.round(h * 0.42), '#2a3833');
+  const wx = Math.round(w * 0.7), wy = Math.round(h * 0.08), ww = Math.round(w * 0.17), wh = Math.round(h * 0.3);
+  R(g, wx - 2, wy - 2, ww + 4, wh + 4, PAL.k0); R(g, wx, wy, ww, wh, '#0f1a24'); ell(g, wx + ww * 0.68, wy + wh * 0.32, 5, 5, '#cfd8dc'); ell(g, wx + ww * 0.74, wy + wh * 0.28, 4, 4, '#0f1a24'); R(g, wx + ww / 2, wy, 1, wh, PAL.k0); R(g, wx, wy + wh / 2, ww, 1, PAL.k0);
+  g.globalAlpha = 0.09; poly(g, [[wx, wy + wh], [wx + ww, wy + wh], [wx + ww * 0.6, h], [wx - ww * 1.2, h]], '#cfd8dc'); g.globalAlpha = 1;
+  const cx = Math.round(w * 0.22), cyy = Math.round(h * 0.2); R(g, cx - 2, cyy - 7, 5, 15, PAL.r3); R(g, cx - 7, cyy - 2, 15, 5, PAL.r3); R(g, cx - 2, cyy - 7, 5, 1, PAL.r4);
+  floorPersp(g, w, fy, h, '#2a3330', '#1d2523', 0.2); R(g, 0, fy - 1, w, 2, PAL.k0);
+  for (let i = 0; i < 3; i++) {
+    const bx = Math.round(w * (0.04 + i * 0.3)), bw = Math.round(w * 0.24), by = fy - Math.round(h * 0.07), bh = Math.round(h * 0.13);
+    R(g, bx, by + bh - 4, 3, Math.round(h * 0.05), PAL.c4); R(g, bx + bw - 3, by + bh - 4, 3, Math.round(h * 0.05), PAL.c4);
+    R(g, bx, by, bw, bh - 4, PAL.w2); R(g, bx, by, bw, 3, PAL.w3); R(g, bx, by, Math.round(bw * 0.22), bh - 4, PAL.w3); R(g, bx + 2, by + 6, bw - 4, 1, PAL.w1); R(g, bx, by + bh - 6, bw, 2, PAL.w1);
+    if (i === 1) { poly(g, [[bx + bw * 0.3, by], [bx + bw * 0.9, by], [bx + bw * 0.92, by - 5], [bx + bw * 0.4, by - 7]], PAL.w1); R(g, bx + bw * 0.5, by - 3, 3, 3, PAL.r3); }
+    R(g, bx - 1, Math.round(h * 0.2) - 6, bw + 2, 2, PAL.c4);
+    for (let k = 0; k < Math.round(bw / 4); k++) R(g, bx + k * 4, Math.round(h * 0.2) - 4, 3, Math.round(h * 0.2) + (k % 2) * 3, k % 2 ? '#9aa8a2' : '#7f8d87');
+  }
+  const ix = Math.round(w * 0.64); R(g, ix, fy - Math.round(h * 0.26), 1, Math.round(h * 0.26), PAL.c4); R(g, ix - 4, fy - Math.round(h * 0.26), 9, 1, PAL.c4); R(g, ix - 3, fy - Math.round(h * 0.26) + 1, 3, 6, '#b8c8c4'); R(g, ix - 2, fy - Math.round(h * 0.26) + 7, 1, Math.round(h * 0.1), '#b8c8c4'); R(g, ix - 3, fy - 2, 7, 2, PAL.c4);
+  lights(g, w, h, [{ x: w * 0.5, y: h * 0.06, r: h * 0.7, a: 0.6 }], [190, 215, 205]); specks(g, w, h, rnd, Math.round(w * h / 700), '#b8c8c4');
+};
 SCENES.menu = SCENES.casino; SCENES.table = SCENES.casino;
 export function backgroundCanvas(kind, w, h, seed = 1) {
   const [c, g] = mk(w, h), rnd = mulberry32(hashStr(kind + seed));
   (SCENES[kind] || SCENES.casino)(g, w, h, rnd); return c;
 }
 export const backgroundKinds = () => Object.keys(SCENES);
+
+// ---------------- Jokers (40×56): marco según rareza, gorro de bufón, sigilo propio y puntos de rareza ----------------
+const _jokerCache = new Map();
+export function jokerURL(id, rarity = 'common') {
+  if (_jokerCache.has(id)) return _jokerCache.get(id);
+  const [c, g] = mk(CW, CH_), rnd = mulberry32(hashStr('joker:' + id));
+  const frame = rarity === 'rare' ? PAL.r4 : rarity === 'uncommon' ? PAL.w2 : PAL.g1;
+  R(g, 0, 0, CW, CH_, PAL.k0); R(g, 1, 1, CW - 2, CH_ - 2, frame); R(g, 2, 2, CW - 4, CH_ - 4, PAL.k2);
+  for (let i = 0; i < 44; i++) P(g, 3 + Math.floor(rnd() * (CW - 6)), 3 + Math.floor(rnd() * (CH_ - 6)), rnd() < 0.5 ? PAL.c1 : PAL.c2);
+  R(g, 4, 4, CW - 8, 1, frame); R(g, 4, CH_ - 5, CW - 8, 1, frame);
+  drawText(g, 'JOKER', 5, 7, frame, 1);
+  blit(g, ['#.....#', '##...##', '###.###', '#######'], 16, 16, PAL.r3); P(g, 15, 15, frame); P(g, 23, 15, frame);   // gorro con dos cascabeles
+  const s = sigil('joker:' + id); blit(g, s, 12, 25, PAL.k0, 2); blit(g, s, 11, 24, PAL.t4, 2);
+  const pips = rarity === 'rare' ? 3 : rarity === 'uncommon' ? 2 : 1;
+  for (let i = 0; i < pips; i++) R(g, 20 - pips * 2 + i * 4 + 1, 48, 3, 3, frame);
+  const u = c.toDataURL(); _jokerCache.set(id, u); return u;
+}
 
 // Sigilos pequeños (objetos y herramientas): 9×9 simétricos generados por hash
 const _sigCache = new Map();

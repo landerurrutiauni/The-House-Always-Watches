@@ -20,7 +20,7 @@ export function defaultMeta() {
     endings: [], memories: [], knowledge: [],
     unlockedCards: [], unlockedItems: [], wingsCleared: [],
     carryDebt: 0, introSeen: false, tutorial: {}, hints: {},
-    mutations: 0,
+    mutations: 0, eggs: [], langs: [], missionsDone: [],
     stats: { roundsWon: 0, roundsLost: 0, duelsWon: 0, duelsLost: 0, anomalies: 0, bossesDown: [] },
     lastRun: null
   };
@@ -32,6 +32,8 @@ export function defaultGameState() {
     player: { health: 100, maxHealth: 100, sanity: 100, money: 50, debt: 0, lives: 1 },
     deck: [],
     inventory: [],            // ids de objetos
+    jokers: [],               // ids de jokers del descenso (máx. 5, de izquierda a derecha)
+    jokerData: {},            // contadores persistentes de los jokers que escalan
     tools: [],                // ids de cartas de mesa consumibles (máx. 3)
     handLevels: {},           // tipo de mano -> nivel
     discoveredEvents: [],
@@ -69,9 +71,9 @@ export function defaultSettings() {
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   return {
     lang: null, music: 0.7, sfx: 0.9, ambient: 0.6,
-    muteMusic: false, muteSfx: false, reduceIntense: false,
+    muteMusic: false, muteSfx: false, reduceIntense: false, voice: 0.7, muteVoices: false, textSpeed: 'normal',
     textSize: 1, contrast: false, reduceEffects: reduce,
-    quality: coarse ? 'medium' : 'high', vibration: true
+    quality: coarse ? 'medium' : 'high', vibration: true, eggs: [], langsSeen: []
   };
 }
 export const settings = defaultSettings();

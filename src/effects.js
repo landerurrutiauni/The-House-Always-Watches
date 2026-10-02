@@ -2,8 +2,10 @@
 import { gs, replaceState, addMoney, addSanity, addHealth, addDebt, addDestiny, rel, hasItem, hasCard, hasTool, know, flag, bus, clamp } from './state.js';
 import { RNG, rngFor, newSeed } from './rng.js';
 import { baseDeck, makeCard, SPECIAL_IDS, CURSED_IDS, MODS, HAND_ORDER } from './cards.js';
-import { ITEMS, ITEM_PRICE, TOOLS, MAX_TOOLS, EVENTS, CHAINS, MEMORIES, MEMORY_ORDER, ENDINGS, ENDING_ORDER, DEALER_CLUES, CHARACTERS, GENERIC_OPPS, DUEL_FOES, SECRET_EVENTS, eventPool, perksFrom } from './content.js';
+import { ITEMS, ITEM_PRICE, TOOLS, MAX_TOOLS, EVENTS, CHAINS, MEMORIES, MEMORY_ORDER, ENDINGS, ENDING_ORDER, DEALER_CLUES, CHARACTERS, GENERIC_OPPS, DUEL_FOES, SECRET_EVENTS, WING_INFO, WING_OPPS, WING_FOES, eventPool, perksFrom } from './content.js';
+import { onJokers, onCollapse } from './achievements.js';
 import { OPP_RULES } from './combat.js';
+import { JOKERS, MAX_JOKERS, pickJoker, jokerSellPrice } from './jokers.js';
 import { generateMap, WINGS } from './map.js';
 
 export const perks = () => perksFrom(gs.meta.memories);
@@ -23,6 +25,8 @@ export function check(c) {
     case 'seen': return gs.discoveredEvents.includes(a);
     case 'clues': return DEALER_CLUES.filter(x => know(x)).length >= a;
     case 'chars': return gs.discoveredCharacters.length >= a;
+    case 'runs': return gs.meta.runsFinished >= a;
+    case 'cleared': return gs.meta.wingsCleared.length >= a;
     case 'endings': return gs.meta.endings.filter(e => e !== 'verdad').length >= a;
     default: return false;
   }
@@ -37,7 +41,17 @@ export function addTool(id) {
   if (gs.tools.length >= MAX_TOOLS) { addMoney(Math.floor(TOOLS[id].price / 2)); return false; }
   gs.tools.push(id); return true;
 }
-export function levelUp(type) { gs.handLevels[type] = (gs.handLevels[type] || 0) + 1; return type; }
+export function addJoker(id) {
+  if (!JOKERS[id] || gs.jokers.includes(id)) return false;
+  if (gs.jokers.length >= MAX_JOKERS) { addMoney(jokerSellPrice(id)); return false; }   // sin hueco: se vende por la mitad
+  gs.jokers.push(id); onJokers(); return true;
+}
+export function sellJoker(index) {
+  const id = gs.jokers[index]; if (!id) return 0;
+  gs.jokers.splice(index, 1); const v = jokerSellPrice(id); addMoney(v); return v;
+}
+export const jokerSlotFree = () => gs.jokers.length < MAX_JOKERS;
+export function levelUp(type) { gs.handLevels[type] = (gs.handLevels[type] || 0) + 1; bus.emit('levelup', { type }); return type; }
 export function discoverCharacter(id) { if (id && !gs.discoveredCharacters.includes(id)) gs.discoveredCharacters.push(id); }
 export function learn(id) { if (!gs.meta.knowledge.includes(id)) { gs.meta.knowledge.push(id); return true; } return false; }
 
@@ -67,6 +81,7 @@ export function applyEffects(list, opts = {}) {
       case 'remove': { const base = gs.deck.filter(x => !x.sp); if (base.length > 20) { const x = rng.pick(base); gs.deck.splice(gs.deck.indexOf(x), 1); out.push({ k, id: x.id }); } break; }
       case 'gamble': { const won = rng.chance(a); out.push({ k, won }); out.push(...applyEffects(won ? b : c, { rng })); break; }
       case 'boss': out.push({ k, id: a }); break;
+      case 'joker': { const id = a === 'random' ? pickJoker(rng, gs.jokers, gs.run ? gs.run.nodes : 0) : a; if (id) out.push({ k, id, ok: addJoker(id) }); break; }
       default: console.warn('efecto desconocido', fx);
     }
   }
@@ -94,10 +109,10 @@ export const HAND_START_LEVELS = {};
 export function secretUnlocked() {
   return hasItem('llave_hueso') || gs.player.sanity < 25 || gs.player.debt > 400 || gs.deaths >= 2 || hasCard('la_mujer') || flag('room13_hint');
 }
-export function wingUnlocked(w) { return w === 'salon' || gs.meta.runsFinished >= 1; }
+export function wingUnlocked(w) { const i = WING_INFO[w]; return !!i && check(i.req); }
 
 export function pools(wing) {
-  return { events: eventPool(wing), opps: GENERIC_OPPS, rules: OPP_RULES, duelFoes: DUEL_FOES, secretEvents: SECRET_EVENTS };
+  return { events: eventPool(wing), opps: GENERIC_OPPS.concat(WING_OPPS[wing] || []), rules: OPP_RULES, duelFoes: DUEL_FOES.concat(WING_FOES[wing] || []), secretEvents: SECRET_EVENTS };
 }
 
 export function startRun(wing = 'salon') {
@@ -108,7 +123,7 @@ export function startRun(wing = 'salon') {
   gs.run.map = generateMap(seed, wing, pools(wing));
   gs.deck = baseDeck();
   for (const c of P.cards) addToDeck(c);
-  gs.inventory = []; gs.tools = P.tools.slice(0, MAX_TOOLS); gs.handLevels = {};
+  gs.inventory = []; gs.tools = P.tools.slice(0, MAX_TOOLS); gs.handLevels = {}; gs.jokers = []; gs.jokerData = {};
   for (const l of P.levels) levelUp(l);
   gs.runFlags = {}; gs.pendingDeath = false;
   const p = gs.player;
@@ -130,7 +145,7 @@ export function nodeInterest() {
 export function debtSurcharge() { return clamp(Math.floor((gs.player.debt - 200) / 100) * 0.05, 0, 0.25); }
 
 export function collapseIfNeeded() {
-  if (gs.player.sanity <= 0) { addSanity(25); addHealth(-20); return true; }
+  if (gs.player.sanity <= 0) { addSanity(25); addHealth(-20); onCollapse(); return true; }
   return false;
 }
 
@@ -184,14 +199,16 @@ export function rewardChoices(rng, row, boss) {
   if (boss) {
     const left = ITEMS.filter(i => !hasItem(i));
     const picks = rng.shuffle(left).slice(0, 3).map(id => ({ type: 'item', id }));
+    if (picks.length >= 2 && jokerSlotFree()) { const j = pickJoker(rng, gs.jokers, row, true); if (j) picks[picks.length - 1] = { type: 'joker', id: j }; }
     return picks.length ? picks : [{ type: 'card', id: rng.pick(SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i))) }];
   }
   const out = [];
   const pool = SPECIAL_IDS.filter(i => CURSED_IDS.includes(i) ? (row >= 3 && rng.chance(0.25)) : true);
   out.push({ type: 'card', id: rng.pick(pool.length ? pool : SPECIAL_IDS) });
   out.push({ type: 'level', hand: rng.pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full']) });
-  const c = rng.pick(gs.deck), m = rng.pick(MODS);
-  out.push({ type: 'mod', uid: c.uid, card: c.id, mod: m });
+  const jk = jokerSlotFree() && rng.chance(0.4) ? pickJoker(rng, gs.jokers, row, false) : null;
+  if (jk) out.push({ type: 'joker', id: jk });
+  else { const c = rng.pick(gs.deck), m = rng.pick(MODS); out.push({ type: 'mod', uid: c.uid, card: c.id, mod: m }); }
   return out;
 }
 export function takeReward(r) {
@@ -199,14 +216,17 @@ export function takeReward(r) {
   else if (r.type === 'level') levelUp(r.hand);
   else if (r.type === 'mod') { const c = gs.deck.find(x => x.uid === r.uid); if (c && !c.mods.includes(r.mod)) c.mods.push(r.mod); }
   else if (r.type === 'item') { if (!hasItem(r.id)) gs.inventory.push(r.id); }
+  else if (r.type === 'joker') addJoker(r.id);
 }
 
 export function merchantStock(rng, row) {
   const items = rng.shuffle(ITEMS.filter(i => !hasItem(i))).slice(0, 2).map(id => ({ kind: 'item', id, price: ITEM_PRICE[id] }));
   const tool = rng.pick(Object.keys(TOOLS));
   const card = rng.pick(SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i)));
+  const jk = pickJoker(rng, gs.jokers, row, false);
   return [
     ...items,
+    ...(jk ? [{ kind: 'joker', id: jk, price: JOKERS[jk].price }] : []),
     { kind: 'tool', id: tool, price: TOOLS[tool].price },
     { kind: 'card', id: card, price: 40 },
     { kind: 'heal', price: 30 }, { kind: 'level', price: 40 }, { kind: 'remove', price: 25 }
@@ -216,10 +236,12 @@ export function buy(entry, rng) {
   const p = gs.player; if (p.money < entry.price) return false;
   if (entry.kind === 'tool' && gs.tools.length >= MAX_TOOLS) return false;
   if (entry.kind === 'item' && hasItem(entry.id)) return false;
+  if (entry.kind === 'joker' && (!jokerSlotFree() || gs.jokers.includes(entry.id))) return false;
   if (entry.kind === 'remove' && gs.deck.filter(c => !c.sp).length <= 20) return false;
   addMoney(-entry.price);
   if (entry.kind === 'item') gs.inventory.push(entry.id);
   else if (entry.kind === 'tool') addTool(entry.id);
+  else if (entry.kind === 'joker') addJoker(entry.id);
   else if (entry.kind === 'card') addToDeck(entry.id);
   else if (entry.kind === 'heal') addHealth(35);
   else if (entry.kind === 'level') levelUp(rng.pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full']));

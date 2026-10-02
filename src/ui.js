@@ -1,7 +1,8 @@
 // ui.js — utilidades de interfaz: DOM, acciones por delegación, HUD, cartas, modales, toasts, máquina de escribir. [capa B, escrita por A]
 import { t, cardName } from './i18n.js';
 import { gs, bus, settings } from './state.js';
-import { iconURL, cardURL, cardBackURL, sigilURL, backgroundCanvas, pixelText, PAL } from './sprites.js';
+import { iconURL, cardURL, cardBackURL, sigilURL, backgroundCanvas, pixelText, jokerURL, PAL } from './sprites.js';
+import { JOKERS, jokerSellPrice } from './jokers.js';
 import { HANDS, HAND_ORDER } from './cards.js';
 import { ITEMS, TOOLS } from './content.js';
 import { fx } from './fx.js';
@@ -70,11 +71,19 @@ export const closeTopModal = () => { const m = modalStack[modalStack.length - 1]
 export const hasModal = () => modalStack.length > 0;
 
 // ---------- Máquina de escribir ----------
-export function typewriter(el, text, { speed = 16, onDone } = {}) {
+// Texto «a máquina». `voice`: id de personaje → un balbuceo (blip) cada dos letras. La velocidad depende de settings.textSpeed.
+export const textSpeedMul = () => (settings.textSpeed === 'instant' ? 0 : settings.textSpeed === 'fast' ? 0.35 : 1);
+export function typewriter(el, text, { speed = 16, onDone, voice } = {}) {
   el.setAttribute('aria-label', text);
-  if (settings.reduceEffects || speed <= 0) { el.textContent = text; if (onDone) onDone(); return { skip() {}, done: true }; }
-  let i = 0, stop = false; const ctl = { done: false, skip() { if (ctl.done) return; stop = true; el.textContent = text; ctl.done = true; if (onDone) onDone(); } };
-  const tick = () => { if (stop) return; i += 1 + (text[i] === ' ' ? 1 : 0); el.textContent = text.slice(0, i); if (i >= text.length) { ctl.done = true; if (onDone) onDone(); } else setTimeout(tick, speed); };
+  const mul = textSpeedMul();
+  if (settings.reduceEffects || !mul || speed <= 0) { el.textContent = text; if (onDone) onDone(); return { skip() {}, done: true }; }
+  let i = 0, stop = false, k = 0; const ctl = { done: false, skip() { if (ctl.done) return; stop = true; el.textContent = text; ctl.done = true; if (onDone) onDone(); } };
+  const tick = () => {
+    if (stop) return;
+    const prev = i; i += 1 + (text[i] === ' ' ? 1 : 0); el.textContent = text.slice(0, i);
+    if (voice && /[\p{L}\p{N}]/u.test(text[prev] || '') && (k++ % 2 === 0)) bus.emit('blip', { voice });
+    if (i >= text.length) { ctl.done = true; if (onDone) onDone(); } else setTimeout(tick, speed * mul);
+  };
   el.textContent = ''; tick(); return ctl;
 }
 
@@ -109,6 +118,7 @@ export function outcomeEl(o) {
     case 'money': case 'sanity': case 'health': case 'debt': return resChip(o.k, o.v);
     case 'card': return h('span', { class: 'out pos' }, ico('cards'), t('ui.out.card', { name: nameOf('card', o.id) }));
     case 'item': return h('span', { class: 'out pos' }, sigil(o.id), t('ui.out.item', { name: nameOf('item', o.id) }));
+    case 'joker': return h('span', { class: 'out ' + (o.ok === false ? 'neg' : 'pos') }, ico('cards'), o.ok === false ? t('ui.out.joker_full') : t('ui.out.joker', { name: t('joker.' + o.id + '.name') }));
     case 'tool': return h('span', { class: 'out ' + (o.ok === false ? 'neg' : 'pos') }, sigil(o.id), o.ok === false ? t('ui.out.tool_full') : t('ui.out.tool', { name: nameOf('tool', o.id) }));
     case 'level': return h('span', { class: 'out pos' }, ico('cards'), t('ui.out.level', { name: nameOf('hand', o.id) }));
     case 'mod': { const c = gs.deck.find(x => x.uid === o.uid); return h('span', { class: 'out pos' }, ico('cards'), t('ui.out.mod', { card: c ? cardName(c) : '', mod: nameOf('mod', o.id) })); }
@@ -126,7 +136,7 @@ export function renderHud(hud) {
   const el = $('#hud'); if (!hud) { el.hidden = true; return; }
   el.hidden = false;
   const st = (k, icon, key, val, extra = '', bar) => h('span', { class: 'stat ' + k + extra, 'data-k': k, title: t(key) + ': ' + val, 'aria-label': t(key) + ': ' + val }, ico(icon), h('span', { class: 'lbl' }, t(key)), h('span', { class: 'v' }, val), bar != null ? h('span', { class: 'bar', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(0, Math.min(100, bar)) + '%' })) : null);
-  const inv = h('button', { type: 'button', class: 'hud-inv btn small ghost', 'data-act': 'inventory', 'aria-label': t('hud.inventory') }, ico('pocket'), ' ' + (hud.items.length + hud.tools.length));
+  const inv = h('button', { type: 'button', class: 'hud-inv btn small ghost', 'data-act': 'inventory', 'aria-label': t('hud.inventory') }, ico('pocket'), ' ' + (hud.items.length + hud.tools.length + (hud.jokers ? hud.jokers.length : 0)));
   fill(el,
     st('health', 'heart', 'hud.health', hud.health + '/' + hud.maxHealth, '', hud.health / hud.maxHealth * 100),
     st('sanity', 'flame', 'hud.sanity', hud.sanity, '', hud.sanity),
@@ -148,6 +158,7 @@ export function openInventory() {
   const body = h('div', null,
     h('h3', null, t('hud.items')), gs.inventory.length ? h('ul', { class: 'memlist' }, ...gs.inventory.map(id => h('li', null, sigil(id), ' ', h('b', null, t(`item.${id}.name`)), h('small', null, t(`item.${id}.desc`))))) : h('p', { class: 'muted' }, t('hud.no_items')),
     h('h3', null, t('hud.tools')), gs.tools.length ? h('ul', { class: 'memlist' }, ...gs.tools.map(id => h('li', null, sigil(id, '', PAL.g1), ' ', h('b', null, t(`tool.${id}.name`)), h('small', null, t(`tool.${id}.desc`))))) : h('p', { class: 'muted' }, t('hud.no_items')),
+    h('h3', null, t('hud.jokers') + ' ' + t('ui.slots', { n: gs.jokers.length, max: 5 })), gs.jokers.length ? h('ul', { class: 'memlist jklist' }, ...gs.jokers.map((id, i) => h('li', { class: 'jk-row' }, jokerEl(id, { static: true }), h('span', { class: 'txt' }, h('b', null, t(`joker.${id}.name`)), h('small', null, jokerDesc(id))), h('button', { type: 'button', class: 'btn small', 'data-act': 'sell_joker', 'data-arg': String(i) }, t('ui.sell', { n: jokerSellPrice(id) }))))) : h('p', { class: 'muted' }, t('hud.no_items')),
     h('h3', null, t('hud.levels')), lv.length ? h('p', null, lv.map(([k, v]) => t('hand.' + k) + ' +' + v).join(' · ')) : h('p', { class: 'muted' }, t('hud.no_items')),
     h('p', { class: 'muted' }, t('hud.deck') + ': ' + gs.deck.length));
   modal(body, { title: t('hud.inventory') });
@@ -164,4 +175,13 @@ export function fsButton(kind = 'icon', cls = '') {
 export function syncFullscreenButtons() {
   const on = isFullscreen(), label = t(on ? 'ui.fullscreen_exit' : 'ui.fullscreen');
   for (const b of $$('[data-fs]')) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.setAttribute('aria-label', label); b.title = label; if (b.dataset.fs === 'icon') b.replaceChildren(ico(on ? 'shrink' : 'expand')); else b.textContent = label; }
+}
+
+// ---------- Jokers ----------
+export function jokerDesc(id) { let s = t(`joker.${id}.desc`); if (id === 'abaco') s += ' (+' + ((gs.jokerData && gs.jokerData.abaco) || 0) + ')'; return s; }
+export function jokerEl(id, o = {}) {
+  const J = JOKERS[id] || { rarity: 'common' }, name = t(`joker.${id}.name`), desc = jokerDesc(id), tag = o.static ? 'div' : 'button';
+  const el = h(tag, { class: 'joker r-' + J.rarity + (o.cls ? ' ' + o.cls : ''), title: name + ' — ' + desc, 'aria-label': name + '. ' + desc, data: { joker: id } }, h('img', { src: jokerURL(id, J.rarity), alt: '', draggable: 'false' }));
+  if (!o.static) el.type = 'button';
+  return el;
 }

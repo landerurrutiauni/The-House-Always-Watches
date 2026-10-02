@@ -5,10 +5,15 @@ import { RNG } from '../src/rng.js';
 import * as C from '../src/combat.js';
 import * as E from '../src/effects.js';
 import { OPP_RULES } from '../src/combat.js';
+import { BOSSES } from '../src/content.js';
+import { JOKERS, pickJoker } from '../src/jokers.js';
 
-const N = +process.argv[2] || 300;
-if (process.argv[3]) C.TARGET.growth = +process.argv[3];
-if (process.argv[4]) C.TARGET.base = +process.argv[4];
+const N = +process.argv.slice(2).filter(x => !x.startsWith('--'))[0] || 300;
+const BOSS = (process.argv.find(a => a.startsWith('--boss=')) || '').slice(7) || null;   // reglas del guardián de esa ala en la fila 7 (por defecto: La Chica)
+const JOKER_BOT = process.argv.includes('--jokers');                                       // el bot también compra/elige comodines
+const POS = process.argv.slice(2).filter(x => !x.startsWith('--'));   // posicionales: nRuns [growth] [base]; las opciones empiezan por --
+if (POS[1]) C.TARGET.growth = +POS[1];
+if (POS[2]) C.TARGET.base = +POS[2];
 const stats = Array.from({ length: 9 }, () => ({ n: 0, win: 0 }));
 let deaths = 0, reachBoss = 0, reachFinal = 0, clears = 0;
 
@@ -42,17 +47,18 @@ for (let run = 0; run < N; run++) {
   for (let row = 0; row < 8 && alive; row++) {
     const kind = row === 7 ? 'boss' : 'game';
     if (row === 7) reachBoss++;
-    const rule = row === 7 ? ['no_repeat'] : [rng.pick(OPP_RULES)];
+    const rule = row === 7 ? (BOSS && BOSSES[BOSS] ? BOSSES[BOSS].rule.slice() : ['no_repeat']) : [rng.pick(OPP_RULES)];
     const { R, won } = playRound(row, kind, rule, 'r' + row);
     stats[row].n++; if (won) stats[row].win++;
     if (won) {
       gs.player.money += C.roundRewards(R, row).money;
       const ch = E.rewardChoices(rng, row, kind === 'boss');
       // el bot prefiere carta > nivel > mod
-      E.takeReward(ch.find(c => c.type === 'card') || ch.find(c => c.type === 'level') || ch[0]);
+      E.takeReward((JOKER_BOT && ch.find(c => c.type === 'joker')) || ch.find(c => c.type === 'card') || ch.find(c => c.type === 'level') || ch[0]);
       // tiendas/descansos aproximados: recupera algo de vida y cordura entre mesas
       addHealth(12); gs.player.sanity = Math.min(100, gs.player.sanity + 6);
-      // compra: nivel de mano si hay dinero
+      // compra: un comodín si el bot los usa y hay hueco; luego niveles de mano
+      if (JOKER_BOT) for (let k = 0; k < 2; k++) { const jid = pickJoker(rng, gs.jokers, row, false); if (jid && gs.jokers.length < 5 && gs.player.money >= JOKERS[jid].price + 10) { gs.player.money -= JOKERS[jid].price; E.addJoker(jid); } }
       while (gs.player.money >= 40) { gs.player.money -= 40; E.levelUp(rng.pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full'])); }
       if (row === 7) { clears++; }
     } else {

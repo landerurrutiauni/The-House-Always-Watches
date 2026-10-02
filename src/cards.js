@@ -1,6 +1,10 @@
 // Cartas, manos y evaluación. Módulo puro (sin DOM) para poder testearlo en Node.
 export const SUITS = ['blood', 'eye', 'tooth', 'key'];
-export const RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// Baraja completa de póker: As (1), 2–10, Jota (11), Reina (12), Rey (13). En fichas: As = 11, figuras = 10, el resto su número.
+export const RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+export const rankChips = r => (r === 1 ? 11 : r >= 11 ? 10 : r);
+export const rankPower = r => (r === 1 ? 14 : r);   // el As es la carta más alta para desempates y «carta alta»
+export const rankLabel = r => (r === 1 ? 'A' : r === 11 ? 'J' : r === 12 ? 'Q' : r === 13 ? 'K' : String(r));
 
 // Manos: chips base y multiplicador base. Cada nivel de mano suma +8 chips y +1 mult.
 export const HANDS = {
@@ -52,7 +56,7 @@ export function makeCard(id, extra) {
 }
 export function baseDeck() {
   const d = [];
-  for (const s of SUITS) for (const r of RANKS) d.push(makeCard(s + '_' + (r < 10 ? '0' + r : r)));
+  for (const s of SUITS) for (const r of RANKS) d.push(makeCard(s + '_' + (r < 10 ? '0' + r : r)));   // 52 cartas
   return d;
 }
 export const isWildRank = c => !!c.sp && (SPECIALS[c.id].wild === 'rank' || SPECIALS[c.id].wild === 'both');
@@ -63,7 +67,7 @@ export const cardName = c => c.sp ? 'card.' + c.id : null; // la UI compone el n
 function rankType(ranks) {
   const cnt = {};
   for (const r of ranks) cnt[r] = (cnt[r] || 0) + 1;
-  const groups = Object.entries(cnt).map(([r, n]) => ({ r: +r, n })).sort((a, b) => b.n - a.n || b.r - a.r);
+  const groups = Object.entries(cnt).map(([r, n]) => ({ r: +r, n })).sort((a, b) => b.n - a.n || rankPower(b.r) - rankPower(a.r));
   const n = ranks.length;
   const g0 = groups[0].n, g1 = groups[1] ? groups[1].n : 0;
   let type = 'high';
@@ -74,7 +78,8 @@ function rankType(ranks) {
   else if (g0 === 2 && g1 === 2) type = 'twopair';
   else if (g0 === 2) type = 'pair';
   let straight = false;
-  if (n === 5) { const s = [...ranks].sort((a, b) => a - b); straight = s.every((v, i) => i === 0 || v === s[i - 1] + 1); }
+  // Escalera: números consecutivos; el As vale 1 (A-2-3-4-5) o 14 (10-J-Q-K-A). No se «da la vuelta» (Q-K-A-2-3 no cuenta).
+  if (n === 5) { const s = [...ranks].sort((a, b) => a - b); straight = s.every((v, i) => i === 0 || v === s[i - 1] + 1) || s.join(',') === '1,10,11,12,13'; }
   return { type, straight, groups };
 }
 
@@ -93,12 +98,12 @@ export function evaluate(cards) {
   };
   let best = null;
   const kr = Math.min(wr.length, 2);
-  const combos = Math.pow(10, kr);
+  const combos = Math.pow(13, kr);
   for (let k = 0; k < combos; k++) {
     const ranks = cards.map(c => c.rank);
     let kk = k;
     for (let j = 0; j < wr.length; j++) {
-      if (j < kr) { ranks[wr[j]] = 1 + (kk % 10); kk = Math.floor(kk / 10); }
+      if (j < kr) { ranks[wr[j]] = 1 + (kk % 13); kk = Math.floor(kk / 13); }
       else { // comodines extra: el rango más repetido
         const cnt = {}; ranks.forEach((r, i) => { if (!wr.includes(i) || i === wr[j]) return; cnt[r] = (cnt[r] || 0) + 1; });
         ranks[wr[j]] = +(Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0] || 1);
@@ -116,8 +121,8 @@ export function evaluate(cards) {
     else if (type === 'three') idx = ranks.map((r, i) => r === groups[0].r ? i : -1).filter(i => i >= 0);
     else if (type === 'twopair') idx = ranks.map((r, i) => (r === groups[0].r || r === groups[1].r) ? i : -1).filter(i => i >= 0);
     else if (type === 'pair') idx = ranks.map((r, i) => r === groups[0].r ? i : -1).filter(i => i >= 0);
-    else { let bi = 0; ranks.forEach((r, i) => { if (r > ranks[bi]) bi = i; }); idx = [bi]; }
-    const sumChips = idx.reduce((a, i) => a + ranks[i], 0);
+    else { let bi = 0; ranks.forEach((r, i) => { if (rankPower(r) > rankPower(ranks[bi])) bi = i; }); idx = [bi]; }
+    const sumChips = idx.reduce((a, i) => a + rankChips(ranks[i]), 0);
     const key = HAND_RANK[type] * 1000 + sumChips;
     if (!best || key > best.key) best = { key, type, idx, ranks: ranks.slice(), suits: assignedSuit() };
   }

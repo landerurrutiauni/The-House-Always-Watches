@@ -4,6 +4,7 @@ import { gs, bus, settings, sanityTier } from './state.js';
 import { loadSettings, saveSettings } from './save.js';
 import { initLang, t, getLang } from './i18n.js';
 import * as G from './game.js';
+import * as FX from './effects.js';
 import { audioManager as audio } from './audio.js';
 import { fx } from './fx.js';
 import { initCookies, refreshBanner, dismissConfig } from './cookies.js';
@@ -16,6 +17,8 @@ import { register as regDuel } from './screens/duel.js';
 import './screens/howto.js';   // registra la acción «howto» (menú, barra superior y tecla ?)
 import { initDebug } from './debug.js';
 import * as COMBAT from './combat.js';
+import * as ACH from './achievements.js';
+import * as MIS from './missions.js';
 import * as SHOT from './shotgun.js';
 import * as STATE from './state.js';
 
@@ -52,16 +55,23 @@ async function boot() {
   installActions(); audio.installListeners(); audio.applySettings(settings); audio.bindGame(bus, gs);
   act.inventory = () => openInventory();
   act.fullscreen = () => toggleFullscreen();
+  act.sell_joker = i => { const n = G.sellJoker(+i); if (!n) return; bus.emit('sfx', { name: 'chip' }); bus.emit('stats', {}); const cur = G.getView(); closeTopModal(); if (cur && cur.type === 'round') G.roundView(); else if (cur && cur.type === 'merchant') G.shopRefresh && G.shopRefresh(); else openInventory(); };
   onFullscreenChange(syncFullscreenButtons);
   bus.on('view', render);
-  bus.on('lang', () => { const v = G.getView(); if (v) render(v); refreshBanner(); });
+  bus.on('lang', () => { const v = G.getView(); if (v) render(v); refreshBanner(); ACH.noteLang(getLang()); saveSettings(); });
   bus.on('toast', e => toast(t(e.key, e.vars), e.kind));
   bus.on('memory', e => toast(t('ui.memory_new', { name: t('mem.' + e.id + '.name') }), 'memory'));
+  // Secretos (logros) y misiones: aviso + sonido. Los secretos también se guardan en los ajustes para que nunca se pierdan.
+  bus.on('egg', e => { saveSettings(); audio.playSFX('unlock'); toast(t('egg.unlocked', { name: t('egg.' + e.id + '.name') }), 'memory'); });
+  bus.on('mission', e => { audio.playSFX('unlock'); toast(t('mission.done', { name: t('mission.' + e.id), reward: MIS.rewardText(e.reward) }), 'good'); });
+  bus.on('view', v => { if (v.type === 'menu') ACH.idleStart(); else ACH.idleStop(); });
+  document.addEventListener('pointerdown', () => { const v = G.getView(); if (v && v.type === 'menu') ACH.idleStart(); }, true);
   bus.on('stats', () => { if (!$('#hud').hidden) renderHud(G.hud()); fx.setTier(sanityTier()); });
   window.addEventListener('keydown', e => {
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Escape') { if (dismissConfig() || closeTopModal()) e.preventDefault(); return; }
     if (hasModal() || isTypingTarget(e.target)) return;
+    { const cv = G.getView(); if (cv && cv.type === 'menu') { ACH.konamiKey(e.key); ACH.idleStart(); } }
     if (e.key === '?' && act.howto) { e.preventDefault(); act.howto(); return; }
     const v = G.getView(); if (!v || !current) return; const el = current.el, k = e.key.toLowerCase();
     if (v.type === 'event' && v.phase === 'choose' && el._key) { const map = { a: 'b', arrowleft: 'b', d: 'a', arrowright: 'a', h: 'h' }; if (map[k]) { e.preventDefault(); el._key(map[k]); return; } }
@@ -70,10 +80,11 @@ async function boot() {
   });
   initCookies();
   initDebug();
+  ACH.noteLang(getLang());
   G.toMenu();
   window.__HOUSE = { version: CONFIG.VERSION, getView: G.getView, lang: getLang };
   // Solo para pruebas automáticas: index.html?test expone los módulos (no altera nada por sí mismo)
-  if (/[?&]test(=1)?(&|$)/.test(location.search)) window.__HOUSE_TEST = { G, C: COMBAT, S: SHOT, st: STATE };
+  if (/[?&]test(=1)?(&|$)/.test(location.search)) { settings.textSpeed = 'instant'; window.__HOUSE_TEST = { G, C: COMBAT, S: SHOT, st: STATE, ACH, MIS, FX }; }
   document.body.dataset.ready = '1';
 }
 boot().catch(e => { console.error('[boot]', e); document.body.dataset.error = String(e && e.message || e); });

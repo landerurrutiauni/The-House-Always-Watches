@@ -5,9 +5,9 @@ import * as E from '../src/effects.js';
 import * as K from '../src/content.js';
 const T = (name, fn) => { try { fn(); globalThis.__p = (globalThis.__p || 0) + 1; console.log('  ok  ' + name); } catch (e) { globalThis.__f = (globalThis.__f || 0) + 1; console.log('  FAIL ' + name + '\n       ' + (e.stack || e).toString().split('\n').slice(0, 4).join('\n       ')); } };
 console.log('effects/content');
-T('startRun crea partida válida', () => { replaceState({}); E.startRun('salon'); assert.equal(gs.deck.length, 40); assert.equal(gs.player.health, 100); assert.ok(gs.run.map.rows.length === 8); });
-T('eventos: 30 y todas sus tuplas conocidas', () => {
-  assert.equal(K.EVENT_IDS.length, 30);
+T('startRun crea partida válida', () => { replaceState({}); E.startRun('salon'); assert.equal(gs.deck.length, 52); assert.equal(gs.player.health, 100); assert.ok(gs.run.map.rows.length === 8); });
+T('eventos: 47 y todas sus tuplas conocidas', () => {
+  assert.equal(K.EVENT_IDS.length, 47);
   const known = new Set(['money', 'sanity', 'health', 'debt', 'destiny', 'flag', 'runflag', 'know', 'rel', 'card', 'mod', 'item', 'tool', 'level', 'remove', 'gamble', 'boss']);
   const walk = l => l.forEach(fx => { assert.ok(known.has(fx[0]), 'efecto ' + fx[0]); if (fx[0] === 'gamble') { walk(fx[2]); walk(fx[3]); } if (fx[0] === 'know') assert.ok(K.KNOWLEDGE.includes(fx[1]), fx[1]); if (fx[0] === 'item') assert.ok(K.ITEMS.includes(fx[1]), fx[1]); if (fx[0] === 'tool') assert.ok(K.TOOLS[fx[1]], fx[1]); if (fx[0] === 'rel') assert.ok(K.CHARACTERS.includes(fx[1])); });
   for (const [id, e] of Object.entries(K.EVENTS)) { walk(e.a); walk(e.b); if (e.hid) walk(e.hid.fx); }
@@ -26,7 +26,7 @@ T('muerte: conserva conocimiento, arrastra deuda, da recuerdo', () => {
   E.startRun('salon'); assert.equal(gs.player.debt, 120); assert.equal(gs.player.money, 60); // recuerdo m01: +10
 });
 T('revivir con vela corta y no dos veces', () => { replaceState({}); E.startRun('salon'); gs.tools = ['vela_corta']; gs.player.health = 0; assert.equal(E.tryRevive(), 'candle'); assert.ok(gs.player.health > 0); gs.player.health = 0; assert.equal(E.tryRevive(), false); });
-T('recompensas: 3 opciones, jefe da objetos', () => { replaceState({}); E.startRun('salon'); const r = E.rewardChoices(new RNG(4), 3, false); assert.equal(r.length, 3); const b = E.rewardChoices(new RNG(4), 7, true); assert.ok(b.every(x => x.type === 'item')); E.takeReward(b[0]); assert.ok(gs.inventory.includes(b[0].id)); });
+T('recompensas: 3 opciones, jefe da objetos', () => { replaceState({}); E.startRun('salon'); const r = E.rewardChoices(new RNG(4), 3, false); assert.equal(r.length, 3); const b = E.rewardChoices(new RNG(4), 7, true); assert.ok(b.every(x => x.type === 'item' || x.type === 'joker') && b.some(x => x.type === 'item')); E.takeReward(b[0]); assert.ok(gs.inventory.includes(b[0].id)); });
 T('tienda: compra descuenta dinero y respeta fondos', () => { replaceState({}); E.startRun('salon'); const st = E.merchantStock(new RNG(5), 3); const e = st.find(x => x.kind === 'level'); gs.player.money = 10; assert.equal(E.buy(e, new RNG(1)), false); gs.player.money = 100; assert.equal(E.buy(e, new RNG(1)), true); assert.equal(gs.player.money, 60); });
 T('finales: deuda siempre; puerta exige llave; verdad exige 5', () => { replaceState({}); E.startRun('salon'); let c = E.endingChoices(); assert.ok(c.find(x => x.id === 'deuda').ok); assert.ok(!c.find(x => x.id === 'puerta').ok); gs.inventory.push('llave_hueso'); assert.ok(E.endingChoices().find(x => x.id === 'puerta').ok); assert.ok(!E.endingChoices().find(x => x.id === 'verdad')); });
 T('interés de deuda y recargo', () => { replaceState({}); E.startRun('salon'); gs.player.debt = 300; assert.equal(E.debtSurcharge(), 0.05); const v = E.nodeInterest(); assert.equal(v, 9); assert.equal(gs.player.debt, 309); });

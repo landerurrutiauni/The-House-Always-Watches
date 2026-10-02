@@ -4,7 +4,10 @@ import { RNG, hashStr } from './rng.js';
 export const WINGS = {
   salon: { boss: 'girl', bg: 'casino', w: { game: 40, event: 28, shotgun: 10, merchant: 9, rest: 13 } },
   pasillo: { boss: 'chair', bg: 'corridor', w: { game: 34, event: 32, shotgun: 12, merchant: 8, rest: 14 } },
-  sotano: { boss: 'drowned', bg: 'basement', w: { game: 36, event: 30, shotgun: 14, merchant: 8, rest: 12 } }
+  sotano: { boss: 'drowned', bg: 'basement', w: { game: 36, event: 30, shotgun: 14, merchant: 8, rest: 12 } },
+  capilla: { boss: 'nun', bg: 'chapel', w: { game: 34, event: 34, shotgun: 10, merchant: 8, rest: 14 } },
+  cocinas: { boss: 'cook', bg: 'kitchen', w: { game: 38, event: 30, shotgun: 12, merchant: 10, rest: 10 } },
+  enfermeria: { boss: 'nurse', bg: 'infirmary', w: { game: 32, event: 32, shotgun: 12, merchant: 8, rest: 16 } }
 };
 export const ROWS = 8;
 

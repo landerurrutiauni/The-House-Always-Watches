@@ -1,0 +1,73 @@
+# Misiones por ala, secretos (logros) y textos del archivo. Formato: clave|es|en|fr|de
+mission.btn|MISIONES {n}/{m}|MISSIONS {n}/{m}|MISSIONS {n}/{m}|MISSIONEN {n}/{m}
+mission.title|Misiones · {wing}|Missions · {wing}|Missions · {wing}|Missionen · {wing}
+mission.progress|{n}/{m}|{n}/{m}|{n}/{m}|{n}/{m}
+mission.reward_label|Recompensa: {r}|Reward: {r}|Récompense : {r}|Belohnung: {r}
+mission.done|Misión cumplida: {name} ({reward})|Mission complete: {name} ({reward})|Mission accomplie : {name} ({reward})|Mission erfüllt: {name} ({reward})
+mission.note|Las misiones se reinician en cada descenso. Cumplirlas da premios pequeños.|Missions reset on every descent. Completing them gives small rewards.|Les missions se réinitialisent à chaque descente. Les accomplir donne de petites récompenses.|Missionen werden bei jedem Abstieg zurückgesetzt. Sie zu erfüllen bringt kleine Belohnungen.
+mission.reward.money|+{n} Dinero|+{n} Money|+{n} Argent|+{n} Geld
+mission.reward.sanity|+{n} Cordura|+{n} Sanity|+{n} Raison|+{n} Verstand
+mission.reward.health|+{n} Salud|+{n} Health|+{n} Santé|+{n} Gesundheit
+mission.reward.card|una carta especial|a special card|une carte spéciale|eine Spezialkarte
+mission.reward.mod|una mejora de carta|a card upgrade|une amélioration de carte|eine Kartenverbesserung
+mission.reward.level|un nivel de mano|a hand level|un niveau de main|eine Handstufe
+mission.reward.joker|un comodín|a joker|un joker|ein Joker
+mission.salon_win2|Gana 2 rondas de cartas|Win 2 card rounds|Gagne 2 manches de cartes|Gewinne 2 Kartenrunden
+mission.salon_straight|Juega una escalera|Play a straight|Joue une suite|Spiele eine Straße
+mission.salon_duel|Gana un duelo de la escopeta|Win a shotgun duel|Gagne un duel du fusil|Gewinne ein Schrotflinten-Duell
+mission.pasillo_events|Resuelve 3 eventos|Resolve 3 events|Résous 3 événements|Löse 3 Ereignisse
+mission.pasillo_clean|Gana una ronda sin descartar|Win a round without discarding|Gagne une manche sans défausser|Gewinne eine Runde ohne Abwerfen
+mission.pasillo_buy|Compra algo al Vendedor|Buy something from the Vendor|Achète quelque chose au Vendeur|Kaufe etwas beim Händler
+mission.sotano_rest|Descansa una vez|Rest once|Repose-toi une fois|Rast einmal
+mission.sotano_big|Puntúa 300 o más con una sola jugada|Score 300 or more with a single play|Marque 300 ou plus en un seul coup|Erziele 300 oder mehr mit einem einzigen Zug
+mission.sotano_win3|Gana 3 rondas de cartas|Win 3 card rounds|Gagne 3 manches de cartes|Gewinne 3 Kartenrunden
+mission.capilla_events|Resuelve 2 eventos|Resolve 2 events|Résous 2 événements|Löse 2 Ereignisse
+mission.capilla_flush|Juega un color (o mejor)|Play a flush (or better)|Joue une couleur (ou mieux)|Spiele einen Flush (oder besser)
+mission.capilla_listen|Escucha una cámara en un duelo|Listen to a chamber in a duel|Écoute une chambre pendant un duel|Horche in einem Duell eine Kammer ab
+mission.cocinas_buy2|Compra 2 cosas al Vendedor|Buy 2 things from the Vendor|Achète 2 choses au Vendeur|Kaufe 2 Dinge beim Händler
+mission.cocinas_full|Juega un full (o mejor)|Play a full house (or better)|Joue un full (ou mieux)|Spiele ein Full House (oder besser)
+mission.cocinas_win2|Gana 2 rondas de cartas|Win 2 card rounds|Gagne 2 manches de cartes|Gewinne 2 Kartenrunden
+mission.enf_rest2|Descansa 2 veces|Rest twice|Repose-toi deux fois|Rast zweimal
+mission.enf_low|Gana una ronda con menos de 40 de Cordura|Win a round with Sanity below 40|Gagne une manche avec moins de 40 de Raison|Gewinne eine Runde mit weniger als 40 Verstand
+mission.enf_duel|Gana un duelo de la escopeta|Win a shotgun duel|Gagne un duel du fusil|Gewinne ein Schrotflinten-Duell
+egg.unlocked|Secreto descubierto: {name}|Secret found: {name}|Secret découvert : {name}|Geheimnis entdeckt: {name}
+egg.ojos.name|Te mira de vuelta|He Looks Back|Il te regarde en retour|Er sieht zurück
+egg.ojos.text|Siete veces miraste al Crupier a los ojos. Él, por primera vez, parpadea.|Seven times you stared into the Dealer’s eyes. For once, he blinks.|Sept fois tu as soutenu le regard du Croupier. Pour une fois, il cligne des yeux.|Siebenmal hast du dem Croupier in die Augen gesehen. Zum ersten Mal blinzelt er.
+egg.ojos.hint|En el menú, los ojos del Crupier no se apartan de ti. Tócalos, una y otra vez.|On the menu, the Dealer’s eyes never leave you. Touch them, again and again.|Dans le menu, les yeux du Croupier ne te quittent pas. Touche-les, encore et encore.|Im Menü weichen die Augen des Croupiers nie von dir. Berühre sie, immer wieder.
+egg.konami.name|Código antiguo|Ancient Code|Code ancien|Alter Code
+egg.konami.text|Una vieja combinación de otra época. El Crupier finge no haberla visto.|An old combination from another era. The Dealer pretends not to have seen it.|Une vieille combinaison d’une autre époque. Le Croupier fait semblant de ne pas l’avoir vue.|Eine alte Tastenkombination aus einer anderen Zeit. Der Croupier tut, als hätte er sie nicht gesehen.
+egg.konami.hint|Un código de teclas de otra época, tecleado en el menú.|A key code from another era, typed on the menu.|Un code de touches d’une autre époque, tapé dans le menu.|Ein Tastencode aus einer anderen Zeit, im Menü eingegeben.
+egg.paciencia.name|Paciencia|Patience|Patience|Geduld
+egg.paciencia.text|Esperaste un minuto entero sin tocar nada. La casa agradece a quien sabe esperar; casi nunca se lo devuelve.|You waited a full minute without touching anything. The house appreciates those who can wait; it almost never repays them.|Tu as attendu une minute entière sans rien toucher. La maison apprécie ceux qui savent attendre ; elle ne le leur rend presque jamais.|Du hast eine volle Minute gewartet, ohne etwas zu berühren. Das Haus schätzt, wer warten kann; zurück gibt es kaum etwas.
+egg.paciencia.hint|La casa tiene toda la noche. Quizá tú también.|The house has all night. Maybe you do too.|La maison a toute la nuit. Toi aussi, peut-être.|Das Haus hat die ganze Nacht. Vielleicht du auch.
+egg.poliglota.name|La casa habla todos los idiomas|The House Speaks Every Language|La maison parle toutes les langues|Das Haus spricht jede Sprache
+egg.poliglota.text|Español, inglés, francés, alemán: la deuda se entiende igual en los cuatro.|Spanish, English, French, German: the debt is understood the same in all four.|Espagnol, anglais, français, allemand : la dette se comprend pareil dans les quatre.|Spanisch, Englisch, Französisch, Deutsch: Die Schuld versteht man in allen vieren gleich.
+egg.poliglota.hint|Cuatro lenguas, una sola deuda.|Four tongues, one debt.|Quatre langues, une seule dette.|Vier Sprachen, eine Schuld.
+egg.real.name|Escalera real|Royal Flush|Quinte flush royale|Royal Flush
+egg.real.text|Diez, Jota, Reina, Rey y As del mismo palo. El Crupier deja de barajar un segundo… y vuelve a barajar.|Ten, Jack, Queen, King and Ace of one suit. The Dealer stops shuffling for a second… then shuffles again.|Dix, Valet, Dame, Roi et As de la même couleur. Le Croupier cesse de battre les cartes une seconde… puis recommence.|Zehn, Bube, Dame, König und Ass einer Farbe. Der Croupier hört eine Sekunde auf zu mischen … und mischt weiter.
+egg.real.hint|La mano más noble de la baraja completa, del 10 al As.|The noblest hand of the full deck, ten to Ace.|La main la plus noble du jeu complet, du dix à l’As.|Die edelste Hand des vollen Blatts, von der Zehn bis zum Ass.
+egg.ases.name|Cuatro Ases|Four Aces|Quatre As|Vier Asse
+egg.ases.text|Cuatro Ases en una mano. Nadie reparte así por casualidad.|Four Aces in one hand. Nobody deals like that by accident.|Quatre As dans une main. Personne ne distribue ainsi par hasard.|Vier Asse in einer Hand. So teilt niemand zufällig aus.
+egg.ases.hint|Todos los As, en una sola jugada.|Every Ace, in a single play.|Tous les As, en un seul coup.|Alle Asse in einem einzigen Zug.
+egg.limite.name|Por los pelos|By a Hair|De justesse|Haarscharf
+egg.limite.text|Ganaste en tu última jugada, con la casa ya sonriendo.|You won on your very last play, with the house already smiling.|Tu as gagné au tout dernier coup, la maison souriant déjà.|Du hast im allerletzten Zug gewonnen, während das Haus schon lächelte.
+egg.limite.hint|Ganar sin ningún margen: a la última jugada.|Win with no margin at all: on the last play.|Gagner sans aucune marge : au dernier coup.|Ohne jeden Spielraum gewinnen: im letzten Zug.
+egg.mesa3.name|La Mesa calla|The Table Falls Silent|La Table se tait|Der Tisch schweigt
+egg.mesa3.text|Tentaste a la Mesa tres veces seguidas y las tres calló. Nadie le había hablado así.|You tempted the Table three times running and it stayed silent all three. No one had spoken to it like that.|Tu as tenté la Table trois fois de suite et elle s’est tue les trois fois. Personne ne lui avait jamais parlé ainsi.|Du hast den Tisch dreimal hintereinander herausgefordert, und dreimal schwieg er. So hatte noch niemand mit ihm gesprochen.
+egg.mesa3.hint|En el duelo, tienta a la Mesa y que no responda… tres veces seguidas.|In the duel, tempt the Table and have it not answer… three times in a row.|Pendant le duel, tente la Table et qu’elle ne réponde pas… trois fois de suite.|Fordere im Duell den Tisch heraus, und er antwortet nicht … dreimal hintereinander.
+egg.cinco.name|Cinco bufones|Five Jesters|Cinq bouffons|Fünf Narren
+egg.cinco.text|Una corte entera de comodines murmura a tu espalda. Tendrás que pagar la fiesta.|A whole court of jokers whispers behind you. You’ll have to pay for the party.|Toute une cour de jokers murmure dans ton dos. Il va falloir payer la fête.|Ein ganzer Hofstaat aus Jokern flüstert hinter dir. Die Feier wirst du bezahlen müssen.
+egg.cinco.hint|Una mano tiene cinco dedos; una corte, cinco comodines.|A hand has five fingers; a court, five jokers.|Une main a cinq doigts ; une cour, cinq jokers.|Eine Hand hat fünf Finger; ein Hofstaat, fünf Joker.
+egg.arrepentido.name|Compra y arrepiéntete|Buy and Regret|Achète et regrette|Kaufen und bereuen
+egg.arrepentido.text|Compraste un comodín y lo vendiste en la misma visita. El Vendedor suspira: «Siempre vuelven».|You bought a joker and sold it in the same visit. The Vendor sighs: “They always come back.”|Tu as acheté un joker et tu l’as revendu pendant la même visite. Le Vendeur soupire : « Ils reviennent toujours. »|Du hast einen Joker gekauft und im selben Besuch wieder verkauft. Der Händler seufzt: „Sie kommen immer zurück.“
+egg.arrepentido.hint|Comprar y vender, sin salir de la tienda.|Buy and sell without leaving the shop.|Acheter et vendre sans quitter la boutique.|Kaufen und verkaufen, ohne den Laden zu verlassen.
+egg.colapso.name|Cordura cero|Zero Sanity|Raison à zéro|Verstand null
+egg.colapso.text|Tu mente se quebró por completo. La casa lo anota con una sonrisa y te devuelve lo justo para seguir.|Your mind shattered completely. The house notes it with a smile and gives you just enough to go on.|Ton esprit s’est brisé complètement. La maison le note avec un sourire et te rend juste de quoi continuer.|Dein Verstand ist völlig zerbrochen. Das Haus notiert es lächelnd und gibt dir gerade genug, um weiterzumachen.
+egg.colapso.hint|Mirar demasiado tiempo lo que no se debe.|Looking too long at what you shouldn’t.|Regarder trop longtemps ce qu’il ne faut pas.|Zu lange hinsehen, wohin man nicht soll.
+egg.jackpot.name|Triple siete|Triple Seven|Triple sept|Dreifach-Sieben
+egg.jackpot.text|Tres sietes en una mano. Suenan campanas que no existen.|Three sevens in one hand. Bells ring that don’t exist.|Trois sept dans une main. Des cloches sonnent qui n’existent pas.|Drei Siebenen in einer Hand. Glocken läuten, die es nicht gibt.
+egg.jackpot.hint|Tres números de la suerte, juntos, en una mano.|Three lucky numbers together in one hand.|Trois chiffres porte-bonheur, ensemble, dans une main.|Drei Glückszahlen zusammen in einer Hand.
+archive.eggs|Secretos|Secrets|Secrets|Geheimnisse
+archive.missions|Misiones cumplidas|Missions completed|Missions accomplies|Erfüllte Missionen
+archive.hint|Pista|Hint|Indice|Hinweis
+archive.char_locked|Aún no has coincidido con este personaje.|You haven’t crossed paths with this character yet.|Tu n’as pas encore croisé ce personnage.|Du bist diesem Charakter noch nicht begegnet.

@@ -1,7 +1,7 @@
 // Tests de lógica pura (Node). Ejecuta: node tools/test-logic.mjs
 import assert from 'node:assert/strict';
 import { gs, replaceState } from '../src/state.js';
-import { baseDeck, makeCard, evaluate, HANDS } from '../src/cards.js';
+import { baseDeck, makeCard, evaluate, HANDS, rankChips} from '../src/cards.js';
 import * as C from '../src/combat.js';
 
 let pass = 0, fail = 0;
@@ -9,7 +9,7 @@ const T = (name, fn) => { try { fn(); pass++; console.log('  ok  ' + name); } ca
 const mk = (...ids) => ids.map(i => makeCard(i));
 
 console.log('cards');
-T('mazo base 40 cartas únicas', () => { const d = baseDeck(); assert.equal(d.length, 40); assert.equal(new Set(d.map(c => c.id)).size, 40); });
+T('mazo base: baraja completa de 52 cartas únicas (As–Rey × 4 palos)', () => { const d = baseDeck(); assert.equal(d.length, 52); assert.equal(new Set(d.map(c => c.id)).size, 52); assert.equal(Math.min(...d.map(c => c.rank)), 1); assert.equal(Math.max(...d.map(c => c.rank)), 13); });
 T('par', () => assert.equal(evaluate(mk('blood_03', 'eye_03', 'key_08')).type, 'pair'));
 T('carta alta puntúa 1 carta', () => { const e = evaluate(mk('blood_03', 'eye_07', 'key_08')); assert.equal(e.type, 'high'); assert.deepEqual(e.idx, [2]); });
 T('doble par', () => assert.equal(evaluate(mk('blood_03', 'eye_03', 'key_08', 'tooth_08')).type, 'twopair'));
@@ -25,6 +25,16 @@ T('escalera y color', () => {
 });
 T('comodín de palo completa color', () => assert.equal(evaluate(mk('blood_01', 'blood_04', 'blood_05', 'blood_09', 'dado_trucado')).type, 'flush'));
 T('sombra (comodín de rango) mejora par a trío', () => assert.equal(evaluate(mk('blood_03', 'eye_03', 'sombra')).type, 'three'));
+T('As–Rey: valor en fichas (As 11, figuras 10, resto su número)', () => { assert.equal(rankChips(1), 11); assert.equal(rankChips(11), 10); assert.equal(rankChips(12), 10); assert.equal(rankChips(13), 10); assert.equal(rankChips(7), 7); });
+T('escalera con As ALTO (10-J-Q-K-A)', () => assert.equal(evaluate(mk('blood_10', 'eye_11', 'key_12', 'tooth_13', 'eye_01')).type, 'straight'));
+T('escalera con As BAJO (A-2-3-4-5)', () => assert.equal(evaluate(mk('blood_01', 'eye_02', 'key_03', 'tooth_04', 'eye_05')).type, 'straight'));
+T('escalera de color real (10-J-Q-K-A del mismo palo)', () => assert.equal(evaluate(mk('eye_10', 'eye_11', 'eye_12', 'eye_13', 'eye_01')).type, 'sflush'));
+T('el As no «da la vuelta» (Q-K-A-2-3 no es escalera)', () => assert.equal(evaluate(mk('blood_12', 'eye_13', 'key_01', 'tooth_02', 'eye_03')).type, 'high'));
+T('carta alta: puntúa el As (la más alta)', () => { const e = evaluate(mk('blood_13', 'eye_07', 'key_01')); assert.equal(e.type, 'high'); assert.deepEqual(e.idx, [2]); });
+T('par de Ases pesa más que par de Reyes (desempate por fichas)', () => { const pa = evaluate(mk('blood_01', 'eye_01', 'key_05')), pk = evaluate(mk('blood_13', 'eye_13', 'key_05')); assert.equal(pa.type, 'pair'); assert.equal(pk.type, 'pair'); assert.deepEqual(pa.idx, [0, 1]); });
+T('comodín de rango completa una escalera real (10-J-Q-K + sombra)', () => assert.equal(evaluate(mk('blood_10', 'eye_11', 'key_12', 'tooth_13', 'sombra')).type, 'straight'));
+T('cuatro cartas de cada rango: 13 rangos × 4 palos', () => { const d = baseDeck(); for (let r = 1; r <= 13; r++) assert.equal(d.filter(c => c.rank === r).length, 4); });
+
 T('quintilla con la séptima', () => assert.equal(evaluate(mk('blood_07', 'eye_07', 'key_07', 'tooth_07', 'la_septima')).type, 'five'));
 T('manos: todas definidas', () => assert.equal(Object.keys(HANDS).length, 10));
 

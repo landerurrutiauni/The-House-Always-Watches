@@ -13,6 +13,8 @@ const pickR = a => a[Math.floor(rnd() * a.length)];
 const seen = {}, errs = [], sfxSeen = new Set(), endings = {}; let views = 0, deaths = 0, stuck = 0;
 bus.on('sfx', e => sfxSeen.add(e.name));
 const noEvent = process.argv.includes('--quiet');
+const FORCE_WING = (process.argv.find(a => a.startsWith('--wing=')) || '').slice(7) || null;   // fuerza el ala (desbloqueándola); «all» las rota todas para recorrer también las nuevas
+const ALL_WINGS = ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria']; let wingRot = 0;
 
 function playRound() {
   let guard = 0;
@@ -41,7 +43,10 @@ function step(v) {
   switch (v.type) {
     case 'menu': return G.newGame();
     case 'intro': return G.introDone();
-    case 'wings': return G.pickWing(pickR(v.wings.filter(w => w.unlocked)).id);
+    case 'wings': {
+      if (FORCE_WING) { gs.meta.runsFinished = Math.max(gs.meta.runsFinished, 3); if (!gs.meta.wingsCleared.length) gs.meta.wingsCleared.push('salon'); return G.pickWing(FORCE_WING === 'all' ? ALL_WINGS[wingRot++ % ALL_WINGS.length] : FORCE_WING); }
+      return G.pickWing(pickR(v.wings.filter(w => w.unlocked)).id);
+    }
     case 'map': return G.chooseNode(pickR(v.avail));
     case 'event': return v.phase === 'choose' ? G.eventChoose(pickR(v.options).k) : G.eventContinue();
     case 'round': return playRound();

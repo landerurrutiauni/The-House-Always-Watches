@@ -30,7 +30,7 @@ function build() {
   S.master = ctx.createGain(); S.master.gain.value = 0.9;
   const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.knee.value = 24; comp.ratio.value = 4; comp.attack.value = 0.01; comp.release.value = 0.25;
   S.master.connect(comp); comp.connect(ctx.destination);
-  S.buses = { music: ctx.createGain(), sfx: ctx.createGain(), ambient: ctx.createGain() };
+  S.buses = { music: ctx.createGain(), sfx: ctx.createGain(), ambient: ctx.createGain(), voice: ctx.createGain() };
   for (const k of Object.keys(S.buses)) S.buses[k].connect(S.master);
   S.noise = makeNoise(ctx);
   const core = { ctx, buses: S.buses, noise: S.noise };
@@ -64,6 +64,7 @@ export const audioManager = {
     S.buses.music.gain.setTargetAtTime(vol(s.music, s.muteMusic), t, 0.05);
     S.buses.sfx.gain.setTargetAtTime(vol(s.sfx, s.muteSfx), t, 0.05);
     S.buses.ambient.gain.setTargetAtTime(vol(s.ambient, s.muteMusic), t, 0.05);
+    S.buses.voice.gain.setTargetAtTime(vol(s.voice == null ? 0.7 : s.voice, s.muteVoices), t, 0.05);
   },
   playMusic(state, opts = {}) { S.wanted = state; return music.play(state, opts); },
   transitionTo(state, opts = {}) { return this.playMusic(state, opts); },
@@ -73,6 +74,7 @@ export const audioManager = {
   bindGame(bus, gs) {
     if (S.bound) return; S.bound = true;
     bus.on('sfx', e => this.playSFX(e.name, e.opts));
+    bus.on('blip', e => sfx.blip(e.voice, e));
     const sync = () => { music.setSanity(gs.player.sanity); music.setDebt(gs.player.debt); music.setDestiny(gs.destiny); music.setContext({ deaths: gs.deaths }); };
     bus.on('stats', sync); sync();
   },

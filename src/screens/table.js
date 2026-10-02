@@ -3,7 +3,8 @@ import * as G from '../game.js';
 import * as C from '../combat.js';
 import { gs, settings } from '../state.js';
 import { t, cardName } from '../i18n.js';
-import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc } from '../ui.js';
+import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc, jokerEl } from '../ui.js';
+import { MAX_JOKERS } from '../jokers.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
 import { audioManager as audio } from '../audio.js';
 import { fx } from '../fx.js';
@@ -24,11 +25,25 @@ export function openHelp() {
 }
 act.help = () => openHelp();
 
+// ---- Panel de manos: nivel (+N) y fichas × mult de cada mano. A la izquierda en pantallas anchas; botón «MANOS» en el resto. ----
+function handsPanel() {
+  const lv = gs.handLevels || {};
+  return h('aside', { class: 'hands-panel', 'aria-label': t('table.hands_title') }, h('h3', null, t('table.hands_title')),
+    ...HAND_ORDER.map(k => { const s = handStats(k, lv); return h('div', { class: 'hrow' + (s.lvl ? ' up' : ''), 'data-hand': k, title: t('table.hands_hint') }, h('span', { class: 'hn' }, t('hand.' + k)), h('span', { class: 'hl' }, s.lvl ? '+' + s.lvl : ''), h('span', { class: 'hv' }, s.chips + '×' + s.mult)); }));
+}
+act.tb_hands = () => modal(handsPanel(), { title: t('table.hands_title') });
+
+const fmtMult = (mult, xmult) => mult + (xmult !== 1 ? '×' + (Math.round(xmult * 100) / 100) : '');
+const pulse = (el, k = 1) => { if (!el) return; el.style.setProperty('--k', String(k)); el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); };
+// Fuerza de la jugada: 0 normal · 1 buena · 2 grande · 3 devastadora (según multiplicador final y peso sobre el objetivo)
+export function playTier(res, R) { const pw = res.mult * res.xmult, ratio = res.total / Math.max(1, R.target); return (ratio >= 0.6 || pw >= 60) ? 3 : (ratio >= 0.3 || pw >= 30) ? 2 : pw >= 14 ? 1 : 0; }
+
 function tableScreen(v) {
   const R = v.R, st = { sel: [], stake: 'none', busy: false, info: null };
   UI = st;
   const find = uid => R.hand.find(c => c.uid === uid) || R.pocket.find(c => c.uid === uid);
-  const root = h('section', { class: 'scr tbl' });
+  const root = h('section', { class: 'scr tbl' }), main = h('div', { class: 'tbl-main' }), side = handsPanel();
+  root.append(side, main);
   // ---- zona rival ----
   const ruleDescs = [...R.rule.map(r => [r, false]), ...(v.weakened || []).map(r => [r, true])];
   const pct = Math.max(0, Math.min(100, R.score / R.target * 100));
@@ -41,19 +56,24 @@ function tableScreen(v) {
     scorebar,
     h('div', { class: 'counts' }, h('span', null, ico('cards'), ' ' + t('table.plays') + ' ', h('b', null, R.playsLeft)), h('span', null, ico('x'), ' ' + t('table.discards') + ' ', h('b', null, R.discardsLeft)), h('span', { class: 'muted' }, t('table.deck', { n: R.drawPile.length })),
       v.odds != null && !v.tutorial ? h('span', { class: 'muted' }, t('table.odds', { p: Math.round(v.odds * 100) })) : null)));
-  root.append(opp);
-  if (v.hintKey) root.append(h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(v.hintKey)));
+  main.append(opp);
+  if (v.hintKey) main.append(h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(v.hintKey)));
+  // ---- jokers (solo si tienes alguno) ----
+  const jokerbar = h('div', { class: 'jokerbar', role: 'group', 'aria-label': t('ui.jokers') });
+  for (let i = 0; i < MAX_JOKERS; i++) { const id = gs.jokers[i]; jokerbar.append(id ? jokerEl(id, { static: true }) : h('div', { class: 'joker empty', title: t('table.jokers_empty'), 'aria-hidden': 'true' })); }
+  if (gs.jokers.length) main.append(jokerbar);
+  const jokEls = {}; jokerbar.querySelectorAll('.joker[data-joker]').forEach(e => { jokEls[e.dataset.joker] = e; });
   // ---- mesa ----
   const played = h('div', { class: 'played', 'aria-hidden': 'true' });
   const ticker = h('div', { class: 'ticker', 'aria-live': 'off' });
   const costs = h('div', { class: 'preview-costs' });
   const peek = h('div', { class: 'peek' });
   const felt = h('div', { class: 'panel felt' }, played, ticker, costs, peek);
-  root.append(felt);
+  main.append(felt);
   const info = h('div', { class: 'cardinfo', 'aria-live': 'polite' });
   const pocket = h('div', { class: 'pocketbar' });
   const hand = h('div', { class: 'hand', role: 'group', 'aria-label': t('table.hand_label') });
-  root.append(h('div', { class: 'infobar' }, info, pocket));
+  main.append(h('div', { class: 'infobar' }, info, pocket, btn(t('table.hands_btn'), 'tb_hands', null, 'ghost small hands-btn')));
   // ---- controles ----
   const playB = btn(t('table.play'), 'tb_play', null, 'primary play', { 'data-primary': '1' });
   const discB = btn(t('table.discard'), 'tb_discard', null, '');
@@ -61,28 +81,32 @@ function tableScreen(v) {
   const stakeB = h('button', { type: 'button', class: 'btn stakebtn', 'data-act': 'tb_stake' });
   const saltB = gs.tools.includes('sal') && R.rule.length ? btn(t('table.salt'), 'tb_salt', null, '') : null;
   const ctrl = h('div', { class: 'ctrl' }, playB, discB, stashB, stakeB, saltB, btn('? ' + t('table.help'), 'help', null, 'ghost'));
-  root.append(h('div', { class: 'dock' }, hand, ctrl));
+  main.append(h('div', { class: 'dock' }, hand, ctrl));
 
   const selCards = () => st.sel.map(find).filter(Boolean);
+  const markHand = type => side.querySelectorAll('.hrow').forEach(r => r.classList.toggle('cur', !!type && r.dataset.hand === type));
   function updatePreview() {
-    const cards = selCards();
+    const cards = selCards(); let curHand = null;
     ticker.replaceChildren(); costs.replaceChildren();
     if (!cards.length) { ticker.append(h('span', { class: 'muted' }, t('table.preview_none'))); }
     else {
       const res = G.roundPreview(st.sel, st.stake);
       if (res) {
-        ticker.append(h('span', { class: 'tag' }, t('hand.' + res.hand)), h('span', { class: 'box chips', title: t('table.chips') }, res.chips), '×', h('span', { class: 'box mult', title: t('table.mult') }, res.mult + (res.xmult !== 1 ? '×' + (Math.round(res.xmult * 100) / 100) : '')), '=', h('span', { class: 'box total' }, res.total));
+        curHand = res.hand;
+        ticker.append(h('span', { class: 'tag' }, t('hand.' + res.hand)), h('span', { class: 'box chips', title: t('table.chips') }, res.chips), '×', h('span', { class: 'box mult', title: t('table.mult') }, fmtMult(res.mult, res.xmult)), '=', h('span', { class: 'box total' }, res.total));
         for (const c of res.combos) costs.append(h('span', { class: 'tag new' }, t(`combo.${c}.name`)));
+        for (const s of res.steps) if (s.j && !costs.querySelector('[data-j="' + s.j + '"]')) costs.append(h('span', { class: 'tag gold', 'data-j': s.j, title: t(`joker.${s.j}.name`) }, '★ ' + t(`joker.${s.j}.name`)));
         const d = res.delta; for (const k of ['health', 'sanity', 'debt', 'money', 'shield']) if (d[k]) costs.append(resChip(k, d[k]));
         if (res.notes.length) for (const n of res.notes) costs.append(h('span', { class: 'tag red', title: t(`rule.${n}.desc`) }, t(`rule.${n}.name`)));
         if (res.total + R.score >= R.target) costs.append(h('span', { class: 'tag good' }, t('table.enough')));
       }
     }
+    markHand(curHand);
     const n = st.sel.length;
     playB.disabled = st.busy || !n || R.playsLeft <= 0; discB.disabled = st.busy || !n || R.discardsLeft <= 0;
     stashB.disabled = st.busy || n !== 1 || R.rule.includes('watched') || R.pocket.length >= R.mods.pocket || R.hidden.has(st.sel[0]);
-    playB.textContent = t('table.play') + (n ? ' (' + n + '/5)' : ''); 
-    const sd = C.STAKES[st.stake], label = t(`stake.${st.stake}.name`);
+    playB.textContent = t('table.play') + (n ? ' (' + n + '/5)' : '');
+    const label = t(`stake.${st.stake}.name`);
     stakeB.replaceChildren(h('span', null, label), h('small', null, st.stake === 'none' ? t('stake.none.desc') : t(`stake.${st.stake}.desc`)));
     stakeB.disabled = st.busy || R.rule.includes('watched');
     if (saltB) saltB.disabled = st.busy;
@@ -114,25 +138,35 @@ function tableScreen(v) {
     st.busy = true; const res = G.roundPlay(uids, stake); if (!res) { st.busy = false; return; }
     st.sel = []; ctrl.querySelectorAll('button').forEach(b => { b.disabled = true; });
     hand.querySelectorAll('.card').forEach(c => { if (uids.includes(c.dataset.uid)) c.style.visibility = 'hidden'; });
-    played.replaceChildren(...cards.map(c => cardEl(c, { static: true, noname: false }))); costs.replaceChildren(); ticker.replaceChildren();
+    played.replaceChildren(...cards.map(c => cardEl(c, { static: true, noname: false }))); costs.replaceChildren(); ticker.replaceChildren(); markHand(res.hand);
     const chipsB = h('span', { class: 'box chips' }, '0'), multB = h('span', { class: 'box mult' }, '0'), totB = h('span', { class: 'box total' }, '');
     const handTag = h('span', { class: 'tag' }, t('hand.' + res.hand)); ticker.append(handTag, chipsB, '×', multB, '=', totB);
     const skip = () => { st.skip = true; }; felt.addEventListener('click', skip, { once: true });
     const dly = res.steps.length > 14 ? 50 : 95; let n = 0;
     for (const s of res.steps) {
-      chipsB.textContent = s.chips; multB.textContent = s.mult + (s.xmult !== 1 ? '×' + (Math.round(s.xmult * 100) / 100) : '');
+      chipsB.textContent = s.chips; multB.textContent = fmtMult(s.mult, s.xmult);
+      const heat = s.mult * s.xmult; multB.classList.toggle('hot', heat >= 14); multB.classList.toggle('inferno', heat >= 30);
       const card = s.i >= 0 ? played.children[s.i] : null; played.querySelectorAll('.hit').forEach(x => x.classList.remove('hit')); if (card) card.classList.add('hit');
       if (s.t === 'chips' || s.t === 'mult' || s.t === 'xmult') audio.playSFX('chip', { vol: 0.35, rate: 1 + Math.min(n, 12) * 0.04 });
-      if (s.t === 'xmult') { fx.float(multB, '×' + (Math.round(s.v * 100) / 100), 'big'); }
-      n++; if (!st.skip) await sleep(dly);
+      if (s.t === 'chips') pulse(chipsB, 1); if (s.t === 'mult') pulse(multB, 1.2); if (s.t === 'xmult') { pulse(multB, 2.2); fx.float(multB, '×' + (Math.round(s.v * 100) / 100), 'big'); }
+      if (s.j && jokEls[s.j]) { const je = jokEls[s.j]; je.classList.remove('fire'); void je.offsetWidth; je.classList.add('fire'); fx.float(je, s.t === 'xmult' ? '×' + (Math.round(s.v * 100) / 100) : s.t === 'cost' ? '+' + Math.abs(s.v) : '+' + s.v, 'big'); }
+      let extra = 0;
+      if (s.t === 'combo') { fx.banner(t(`combo.${s.id}.name`), 1); audio.playSFX('sting', { vol: 0.5 }); fx.shake(); extra = 260; }
+      else if (s.j) extra = 90;
+      n++; if (!st.skip) await sleep(dly + extra);
     }
     played.querySelectorAll('.hit').forEach(x => x.classList.remove('hit'));
     totB.textContent = res.total; fx.float(totB, '+' + res.total, 'big'); scorebar.firstChild.style.width = Math.min(100, R.score / R.target * 100) + '%'; scorebar.lastChild.textContent = R.score + ' / ' + R.target;
-    for (const c of res.combos) { audio.playSFX('sting', { vol: 0.5 }); }
+    // Juego visual según la fuerza de la jugada
+    const tier = playTier(res, R);
+    if (tier >= 1) { totB.classList.add('big'); }
+    if (tier >= 2) { fx.banner(t(tier >= 3 ? 'fxbanner.huge' : 'fxbanner.big'), tier); fx.embers(multB, tier >= 3 ? 26 : 14); fx.flash(tier >= 3 ? '#ffd24a' : '#b08a3a', tier >= 3 ? 0.28 : 0.2); fx.vibrate(tier >= 3 ? [40, 30, 90] : 40); audio.playSFX(tier >= 3 ? 'slam' : 'level_up', { vol: 0.6 }); }
+    if (tier >= 3) fx.shake();
+    else if (R.score >= R.target) { fx.banner(t('fxbanner.target'), 2); audio.playSFX('level_up', { vol: 0.5 }); }
     if ((res.broken || []).length) { audio.playSFX('glitch'); announce(t('table.glass_broke')); }
     if (res.delta.health < 0) { fx.flash(); fx.shake(); fx.vibrate(50); }
     announce(t('hand.' + res.hand) + ' ' + res.total);
-    await sleep(st.skip ? 250 : 650);
+    await sleep(st.skip ? 250 : (tier >= 2 ? 1100 : 650));
     if (R.over) G.roundFinish(); else G.roundView();
   };
   refresh();

@@ -1,0 +1,56 @@
+# Jokers, panel de manos, banners de jugadas potentes y textos de interfaz asociados. Formato: clave|es|en|fr|de
+ui.joker|JOKER|JOKER|JOKER|JOKER
+ui.jokers|Jokers|Jokers|Jokers|Joker
+ui.sell|VENDER (+{n})|SELL (+{n})|VENDRE (+{n})|VERKAUFEN (+{n})
+ui.slots|{n}/{max} huecos|{n}/{max} slots|{n}/{max} emplacements|{n}/{max} Plätze
+ui.out.joker|Joker: {name}|Joker: {name}|Joker : {name}|Joker: {name}
+ui.out.joker_full|Sin hueco para el Joker: lo vendes por la mitad|No room for the Joker: sold for half price|Pas de place pour le Joker : vendu à moitié prix|Kein Platz für den Joker: zum halben Preis verkauft
+hud.jokers|Jokers|Jokers|Jokers|Joker
+shop.joker.full|SIN HUECO|NO SLOT|COMPLET|VOLL
+reward.joker|Joker: {name}|Joker: {name}|Joker : {name}|Joker: {name}
+table.hands_title|MANOS|HANDS|MAINS|HÄNDE
+table.hands_btn|MANOS|HANDS|MAINS|HÄNDE
+table.hands_hint|Mejoras de cada mano|Upgrades of each hand|Améliorations de chaque main|Verbesserungen jeder Hand
+table.jokers_empty|Hueco libre|Free slot|Emplacement libre|Freier Platz
+fxbanner.good|¡BUENA JUGADA!|NICE PLAY!|BEAU COUP !|GUTER ZUG!
+fxbanner.big|¡GRAN JUGADA!|BIG PLAY!|GRAND COUP !|GROSSER ZUG!
+fxbanner.huge|¡DEVASTADOR!|DEVASTATING!|DÉVASTATEUR !|VERHEEREND!
+fxbanner.target|¡OBJETIVO ALCANZADO!|TARGET REACHED!|OBJECTIF ATTEINT !|ZIEL ERREICHT!
+joker.bufon.name|El Bufón Mudo|The Mute Jester|Le Bouffon Muet|Der stumme Narr
+joker.bufon.desc|+4 de multiplicador.|+4 Mult.|+4 de multiplicateur.|+4 Multiplikator.
+joker.sonrisa.name|La Sonrisa Fija|The Fixed Grin|Le Sourire Figé|Das starre Grinsen
+joker.sonrisa.desc|+30 fichas si la jugada contiene una pareja o mejor.|+30 chips if the play contains a pair or better.|+30 jetons si le coup contient une paire ou mieux.|+30 Chips, wenn der Zug ein Paar oder besser enthält.
+joker.sanguijuela.name|La Sanguijuela|The Leech|La Sangsue|Der Blutegel
+joker.sanguijuela.desc|+2 mult por cada carta de Sangre que puntúa.|+2 Mult per Blood card that scores.|+2 mult par carte de Sang qui marque.|+2 Mult pro Blut-Karte, die zählt.
+joker.ojo_nuca.name|El Ojo en la Nuca|The Eye on the Neck|L’Œil dans la Nuque|Das Auge im Nacken
+joker.ojo_nuca.desc|+12 fichas por cada carta de Ojo que puntúa.|+12 chips per Eye card that scores.|+12 jetons par carte d’Œil qui marque.|+12 Chips pro Augen-Karte, die zählt.
+joker.colmillo_dorado.name|El Colmillo Dorado|The Golden Fang|Le Croc Doré|Der goldene Zahn
+joker.colmillo_dorado.desc|+10 fichas por cada carta de Diente que puntúa.|+10 chips per Tooth card that scores.|+10 jetons par carte de Dent qui marque.|+10 Chips pro Zahn-Karte, die zählt.
+joker.llavero_roto.name|El Llavero Roto|The Broken Keyring|Le Porte-clés Brisé|Der zerbrochene Schlüsselbund
+joker.llavero_roto.desc|+8 fichas y +1 de Escudo por cada Llave que puntúa.|+8 chips and +1 Shield per Key that scores.|+8 jetons et +1 de Bouclier par Clé qui marque.|+8 Chips und +1 Schild pro Schlüssel, der zählt.
+joker.ultima_oportunidad.name|La Última Oportunidad|The Last Chance|La Dernière Chance|Die letzte Chance
+joker.ultima_oportunidad.desc|+10 mult en tu última jugada de la ronda.|+10 Mult on your last play of the round.|+10 mult lors de ton dernier coup de la manche.|+10 Mult bei deinem letzten Zug der Runde.
+joker.trapero.name|El Trapero|The Ragman|Le Chiffonnier|Der Lumpensammler
+joker.trapero.desc|+1 mult por cada 40 de Deuda (máx. +10).|+1 Mult per 40 Debt (max +10).|+1 mult par tranche de 40 de Dette (max +10).|+1 Mult pro 40 Schulden (max. +10).
+joker.peaje.name|El Peaje del Barquero|The Ferryman’s Toll|Le Péage du Passeur|Der Zoll des Fährmanns
+joker.peaje.desc|Ganas 2 de Dinero por cada carta que puntúa.|You earn 2 Money for every card that scores.|Tu gagnes 2 d’Argent par carte qui marque.|Du verdienst 2 Geld für jede Karte, die zählt.
+joker.vela_viuda.name|La Vela de la Viuda|The Widow’s Candle|La Bougie de la Veuve|Die Kerze der Witwe
+joker.vela_viuda.desc|×1,5 si tu Cordura es menor de 40.|×1.5 if your Sanity is below 40.|×1,5 si ta Raison est inférieure à 40.|×1,5, wenn dein Verstand unter 40 liegt.
+joker.gemelos.name|Los Gemelos|The Twins|Les Jumeaux|Die Zwillinge
+joker.gemelos.desc|×1,5 si la jugada es Doble pareja o Full.|×1.5 if the play is Two pair or Full house.|×1,5 si le coup est une Double paire ou un Full.|×1,5, wenn der Zug Zwei Paare oder Full House ist.
+joker.escalera_sin_fin.name|La Escalera Sin Fin|The Endless Staircase|L’Escalier Sans Fin|Die endlose Treppe
+joker.escalera_sin_fin.desc|+40 fichas y +4 mult si la jugada es una Escalera.|+40 chips and +4 Mult if the play is a Straight.|+40 jetons et +4 mult si le coup est une Quinte.|+40 Chips und +4 Mult, wenn der Zug eine Straße ist.
+joker.monja_ciega.name|La Monja Ciega|The Blind Nun|La Nonne Aveugle|Die blinde Nonne
+joker.monja_ciega.desc|×1,25 por cada figura (J, Q, K) que puntúa.|×1.25 for every face card (J, Q, K) that scores.|×1,25 par figure (V, D, R) qui marque.|×1,25 pro Bildkarte (B, D, K), die zählt.
+joker.as_manga.name|El As en la Manga|The Ace Up the Sleeve|L’As dans la Manche|Das Ass im Ärmel
+joker.as_manga.desc|×1,5 por cada As que puntúa.|×1.5 for every Ace that scores.|×1,5 par As qui marque.|×1,5 pro Ass, das zählt.
+joker.casa_gana.name|La Casa Siempre Gana|The House Always Wins|La Maison Gagne Toujours|Das Haus gewinnt immer
+joker.casa_gana.desc|×1,4 si apuestas en la jugada.|×1.4 if you stake on the play.|×1,4 si tu mises sur le coup.|×1,4, wenn du auf den Zug setzt.
+joker.abaco.name|El Ábaco Oxidado|The Rusty Abacus|Le Boulier Rouillé|Der rostige Abakus
+joker.abaco.desc|+1 mult permanente por cada ronda ganada en este descenso.|+1 permanent Mult for every round won in this descent.|+1 mult permanent par manche gagnée lors de cette descente.|+1 dauerhafter Mult pro gewonnener Runde in diesem Abstieg.
+joker.corona_podrida.name|La Corona Podrida|The Rotten Crown|La Couronne Pourrie|Die faule Krone
+joker.corona_podrida.desc|×2 si la jugada es Color o mejor (Color, Full, Póker, Escalera de color).|×2 if the play is a Flush or better (Flush, Full house, Four of a kind, Straight flush).|×2 si le coup est une Couleur ou mieux (Couleur, Full, Carré, Quinte flush).|×2, wenn der Zug ein Flush oder besser ist (Flush, Full House, Vierling, Straight Flush).
+joker.sombrero.name|El Sombrero del Crupier|The Dealer’s Hat|Le Chapeau du Croupier|Der Hut des Croupiers
+joker.sombrero.desc|×1,3 en todas tus jugadas, pero cada jugada cuesta 2 de Cordura.|×1.3 on all your plays, but every play costs 2 Sanity.|×1,3 sur tous tes coups, mais chaque coup coûte 2 de Raison.|×1,3 bei allen Zügen, aber jeder Zug kostet 2 Verstand.
+joker.ultimo_aliento.name|El Último Aliento|The Last Breath|Le Dernier Souffle|Der letzte Atemzug
+joker.ultimo_aliento.desc|×3 si tu Salud está por debajo del 30 %.|×3 if your Health is below 30%.|×3 si ta Santé est inférieure à 30 %.|×3, wenn deine Gesundheit unter 30 % liegt.

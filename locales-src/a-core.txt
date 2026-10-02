@@ -7,7 +7,7 @@ suit.blood.fx|+1,5 mult por carta. Cuesta 1 de Salud.|+1.5 mult per card. Costs 
 suit.eye.fx|+6 fichas y revela 1 carta del mazo.|+6 chips and reveals 1 card of the deck.|+6 jetons et révèle 1 carte du paquet.|+6 Chips und deckt 1 Karte des Stapels auf.
 suit.tooth.fx|+3 fichas. Crece +1 cada vez que puntúa.|+3 chips. Grows +1 each time it scores.|+3 jetons. Gagne +1 à chaque point marqué.|+3 Chips. Wächst um +1 bei jeder Wertung.
 suit.key.fx|+4 fichas y +2 de Escudo.|+4 chips and +2 Shield.|+4 jetons et +2 de Bouclier.|+4 Chips und +2 Schild.
-card.base|{rank} de {suit}|{rank} of {suit}|{suit} {rank}|{suit} {rank}
+card.base|{rank} de {suit}|{rank} of {suit}|{rank} ({suit})|{rank} ({suit})
 card.la_mujer.name|La Mujer de Rojo|The Woman in Red|La Femme en Rouge|Die Frau in Rot
 card.la_mujer.desc|Comodín total. ×4 al puntuar. +25 Deuda y −6 Cordura.|Total wild. ×4 when scoring. +25 Debt and −6 Sanity.|Joker total. ×4 en marquant. +25 Dette et −6 Raison.|Voller Joker. ×4 beim Werten. +25 Schulden und −6 Verstand.
 card.el_ahogado.name|El Ahogado|The Drowned Man|Le Noyé|Der Ertrunkene

@@ -1,0 +1,30 @@
+# Duelo narrado paso a paso, voces y velocidad de texto. Formato: clave|es|en|fr|de
+duel.you|Tú|You|Toi|Du
+duel.n.p_aim_foe|Apuntas a {name} y aprietas el gatillo…|You aim at {name} and pull the trigger…|Tu vises {name} et tu presses la détente…|Du zielst auf {name} und drückst ab …
+duel.n.p_aim_table|Tientas a la Mesa: apoyas el cañón sobre el tapete…|You tempt the Table: you rest the barrel on the felt…|Tu tentes la Table : tu poses le canon sur le tapis…|Du versuchst den Tisch: Du legst den Lauf auf den Filz …
+duel.n.f_aim_p|{name} te apunta y aprieta el gatillo…|{name} aims at you and pulls the trigger…|{name} te vise et presse la détente…|{name} zielt auf dich und drückt ab …
+duel.n.f_aim_table|{name} tienta a la Mesa…|{name} tempts the Table…|{name} tente la Table…|{name} versucht den Tisch …
+duel.n.loaded|¡BANG! La cámara {k} estaba CARGADA.|BANG! Chamber {k} was LOADED.|BANG ! La chambre {k} était CHARGÉE.|BANG! Kammer {k} war GELADEN.
+duel.n.empty|Clic… La cámara {k} estaba VACÍA.|Click… Chamber {k} was EMPTY.|Clic… La chambre {k} était VIDE.|Klick … Kammer {k} war LEER.
+duel.n.f_loses|{name} pierde una marca. Le quedan {n}.|{name} loses a mark. {n} left.|{name} perd une marque. Il lui en reste {n}.|{name} verliert eine Marke. Es bleiben {n}.
+duel.n.p_loses|Pierdes una marca. Te quedan {n}.|You lose a mark. You have {n} left.|Tu perds une marque. Il t’en reste {n}.|Du verlierst eine Marke. Dir bleiben {n}.
+duel.n.backfire_p|La Mesa te devuelve la bala.|The Table sends the bullet back at you.|La Table te renvoie la balle.|Der Tisch schickt dir die Kugel zurück.
+duel.n.backfire_f|La Mesa le devuelve la bala a {name}.|The Table sends the bullet back at {name}.|La Table renvoie la balle à {name}.|Der Tisch schickt {name} die Kugel zurück.
+duel.n.safe_p|La Mesa guarda silencio: sigues con el turno.|The Table stays silent: you keep your turn.|La Table se tait : tu gardes la main.|Der Tisch schweigt: Du bleibst am Zug.
+duel.n.safe_f|La Mesa guarda silencio: {name} sigue con el turno.|The Table stays silent: {name} keeps the turn.|La Table se tait : {name} garde la main.|Der Tisch schweigt: {name} bleibt am Zug.
+duel.n.pass_f|El turno pasa a {name}.|The turn passes to {name}.|Le tour passe à {name}.|Der Zug geht an {name}.
+duel.n.pass_p|El turno vuelve a ti.|The turn comes back to you.|Le tour revient à toi.|Der Zug kommt zu dir zurück.
+duel.n.skipped|{name} olvida su turno.|{name} forgets its turn.|{name} oublie son tour.|{name} vergisst seinen Zug.
+duel.n.reload|La escopeta se recarga: seis cámaras nuevas. {name} anuncia {n} balas.|The shotgun reloads: six new chambers. {name} announces {n} bullets.|Le fusil se recharge : six chambres neuves. {name} annonce {n} balles.|Die Schrotflinte lädt nach: sechs neue Kammern. {name} sagt {n} Kugeln an.
+duel.n.skip_hint|Toca la pantalla para acelerar.|Tap the screen to speed up.|Touche l’écran pour accélérer.|Tippe auf den Bildschirm, um zu beschleunigen.
+duel.cap.bang|¡BANG!|BANG!|BANG !|BANG!
+duel.cap.click|CLIC…|CLICK…|CLIC…|KLICK …
+duel.cap.safe|SEGURO|SAFE|SANS DANGER|SICHER
+duel.cap.back|¡REBOTE!|BACKFIRE!|RICOCHET !|RÜCKSCHLAG!
+settings.voices|Voces (balbuceo)|Voices (babble)|Voix (marmonnement)|Stimmen (Gebrabbel)
+settings.mute_voices|Silenciar voces|Mute voices|Couper les voix|Stimmen stummschalten
+settings.text_speed|Velocidad del texto|Text speed|Vitesse du texte|Textgeschwindigkeit
+settings.ts.normal|Normal|Normal|Normale|Normal
+settings.ts.fast|Rápida|Fast|Rapide|Schnell
+settings.ts.instant|Instantánea|Instant|Instantanée|Sofort
+duel.n.turn_of|Turno de {name}|{name}’s turn|Tour de {name}|{name} ist dran

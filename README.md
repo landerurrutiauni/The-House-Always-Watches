@@ -42,30 +42,38 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 | Dónde | Ratón / táctil | Teclado |
 |---|---|---|
 | Decisiones binarias (eventos) | Botones, o deslizar ← rechazar / → aceptar | `A` / ← rechazar · `D` / → aceptar · `H` opción oculta |
-| Mesa de cartas | Tocar cartas (hasta 5), JUGAR / DESCARTAR / BOLSILLO / apuesta | `1`–`9` elegir carta · `Enter` jugar · `Retroceso` descartar |
-| Duelo de la escopeta | DISPARAR AL RIVAL / TENTAR A LA MESA / ESCUCHAR | `F` disparar · `T` tentar a la mesa · `L` escuchar |
-| Mapa | Tocar un nodo para ver qué es; tocarlo otra vez (o ENTRAR) para entrar | — |
+| Mesa de cartas | Tocar cartas (hasta 5), JUGAR / DESCARTAR / BOLSILLO / apuesta; botón **MANOS** (en pantallas estrechas) con el nivel de cada mano | `1`–`9` elegir carta · `Enter` jugar · `Retroceso` descartar |
+| Duelo de la escopeta | DISPARAR AL RIVAL / TENTAR A LA MESA / ESCUCHAR; **tocar la pantalla acelera la narración** | `F` disparar · `T` tentar a la mesa · `L` escuchar |
+| Mapa | Tocar un nodo para ver qué es; tocarlo otra vez (o ENTRAR) para entrar; botón **MISIONES** | — |
+| Inventario | Comodines con botón VENDER (la mitad de su precio) | — |
 | Ayuda «Cómo se juega» | Botón del menú o **?** de la barra superior | `?` |
 | Cualquier panel | ✕ | `Esc` |
 
 ## Qué contiene
 
-- 4 palos (Sangre, Ojo, Diente, Llave), 10 manos de póker más 6 combinaciones propias, 15 cartas especiales (5 malditas), modificadores de carta y apuestas (Salud, Cordura, Dinero o Deuda).
+- **Baraja completa de 52 cartas** (A, 2–10, J, Q, K en 4 palos: Sangre, Ojo, Diente, Llave). Valor en fichas: As 11, figuras 10, el resto su número. Escaleras A-2-3-4-5 y 10-J-Q-K-A. 10 manos de póker más 6 combinaciones propias, 15 cartas especiales (5 malditas), modificadores de carta y apuestas (Salud, Cordura, Dinero o Deuda).
+- **Comodines** (19, estilo Balatro): hasta 5 a la vez, de rareza común / poco común / rara; se compran en la tienda, salen de recompensas y eventos, y se venden por la mitad. Cada comodín se enciende en la mesa cuando puntúa.
+- **Panel de manos** a la izquierda de la mesa (en pantallas anchas) con el nivel y las fichas × multiplicador de cada mano; la que vas a formar se resalta. En pantallas estrechas, botón **MANOS**.
+- **Puntuación con animación**: banners de combo, multiplicadores que se «encienden» según crecen y jugadas devastadoras con destello y sacudida (todo se apaga con *Reducir efectos*).
 - Recursos: Dinero, Cordura, Deuda, Salud, Vidas y un Destino invisible. La Cordura baja distorsiona la pantalla en 4 niveles.
-- Mapa de nodos procedural con 3 alas (Salón, Pasillo, Sótano), nodo secreto, tienda, descansos, 30 eventos (3 secretos), 10 reglas de oponente, 12 objetos y 5 herramientas.
-- **Duelo de la escopeta ficticia**: 6 cámaras, anuncio que puede mentir, tentar a la Mesa o escuchar. Es una mecánica abstracta de «marcas»; no hay violencia explícita.
-- 8 personajes, 5 jefes, 6 finales (5 + el final verdadero), La Puerta, 12 recuerdos permanentes y 13 piezas de conocimiento.
+- **6 alas** (Salón, Pasillo, Sótano, Capilla, Cocinas, Enfermería), cada una con su guardián, fondo, rivales y eventos propios. Las tres últimas se abren al progresar (descensos terminados / guardianes derrotados; la pantalla de alas indica cuánto falta). Nodo secreto, tienda, descansos, **47 eventos** (3 secretos) con cadenas de historia por personaje, 10 reglas de oponente, 12 objetos y 5 herramientas.
+- **13 personajes** con biografía en el Archivo (se revela al coincidir con ellos). Sus historias se cruzan: lo que descubres de unos cambia lo que dicen otros, y 18 piezas de conocimiento debilitan a algunos guardianes.
+- **Misiones por ala** (3 en cada una, 18 en total): premios pequeños —recursos, una carta, una mejora, un nivel de mano o, raramente, un comodín—. Se ven y se siguen desde el botón **MISIONES** del mapa y se reinician en cada descenso.
+- **Secretos**: el juego esconde logros que no se explican aquí. El Archivo anota los que has encontrado y da una pista de los que faltan.
+- **Duelo de la escopeta ficticia**: 6 cámaras, anuncio que puede mentir, tentar a la Mesa o escuchar. Cada turno se **narra paso a paso** (quién apunta, qué cámara, BANG o CLIC, marcas que cambian, recarga y a quién le toca) con el cargador y las marcas actualizándose a la vez que cada frase. Es una mecánica abstracta de «marcas»; no hay violencia explícita.
+- 13 personajes, 6 guardianes de ala más el Crupier, 6 finales (5 + el final verdadero), La Puerta, 12 recuerdos permanentes y 18 piezas de conocimiento.
+- **Voces**: cada personaje «balbucea» al hablar (sintetizado con Web Audio, sin archivos de audio). Ajustes: volumen de voces, silenciarlas y velocidad del texto (normal / rápida / instantánea).
 - Morir no es Game Over: pantalla DEUDA ACTUAL / RECUERDOS CONSERVADOS y nuevo descenso con meta-progresión.
 - Intro «¿Estás despierto?», tutorial, pantalla «Cómo se juega» y pistas de una sola vez.
 - Música dinámica por capas y efectos de sonido sintetizados con Web Audio.
-- Idiomas es / en / fr / de al 100 % (783 claves × 4) con cambio en caliente.
+- Idiomas es / en / fr / de al 100 % (1094 claves × 4) con cambio en caliente.
 
 ## Estructura
 
 ```
 index.html              punto de entrada (versión modular, la que sirve GitHub Pages)
 assets/ui/game.css      maquetación, efectos, accesibilidad, pantallas grandes
-src/                    lógica (state, cards, combat, shotgun, map, content, effects, game, save, i18n)
+src/                    lógica (state, cards, combat, jokers, shotgun, map, content, effects, missions, achievements, game, save, i18n)
                         y capa web (sprites, audio, music, sfx, fx, fullscreen, ui, cookies, privacy, debug, main,
                         screens/: menu, run, table, duel, howto)
 locales-src/*.txt       textos fuente: clave|es|en|fr|de
@@ -84,11 +92,13 @@ Los textos se editan en `locales-src/` y se regeneran con `npm run i18n` (tambi�
 | `npm run serve` | Servidor local en el puerto 8080 |
 | `npm run build` | Regenera `locales/` y `dist/` (archivo único + página de privacidad) |
 | `npm run i18n` | Fusiona textos y comprueba paridad es/en/fr/de |
-| `npm run check` | i18n + tests de lógica + tests de ayuda y pistas + partidas simuladas sin interfaz |
+| `npm run check` | i18n + tests de lógica, comodines, alas/personajes/secretos/misiones y ayuda + partidas simuladas sin interfaz |
+| `npm run test:wings` | Partidas completas del bot en cada una de las 6 alas |
 | `npm run test:ui` | Bot que juega con clics reales en Chromium (necesita `npm run serve`, `pip install playwright` y `playwright install chromium`) |
+| `npm run test:extras` | Mesa y panel de manos, comodines en tienda/inventario, duelo narrado (ritmo y orden), voces y ajustes, 6 alas, misiones, secretos, archivo e historia, en Chromium |
 | `npm run test:features` | Sin terceros ni cookies, consentimiento opcional, persistencia, audio, accesibilidad, idiomas, pantalla completa, ayuda y pistas, y depuración en Chromium (necesita el servidor) |
 | `npm run test:single` | Prueba el archivo único abierto como `file://` |
-| `npm run balance` | Simulación de equilibrio con un bot voraz |
+| `npm run balance` | Simulación de equilibrio con un bot voraz (`-- 500 --boss=cook --jokers` para probar un guardián y/o con comodines) |
 
 ## Configuración
 
@@ -121,14 +131,16 @@ Ajustes: volumen de música / efectos / ambiente, silenciar, reducir sonidos int
 
 Todo en Chromium (Playwright) y en Node:
 
-- 47 tests de lógica, 31 de ayuda y pistas, y partidas simuladas sin interfaz con varias semillas (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
+- 56 tests de lógica, 26 de comodines, 31 de alas / personajes / historia / secretos / misiones, 31 de ayuda y pistas, y partidas simuladas sin interfaz con varias semillas y en cada ala (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
 - Un bot que juega con clics reales (modo normal y aleatorio con teclas y clics al azar), en 1280×720, 1920×1080, 390×844, 360×640, 844×390 y 820×1180, en los 4 idiomas, sobre la versión modular y sobre el archivo único abierto como `file://`.
-- 77 comprobaciones de funciones transversales (sin terceros ni cookies, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente, pantalla completa, ayuda y pistas, depuración), 14 sobre el archivo único y una simulación de GitHub Pages bajo subruta.
+- 49 comprobaciones en navegador de lo añadido (mesa, comodines, duelo narrado con medida de ritmo, voces y ajustes, alas, misiones, secretos, archivo, eventos) y 77 de funciones transversales (sin terceros ni cookies, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente, pantalla completa, ayuda y pistas, depuración), 14 sobre el archivo único y una simulación de GitHub Pages bajo subruta.
 
 ## Límites y lo que no se ha probado
 
-- **Ningún humano ha jugado ni escuchado el juego**, ni se ha probado el tutorial y las pistas con una persona nueva. El equilibrio solo se ha ajustado contra un bot voraz (victoria del 100 % en la primera sala al 54 % contra el jefe de ala); la dificultad real, el ritmo y la música no se han validado con personas.
+- **Ningún humano ha jugado ni escuchado el juego**, ni se ha probado el tutorial y las pistas con una persona nueva. El equilibrio solo se ha ajustado contra un bot voraz (en simulación gana ~50 % contra cada guardián de ala sin comodines y ~85 % con ellos); la dificultad real, el ritmo, la música, las voces y la duración de la narración del duelo no se han validado con personas.
 - Tras el tutorial no hay curva de aprendizaje: las reglas de los rivales salen al azar desde la primera sala; con las filas sube sobre todo el objetivo de puntos.
 - **Solo Chromium.** No se ha probado en Firefox ni Safari ni en dispositivos móviles reales (solo emulación táctil); la pantalla completa tampoco.
-- El audio se verificó midiendo señal en la salida de un navegador sin pantalla, no escuchándolo.
+- El audio (incluidas las voces) se verificó midiendo señal y eventos en un navegador sin pantalla, no escuchándolo.
+- Los secretos con teclado (código de teclas) no se pueden activar en un móvil sin teclado; los demás funcionan con toques. Los secretos y las misiones se probaron con partidas simuladas y clics automáticos, no jugándolos.
+- La historia nueva (Capilla, Cocinas, Enfermería, cinco personajes y sus cadenas) no ha sido leída ni revisada por nadie más que su autor; los textos en inglés, francés y alemán no han pasado por un hablante nativo.
 - No hay licencia definida (por defecto, todos los derechos reservados): añade la que quieras.

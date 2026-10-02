@@ -1,9 +1,10 @@
 // Motor de rondas de cartas. Sin DOM. La puntuación es una función PURA (resolvePlay) para poder
 // previsualizar sin efectos, y `play` aplica el resultado al estado.
-import { HANDS, SPECIALS, evaluate, isWildSuit, makeCard } from './cards.js';
+import { HANDS, SPECIALS, evaluate, isWildSuit, makeCard, rankChips } from './cards.js';
 import { RNG, rngFor } from './rng.js';
 import { gs, addHealth, addSanity, addMoney, addDebt, bus } from './state.js';
 import { muteBus } from './state.js';
+import { JOKERS } from './jokers.js';
 
 export const OPP_RULES = ['blind_eyes', 'no_repeat', 'cold_blood', 'drown', 'watched', 'interest', 'remember', 'tax', 'mist', 'greedy'];
 
@@ -37,7 +38,7 @@ export function deriveMods(inv = [], perks = {}) {
   };
 }
 
-export const TARGET = { base: 100, growth: 1.5 };
+export const TARGET = { base: 100, growth: 1.44 };   // reajustado para la baraja de 52 cartas (guardián ≈ 50 % con el bot voraz y sin jokers)
 export function targetFor(row, kind = 'game', oppMul = 1, pity = 0, mods = { targetMul: 1 }) {
   const base = TARGET.base * Math.pow(TARGET.growth, row);
   const k = kind === 'boss' ? 1.45 : kind === 'final' ? 1.7 : 1;
@@ -67,7 +68,7 @@ export function resolvePlay(R, cards, stakeId = 'none') {
 
   const cardFx = (s, retrig) => {
     const c = s.c, i = s.i;
-    if (!retrig) addChips(s.rank, i);
+    if (!retrig) addChips(rankChips(s.rank), i);
     if (c.sp) {
       switch (c.id) {
         case 'la_mujer': addX(4, i); cost('debt', 25, i); cost('sanity', -6, i); break;
@@ -114,12 +115,25 @@ export function resolvePlay(R, cards, stakeId = 'none') {
   if (M.flatChips) addChips(M.flatChips, -1);
   if (M.flatMult) addMult(M.flatMult, -1);
 
+  // Jokers (de izquierda a derecha). Sus pasos llevan j:id para animar el joker que puntúa.
+  const jokS = { scoring, cards, hand: ev.type, R, stake: stakeId, played: cards.length };
+  for (const id of R.jokers || []) {
+    const jk = JOKERS[id]; if (!jk) continue;
+    const J = {
+      addChips: v => { chips += v; push('chips', v, -3, { j: id }); },
+      addMult: v => { mult += v; push('mult', v, -3, { j: id }); },
+      addX: v => { xmult *= v; push('xmult', v, -3, { j: id }); },
+      cost: (k, v) => { d[k] += v; push('cost', v, -3, { k, j: id }); }
+    };
+    jk.fx(jokS, J, R.jokerData || {});
+  }
+
   // Combos propios (aditivos)
   const cnt = { blood: 0, eye: 0, tooth: 0, key: 0 };
   for (const s of scoring) for (const su of Object.keys(cnt)) if (s.c.suit === su || isWildSuit(s.c) || s.suit === su) cnt[su]++;
   const natural = uniq(scoring.map(s => s.c.suit));
   const puertas = scoring.length === 5 && scoring.reduce((a, s) => a + s.rank, 0) % 7 === 0;
-  const combo = (id, fn) => { combos.push(id); fn(); };
+  const combo = (id, fn) => { combos.push(id); steps.push({ t: 'combo', id, i: -1, chips, mult, xmult }); fn(); };
   if (cnt.eye >= 3) combo('mirada', () => { addChips(30, -1); d.peek += 3; });
   if (puertas) combo('puertas', () => { addChips(30, -1); addMult(7, -1); });
   else if (cnt.blood >= 3) combo('ritual', () => { addMult(6, -1); cost('hpLoss', 3, -1); });
@@ -184,7 +198,7 @@ function refill(R) {
   R.peekN = Math.min(R.peekN, R.drawPile.length);
 }
 
-const ctx = R => ({ levels: R.levels, mods: R.mods, rule: R.rule, history: R.history, shield: R.shield, deaths: R.deaths, player: { health: gs.player.health, sanity: gs.player.sanity, money: gs.player.money, debt: gs.player.debt } });
+const ctx = R => ({ levels: R.levels, mods: R.mods, rule: R.rule, history: R.history, shield: R.shield, deaths: R.deaths, playsLeft: R.playsLeft, jokers: gs.jokers.slice(), jokerData: gs.jokerData, player: { health: gs.player.health, maxHealth: gs.player.maxHealth, sanity: gs.player.sanity, money: gs.player.money, debt: gs.player.debt } });
 const find = (R, uids) => uids.map(u => R.hand.find(c => c.uid === u) || R.pocket.find(c => c.uid === u)).filter(Boolean);
 
 export function stakeAllowed(R, stakeId) {
@@ -209,6 +223,7 @@ export function play(R, uids, stakeId = 'none') {
   if (!cards.length || cards.length > 5) return null;
   if (!stakeAllowed(R, stakeId)) stakeId = 'none';
   const res = resolvePlay(ctx(R), cards, stakeId);
+  res.stake = stakeId; if (stakeId !== 'none') R.stakeUsed = (R.stakeUsed || 0) + 1;
   // aplicar
   R.score += res.total; R.playsLeft--; R.history.push(res.hand);
   R.shield = Math.max(0, R.shield + res.delta.shield);
@@ -245,7 +260,7 @@ export function discard(R, uids) {
     if (k >= 0) R.hand.splice(k, 1); else { k = R.pocket.findIndex(x => x.uid === c.uid); if (k >= 0) R.pocket.splice(k, 1); }
     R.discard.push(c);
   }
-  R.discardsLeft--;
+  R.discardsLeft--; R.discardsMade = (R.discardsMade || 0) + 1;
   refill(R);
   if (!R.hand.length && !R.pocket.length) R.over = 'lose';
   return true;

@@ -40,9 +40,12 @@ import * as C from './combat.js';
 import * as S from './shotgun.js';
 import * as FX from './effects.js';
 import { EVENTS, BOSSES, CHARACTERS, WING_INFO, TOOLS, MEMORY_ORDER, KNOWLEDGE, ENDING_ORDER, MAX_TOOLS } from './content.js';
+import * as ACH from './achievements.js';
+import * as MIS from './missions.js';
 import { WINGS, nodeById, available } from './map.js';
 import { SPECIAL_IDS, CURSED_IDS } from './cards.js';
-import { saveGame, loadGame, resetProgress, hasSave } from './save.js';
+import { MAX_JOKERS, onRoundWon } from './jokers.js';
+import { saveGame, loadGame, resetProgress, hasSave, saveSettings } from './save.js';
 
 // ---------------- Estado transitorio (NO se guarda) ----------------
 export const G = { view: null, R: null, D: null, node: null, ev: null, snap: null, rewardCtx: null, shop: null, tut: { plays: 0, discards: 0 }, lastDuel: null, pendingBoss: null };
@@ -54,7 +57,7 @@ export function hud() {
   const p = gs.player;
   return {
     health: p.health, maxHealth: p.maxHealth, sanity: p.sanity, money: p.money, debt: p.debt, lives: p.lives,
-    tier: sanityTier(), tools: gs.tools.slice(), items: gs.inventory.slice(), deck: gs.deck.length,
+    tier: sanityTier(), tools: gs.tools.slice(), items: gs.inventory.slice(), jokers: gs.jokers.slice(), deck: gs.deck.length,
     run: gs.runNumber, deaths: gs.deaths, wing: gs.run ? gs.run.wing : null, row: currentRow(), levels: Object.assign({}, gs.handLevels)
   };
 }
@@ -96,7 +99,7 @@ function freshStart() {
   return setView({ type: 'intro', lines: ['intro.1', 'intro.2', 'intro.3', 'intro.4', 'intro.5', 'intro.6'], music: 'menu' });
 }
 // REINICIAR PROGRESO: borra todo (la UI pide confirmación).
-export function resetAll() { resetProgress(); G.R = G.D = G.node = G.ev = null; return toMenu(); }
+export function resetAll() { resetProgress(); ACH.resetEggs(); saveSettings(); G.R = G.D = G.node = G.ev = null; return toMenu(); }
 export function introDone() {
   gs.meta.introSeen = true; saveGame();
   return chooseWing();
@@ -110,7 +113,7 @@ export function continueGame() {
 }
 
 export function chooseWing() {
-  const list = Object.keys(WINGS).map(id => ({ id, unlocked: FX.wingUnlocked(id), cleared: gs.meta.wingsCleared.includes(id), boss: WINGS[id].boss, bg: WINGS[id].bg }));
+  const list = Object.keys(WINGS).map(id => ({ id, unlocked: FX.wingUnlocked(id), cleared: gs.meta.wingsCleared.includes(id), boss: WINGS[id].boss, bg: WINGS[id].bg, req: WING_INFO[id] ? WING_INFO[id].req : [] }));
   const open = list.filter(w => w.unlocked);
   if (open.length <= 1) return beginRun(open[0] ? open[0].id : 'salon');
   return setView({ type: 'wings', wings: list, music: 'menu' });
@@ -120,7 +123,7 @@ export function pickWing(id) {
   return beginRun(id);
 }
 export function beginRun(wing) {
-  FX.startRun(wing);
+  FX.startRun(wing); MIS.begin(wing);
   G.R = G.D = G.node = G.ev = null;
   G.tut = { plays: 0, discards: 0 };
   saveGame();
@@ -158,11 +161,11 @@ export function markHint(key) { const name = String(key).replace(/^hint\./, '');
 
 export function showMap() {
   const run = gs.run;
-  run.phase = 'map';
+  run.phase = 'map'; MIS.ensure();
   const avail = available(run.map, run.pos, FX.secretUnlocked());
   return setView({
     type: 'map', map: run.map, pos: run.pos, visited: run.visited.slice(), avail, secretVisible: FX.secretUnlocked(),
-    wing: run.wing, row: currentRow(), hintKey: peekHint('map'), music: gs.player.sanity < 25 ? 'low_sanity' : 'exploration'
+    wing: run.wing, row: currentRow(), missions: MIS.list(), hintKey: peekHint('map'), music: gs.player.sanity < 25 ? 'low_sanity' : 'exploration'
   });
 }
 
@@ -247,10 +250,10 @@ function showEvent(id, node) {
     music: secret ? 'secret' : (gs.player.sanity < 25 ? 'horror' : 'dialogue')
   });
 }
-const snapshot = () => JSON.stringify({ player: gs.player, deck: gs.deck, inventory: gs.inventory, tools: gs.tools, handLevels: gs.handLevels, flags: gs.flags, runFlags: gs.runFlags, rels: gs.relationships, destiny: gs.destiny, know: gs.meta.knowledge, disc: gs.discoveredCharacters });
+const snapshot = () => JSON.stringify({ player: gs.player, deck: gs.deck, inventory: gs.inventory, tools: gs.tools, jokers: gs.jokers, jokerData: gs.jokerData, handLevels: gs.handLevels, flags: gs.flags, runFlags: gs.runFlags, rels: gs.relationships, destiny: gs.destiny, know: gs.meta.knowledge, disc: gs.discoveredCharacters });
 function restore(s) {
   const o = JSON.parse(s);
-  Object.assign(gs.player, o.player); gs.deck = o.deck; gs.inventory = o.inventory; gs.tools = o.tools; gs.handLevels = o.handLevels;
+  Object.assign(gs.player, o.player); gs.deck = o.deck; gs.inventory = o.inventory; gs.tools = o.tools; gs.jokers = o.jokers || []; gs.jokerData = o.jokerData || {}; gs.handLevels = o.handLevels;
   gs.flags = o.flags; gs.runFlags = o.runFlags; gs.relationships = o.rels; gs.destiny = o.destiny; gs.meta.knowledge = o.know; gs.discoveredCharacters = o.disc;
   bus.emit('stats', {});
 }
@@ -288,6 +291,7 @@ export function eventRedo(via) {
 export function eventContinue() {
   const cur = G.ev; if (!cur || !G.view || G.view.phase !== 'result') return G.view;
   if (!gs.discoveredEvents.includes(cur.id)) gs.discoveredEvents.push(cur.id);
+  MIS.track('event', { id: cur.id });
   const bossId = G.view.boss;
   G.ev = null; G.snap = null;
   if (checkDeath()) return G.view;
@@ -303,6 +307,9 @@ export const bossRules = id => {
   if (id === 'chair' && know('k_moon')) rules = rules.filter(r => r !== 'cold_blood');
   if (id === 'drowned' && know('k_drowned_paid')) rules = rules.filter(r => r !== 'drown');
   if (id === 'child' && know('k_child_self')) rules = rules.filter(r => r !== 'blind_eyes');
+  if (id === 'nun' && know('k_nun_name')) rules = rules.filter(r => r !== 'remember');
+  if (id === 'cook' && know('k_cook_jars')) rules = rules.filter(r => r !== 'greedy');
+  if (id === 'nurse' && know('k_nurse_eye')) rules = rules.filter(r => r !== 'blind_eyes');
   return rules;
 };
 export const bossWeakened = id => BOSSES[id] ? BOSSES[id].rule.filter(r => !bossRules(id).includes(r)) : [];
@@ -347,9 +354,11 @@ export function enterRound(node) {
 export const roundPreview = (uids, stake = 'none') => (G.R ? C.preview(G.R, uids, stake) : null);
 export function roundPlay(uids, stake = 'none') {
   const R = G.R; if (!R || R.over) return null;
+  const played = uids.map(u => R.hand.find(c => c.uid === u) || R.pocket.find(c => c.uid === u)).filter(Boolean);
   const res = C.play(R, uids, stake);
   if (!res) { sfx('deny'); return null; }
   G.tut.plays++;
+  ACH.onPlay(played, res); MIS.track('play', { hand: res.hand, total: res.total });
   sfx('card_play'); if (stake !== 'none') sfx('bet');
   if (res.delta.health < 0) sfx('hurt');
   return res;
@@ -369,7 +378,8 @@ export function roundFinish() {
   const won = R.over === 'win';
   const st = gs.meta.stats;
   if (won) {
-    st.roundsWon++; run.pity = 0;
+    st.roundsWon++; run.pity = 0; onRoundWon(gs.jokers, gs.jokerData);
+    ACH.onRoundWon(R); MIS.track('roundWon', { kind: ctx.kind, tutorial: !!ctx.tutorial, discards: R.discardsMade || 0, sanity: gs.player.sanity });
     const rew = C.roundRewards(R, ctx.row);
     let rewards = { money: 0, sanity: 0 };
     if (ctx.kind === 'game' || ctx.kind === 'boss') { rewards.money = addMoney(rew.money); if (P.sanityWin) rewards.sanity = addSanity(P.sanityWin); }
@@ -479,21 +489,23 @@ export function duelStart(type) {
   return duelView();
 }
 function foeSfx(e) { if (e.result === 'hit' || e.result === 'backfire') sfx('shot'); else if (e.result === 'click') sfx('click_empty'); else if (e.result === 'safe') sfx('click_empty'); if (e.reload) sfx('gun_load'); }
-export function duelShoot(at) {
+export function duelShoot(at, o = {}) {   // o.silent: la interfaz reproduce los sonidos al ritmo de la narración
   const D = G.D; if (!D || D.over || D.turn !== 'p') return null;
   const ev = S.playerShoot(D, at); if (!ev) return null;
   const events = [ev];
-  foeSfx(ev);
-  if (ev.anomaly) { gs.meta.stats.anomalies++; gs.runFlags.anomaly = true; sfx('glitch'); ev.lineKey = 'duel.anomaly'; }
-  if (!D.over && D.turn === 'f') { const fe = S.foeTurn(D); for (const e of fe) { foeSfx(e); events.push(e); } }
+  if (!o.silent) foeSfx(ev);
+  if (ev.anomaly) { gs.meta.stats.anomalies++; gs.runFlags.anomaly = true; if (!o.silent) sfx('glitch'); ev.lineKey = 'duel.anomaly'; }
+  if (!D.over && D.turn === 'f') { const fe = S.foeTurn(D); for (const e of fe) { if (!o.silent) foeSfx(e); events.push(e); } }
   bus.emit('stats', {});
+  ACH.onDuelStreak(D);
   return { events, over: D.over, turn: D.turn };
 }
 export function duelListen() {
   const D = G.D; if (!D || D.over || D.turn !== 'p') return null;
   const p = gs.player; if (p.sanity <= S.LISTEN_COST) { sfx('deny'); return null; }
   addSanity(-S.LISTEN_COST); sfx('whisper');
-  return S.listen(D, duelListenReliability());
+  const r = S.listen(D, duelListenReliability()); MIS.track('listen');
+  return r;
 }
 export function duelTool(id) {
   const D = G.D; if (!D || D.over || D.turn !== 'p' || !hasTool(id)) { sfx('deny'); return null; }
@@ -507,7 +519,7 @@ export function duelFinish() {
   const D = G.D, ctx = G.duelCtx; if (!D || !D.over) return G.view;
   const won = D.over === 'win', st = gs.meta.stats, run = gs.run;
   const deltas = { money: 0, sanity: 0, debt: 0, health: 0, card: null, lostCard: null };
-  if (won) st.duelsWon++; else st.duelsLost++;
+  if (won) { st.duelsWon++; if (ctx.kind !== 'final') MIS.track('duelWon'); } else st.duelsLost++;
   if (ctx.kind === 'final') {
     if (won) {
       sfx('victory'); run.finalStage = 3; run.phase = 'door'; saveGame();
@@ -544,12 +556,14 @@ export function duelFinish() {
 }
 
 // ---------------- Tienda ----------------
+export function shopRefresh() { return G.shop ? shopView() : G.view; }
 function shopView() {
   const p = gs.player, sh = G.shop;
   const stock = sh.stock.map((e, i) => {
     let can = !e.sold && p.money >= e.price;
     if (e.kind === 'tool' && gs.tools.length >= MAX_TOOLS) can = false;
     if (e.kind === 'remove' && gs.deck.filter(c => !c.sp).length <= 20) can = false;
+    if (e.kind === 'joker' && (gs.jokers.length >= MAX_JOKERS || gs.jokers.includes(e.id))) can = false;
     if (e.kind === 'loan') can = !e.sold;
     return Object.assign({}, e, { index: i, can });
   });
@@ -567,9 +581,15 @@ export function buy(i) {
   const sh = G.shop; if (!sh || !sh.stock[i] || sh.stock[i].sold) { sfx('deny'); return G.view; }
   const e = sh.stock[i]; let ok = false;
   if (e.kind === 'loan') { addMoney(e.amount); addDebt(e.debt); e.sold = true; ok = true; }
-  else { ok = FX.buy(e, sh.rng); if (ok) e.sold = true; }
+  else { ok = FX.buy(e, sh.rng); if (ok) { e.sold = true; MIS.track('buy', { kind: e.kind }); if (e.kind === 'joker') (sh.bought = sh.bought || []).push(e.id); } }
   sfx(ok ? 'chip' : 'deny');
   return shopView();
+}
+// Vender un comodín desde el inventario (si lo habías comprado en esta misma tienda, es un secreto)
+export function sellJoker(i) {
+  const id = gs.jokers[+i]; const n = FX.sellJoker(+i);
+  if (n) ACH.onSellJoker(!!(G.shop && G.shop.bought && G.shop.bought.includes(id)));
+  return n;
 }
 export function leaveShop() { G.shop = null; return finishNode(); }
 
@@ -594,6 +614,7 @@ export function restChoose(k) {
   else if (k === 'calm') { addSanity(REST_AMOUNTS.calm); sfx('heal'); }
   else if (k === 'pay') { addMoney(-o.amount); addDebt(-o.amount); sfx('chip'); }
   else if (k === 'study') { addSanity(-REST_AMOUNTS.study); done.extra = FX.levelUp(gs.run ? rngFor(gs.run.seed, 'study', gs.run.nodes).pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full']) : 'pair'); sfx('unlock'); }
+  MIS.track('rest', { k });
   return restView(done);
 }
 export function restContinue() { return finishNode(); }
@@ -666,7 +687,9 @@ export function archiveData() {
     memories: MEMORY_ORDER.map(id => ({ id, got: gs.meta.memories.includes(id) })),
     knowledge: KNOWLEDGE.map(id => ({ id, got: gs.meta.knowledge.includes(id) })),
     characters: CHARACTERS.map(id => ({ id, met: gs.discoveredCharacters.includes(id) })),
-    stats: Object.assign({ deaths: gs.deaths, runs: gs.meta.runsFinished }, gs.meta.stats)
+    stats: Object.assign({ deaths: gs.deaths, runs: gs.meta.runsFinished }, gs.meta.stats),
+    eggs: ACH.EGGS.map(id => ({ id, got: ACH.hasEgg(id) })),
+    missions: { done: gs.meta.missionsDone.length, total: MIS.MISSION_IDS.length }
   };
 }
 export function openArchive() { return setView({ type: 'archive', data: archiveData(), music: 'secret' }); }

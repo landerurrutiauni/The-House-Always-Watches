@@ -61,9 +61,41 @@ const R = {
   creak: (o, t) => tone(o, t, { f: 120, f2: 210, type: 'sawtooth', a: .3, d: .7, v: .06, lp: 420 })
 };
 
+// ---- Voces de balbuceo (estilo Undertale / Papers Please): un «blip» corto por letra, con tono y timbre propios de cada personaje ----
+const VOICES = {
+  narrator: { f: 300, type: 'triangle', v: .05, d: .04, vary: .2, lp: 1800 },
+  dealer: { f: 118, type: 'square', v: .08, d: .05, vary: .22, lp: 900 },
+  girl: { f: 540, type: 'triangle', v: .09, d: .045, vary: .3, lp: 3000 },
+  chair: { f: 88, type: 'sawtooth', v: .07, d: .08, vary: .12, lp: 520 },
+  child: { f: 820, type: 'sine', v: .1, d: .04, vary: .35, lp: 4000 },
+  merchant: { f: 215, type: 'square', v: .065, d: .05, vary: .35, lp: 1400, hiss: true },
+  woman: { f: 330, type: 'sine', v: .1, d: .07, vary: .18, lp: 2500, vib: 30 },
+  drowned: { f: 150, type: 'sine', v: .11, d: .09, vary: .3, lp: 420, bubble: true },
+  archivist: { f: 262, type: 'square', v: .055, d: .03, vary: .08, lp: 2200 },
+  nun: { f: 200, type: 'sine', v: .09, d: .08, vary: .1, lp: 1200, hiss: true },
+  cook: { f: 100, type: 'sawtooth', v: .08, d: .06, vary: .35, lp: 700 },
+  puppet: { f: 480, type: 'square', v: .055, d: .03, vary: .5, lp: 3500 },
+  pianist: { f: 262, type: 'triangle', v: .09, d: .1, vary: 0, lp: 2600, scale: [262, 294, 330, 392, 440, 523] },
+  nurse: { f: 380, type: 'sine', v: .085, d: .07, vary: .1, lp: 2000 }
+};
+export const VOICE_IDS = Object.keys(VOICES);
+
 export const sfx = {
   NAMES: Object.keys(R),
-  attach(core) { C.ctx = core.ctx; C.noise = core.noise; C.bus = core.buses.sfx; C.abus = core.buses.ambient; },
+  voices: VOICE_IDS,
+  blip(voice, opts = {}) {
+    if (!C.ctx || C.ctx.state !== 'running') return false;
+    const V = VOICES[voice] || VOICES.narrator;
+    try {
+      const t = C.ctx.currentTime + .003, out = C.vbus || C.bus;
+      const f = V.scale ? V.scale[Math.floor(Math.random() * V.scale.length)] : V.f * (1 + (Math.random() * 2 - 1) * V.vary);
+      tone(out, t, { f, f2: f * .93, type: V.type, a: .004, d: V.d, v: V.v * (opts.vol != null ? opts.vol : 1), lp: V.lp, det: V.vib ? (Math.random() * 2 - 1) * V.vib : 0 });
+      if (V.hiss) burst(out, t, { d: .035, type: 'highpass', f: 3000, q: .7, v: .018 });
+      if (V.bubble && Math.random() < .35) tone(out, t + .02, { f: f * 1.7, f2: f * 2.4, type: 'sine', d: .05, v: V.v * .6, lp: 900 });
+      return true;
+    } catch (e) { return false; }
+  },
+  attach(core) { C.ctx = core.ctx; C.noise = core.noise; C.bus = core.buses.sfx; C.abus = core.buses.ambient; C.vbus = core.buses.voice; },
   setReduceIntense(v) { C.reduce = !!v; },
   has(name) { return !!R[ALIAS[name] || name]; },
   play(name, opts = {}) {

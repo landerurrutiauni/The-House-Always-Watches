@@ -11,7 +11,7 @@ ap.add_argument('--url', default='http://localhost:8080/index.html?test'); ap.ad
 ap.add_argument('--w', type=int, default=1280); ap.add_argument('--h', type=int, default=720); ap.add_argument('--seed', type=int, default=1)
 ap.add_argument('--shots', default=''); ap.add_argument('--lang', default=''); ap.add_argument('--mobile', action='store_true')
 ap.add_argument('--fuzz', action='store_true', help='clics aleatorios sobre cualquier botón visible'); ap.add_argument('--consent', default='reject')
-ap.add_argument('--fresh', action='store_true'); ap.add_argument('--jump', default='', help='finale | boss: salta a ese punto de la partida'); ap.add_argument('--budget', type=float, default=1e9, help='segundos máximos de juego'); ap.add_argument('--fast', action='store_true', help='sin animaciones (reduceEffects) y sin música: recorre partidas largas')
+ap.add_argument('--fresh', action='store_true'); ap.add_argument('--wing', default='', help='abre las 6 alas y empieza en esta (capilla | cocinas | enfermeria | …)'); ap.add_argument('--jump', default='', help='finale | boss: salta a ese punto de la partida'); ap.add_argument('--budget', type=float, default=1e9, help='segundos máximos de juego'); ap.add_argument('--fast', action='store_true', help='sin animaciones (reduceEffects) y sin música: recorre partidas largas')
 A = ap.parse_args(); rnd = random.Random(A.seed)
 KEY_RE = re.compile(r'\b(?:ui|menu|table|duel|map|node|rest|shop|reward|result|boss|finale|door|ending|death|archive|hud|settings|cookies|ads|help|wings|event|card|suit|hand|combo|rule|stake|item|tool|char|opp|mem|know|wing|tut|dlg|log|fx|whisper|debug|legal)\.[a-z0-9_]+(?:\.[a-z0-9_]+)*\b')
 
@@ -46,6 +46,9 @@ def main():
             dead = pg.evaluate("""() => [...document.querySelectorAll('#view button, #hud button')].filter(b => b.offsetParent && !b.disabled && !b.dataset.act && !b.onclick && !b.closest('.modal')).map(b => b.className + ':' + b.textContent.slice(0,20))""")
             for d in dead: errors.append(f'BOTÓN sin acción en {v}: {d}')
         G = lambda code, arg=None: pg.evaluate("async (arg) => { const T = window.__HOUSE_TEST; const G = T.G, C = T.C, S = T.S, st = T.st; " + code + "}", arg)
+        if A.wing:
+            pg.evaluate("""(w) => { const T = window.__HOUSE_TEST; const G = T.G, st = T.st; G.newGame(); G.introDone(); const m = st.gs.meta; m.tutorial.round = true; m.runsFinished = 3; m.wingsCleared = ['salon']; m.stats.anomalies = 1; G.beginRun(w); }""", A.wing)
+            pg.wait_for_timeout(300)
         if A.jump:
             pg.evaluate("""async (j) => { const T = window.__HOUSE_TEST; const G = T.G, st = T.st; G.newGame(); G.introDone(); const p = st.gs.player; st.gs.meta.tutorial.round = true; p.maxHealth = 999; p.health = 999; p.sanity = 100; p.money = 500;
               if (j === 'finale') { st.gs.inventory.push('llave_hueso'); G.startFinale(); } else if (j === 'boss') { const run = st.gs.run; const b = run.map.rows[run.map.rows.length - 1][0]; run.pos = b.id; G.G.node = b; G.enterBoss(b); } }""", A.jump)
