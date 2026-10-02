@@ -2,11 +2,12 @@
 import { gs, replaceState, addMoney, addSanity, addHealth, addDebt, addDestiny, rel, hasItem, hasCard, hasTool, know, flag, bus, clamp } from './state.js';
 import { RNG, rngFor, newSeed } from './rng.js';
 import { baseDeck, makeCard, SPECIAL_IDS, CURSED_IDS, MODS, HAND_ORDER } from './cards.js';
-import { ITEMS, ITEM_PRICE, TOOLS, MAX_TOOLS, EVENTS, CHAINS, MEMORIES, MEMORY_ORDER, ENDINGS, ENDING_ORDER, DEALER_CLUES, CHARACTERS, GENERIC_OPPS, DUEL_FOES, SECRET_EVENTS, WING_INFO, WING_OPPS, WING_FOES, eventPool, perksFrom } from './content.js';
+import { ITEMS, ITEM_PRICE, TOOLS, MAX_TOOLS, EVENTS, CHAINS, MEMORIES, MEMORY_ORDER, ENDINGS, ENDING_ORDER, DEALER_CLUES, CHARACTERS, GENERIC_OPPS, DUEL_FOES, SECRET_EVENTS, WING_INFO, WING_OPPS, WING_FOES, GAMBLERS, eventPool, perksFrom } from './content.js';
 import { onJokers, onCollapse } from './achievements.js';
 import { OPP_RULES } from './combat.js';
 import { JOKERS, MAX_JOKERS, pickJoker, jokerSellPrice } from './jokers.js';
 import { generateMap, WINGS } from './map.js';
+import { eqRow } from './scale.js';
 
 export const perks = () => perksFrom(gs.meta.memories);
 
@@ -112,7 +113,7 @@ export function secretUnlocked() {
 export function wingUnlocked(w) { const i = WING_INFO[w]; return !!i && check(i.req); }
 
 export function pools(wing) {
-  return { events: eventPool(wing), opps: GENERIC_OPPS.concat(WING_OPPS[wing] || []), rules: OPP_RULES, duelFoes: DUEL_FOES.concat(WING_FOES[wing] || []), secretEvents: SECRET_EVENTS };
+  return { events: eventPool(wing), opps: GENERIC_OPPS.concat(WING_OPPS[wing] || []), gamblers: GAMBLERS, rules: OPP_RULES, duelFoes: DUEL_FOES.concat(WING_FOES[wing] || []), secretEvents: SECRET_EVENTS };
 }
 
 export function startRun(wing = 'salon') {
@@ -138,7 +139,7 @@ export function startRun(wing = 'salon') {
 // Interés de la deuda al terminar cada nodo.
 export function nodeInterest() {
   const p = gs.player; if (p.debt <= 0) return 0;
-  const k = 0.03 * (hasItem('libro_cuentas') ? 0.5 : 1) * (hasItem('reloj_parado') ? 1.5 : 1) * perks().interest;
+  const k = 0.03 * eqRow(1) * (hasItem('libro_cuentas') ? 0.5 : 1) * (hasItem('reloj_parado') ? 1.5 : 1) * perks().interest;
   const v = Math.max(1, Math.ceil(p.debt * k)); addDebt(v); return v;
 }
 // Recargo de la Casa por deuda alta: +5% del objetivo por cada 100 sobre 200 (máx. 25%).
@@ -203,7 +204,7 @@ export function rewardChoices(rng, row, boss) {
     return picks.length ? picks : [{ type: 'card', id: rng.pick(SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i))) }];
   }
   const out = [];
-  const pool = SPECIAL_IDS.filter(i => CURSED_IDS.includes(i) ? (row >= 3 && rng.chance(0.25)) : true);
+  const pool = SPECIAL_IDS.filter(i => CURSED_IDS.includes(i) ? (eqRow(row) >= 3 && rng.chance(0.25)) : true);
   out.push({ type: 'card', id: rng.pick(pool.length ? pool : SPECIAL_IDS) });
   out.push({ type: 'level', hand: rng.pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full']) });
   const jk = jokerSlotFree() && rng.chance(0.4) ? pickJoker(rng, gs.jokers, row, false) : null;

@@ -24,7 +24,8 @@ export function h(tag, attrs, ...kids) {
 export const ico = (name, cls = '', color) => h('img', { class: 'ico ' + cls, src: iconURL(name, 2, color || PAL.t3), alt: '', 'aria-hidden': 'true', draggable: 'false' });
 export const sigil = (id, cls = '', color) => h('img', { class: 'ico ' + cls, src: sigilURL(id, 2, color || PAL.t3), alt: '', 'aria-hidden': 'true' });
 export const fill = (el, ...kids) => { el.replaceChildren(...kids.flat(Infinity).filter(k => k != null && k !== false)); return el; };
-export const sc = (big, small) => (window.innerWidth < 500 || window.innerHeight < 780 ? small : (window.innerWidth >= 1500 && window.innerHeight >= 980 ? big + 1 : big));
+// El escenario mide siempre 1280×720: se usa el tamaño «pequeño» pensado para esa altura (el escalado a la ventana lo hace el escenario entero)
+export const sc = (big, small) => small;
 export const announce = txt => { const l = $('#live'); if (l) l.textContent = txt; };
 
 // ---------- Acciones (data-act) ----------
@@ -45,7 +46,7 @@ export function installActions() {
 const bgCache = new Map(); let bgKind = 'casino', bgKey = '';
 export function setBackground(kind) {
   if (kind) bgKind = kind;
-  const vw = window.innerWidth || 800, vh = window.innerHeight || 600, S = Math.max(3, Math.min(6, Math.round(Math.min(vw, vh) / 130)));
+  const vw = 1280, vh = 720, S = 6;
   const w = Math.ceil(vw / S), hh = Math.ceil(vh / S), key = bgKind + ':' + w + 'x' + hh; if (key === bgKey) return; bgKey = key;
   let c = bgCache.get(key); if (!c) { c = backgroundCanvas(bgKind, w, hh, 7); if (bgCache.size > 9) bgCache.delete(bgCache.keys().next().value); bgCache.set(key, c); }
   $('#bg').replaceChildren(c);
@@ -76,7 +77,12 @@ export const textSpeedMul = () => (settings.textSpeed === 'instant' ? 0 : settin
 export function typewriter(el, text, { speed = 16, onDone, voice } = {}) {
   el.setAttribute('aria-label', text);
   const mul = textSpeedMul();
-  if (settings.reduceEffects || !mul || speed <= 0) { el.textContent = text; if (onDone) onDone(); return { skip() {}, done: true }; }
+  if (settings.reduceEffects || !mul || speed <= 0) {
+    el.textContent = text;
+    // «Reducir efectos» quita el efecto de escribir a máquina, no la voz: se oye una ráfaga corta de balbuceo (con velocidad «instantánea», silencio)
+    if (voice && mul && settings.reduceEffects) { const n = Math.min(12, Math.ceil(text.length / 5)); for (let b = 0; b < n; b++) setTimeout(() => bus.emit('blip', { voice }), 60 + b * 65); }
+    if (onDone) onDone(); return { skip() {}, done: true };
+  }
   let i = 0, stop = false, k = 0; const ctl = { done: false, skip() { if (ctl.done) return; stop = true; el.textContent = text; ctl.done = true; if (onDone) onDone(); } };
   const tick = () => {
     if (stop) return;
@@ -144,7 +150,7 @@ export function renderHud(hud) {
     st('debt', 'ledger', 'hud.debt', hud.debt),
     hud.lives > 0 ? st('lives', 'candle', 'hud.lives', '×' + hud.lives) : null,
     h('span', { class: 'hud-inv' }, ...hud.tools.map(id => h('span', { class: 'chip tool', title: t(`tool.${id}.name`) + ': ' + t(`tool.${id}.desc`) }, sigil(id, '', PAL.g1))), inv),
-    h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'howto', 'aria-label': t('hud.howto'), title: t('hud.howto') }, ico('help')),
+    h('button', { type: 'button', class: 'btn small ghost' + (hud.guide ? ' pulse' : ''), 'data-act': 'howto', 'aria-label': t('hud.howto'), title: t('hud.howto') }, ico('help')),
     fsButton('icon', 'small ghost'),
     h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'settings', 'aria-label': t('hud.settings'), title: t('hud.settings') }, ico('gear'))
   );

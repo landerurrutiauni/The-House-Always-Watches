@@ -14,7 +14,7 @@ const seen = {}, errs = [], sfxSeen = new Set(), endings = {}; let views = 0, de
 bus.on('sfx', e => sfxSeen.add(e.name));
 const noEvent = process.argv.includes('--quiet');
 const FORCE_WING = (process.argv.find(a => a.startsWith('--wing=')) || '').slice(7) || null;   // fuerza el ala (desbloqueándola); «all» las rota todas para recorrer también las nuevas
-const ALL_WINGS = ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria']; let wingRot = 0;
+const ALL_WINGS = ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria', 'teatro', 'vigilancia']; let wingRot = 0;
 
 function playRound() {
   let guard = 0;
@@ -44,7 +44,7 @@ function step(v) {
     case 'menu': return G.newGame();
     case 'intro': return G.introDone();
     case 'wings': {
-      if (FORCE_WING) { gs.meta.runsFinished = Math.max(gs.meta.runsFinished, 3); if (!gs.meta.wingsCleared.length) gs.meta.wingsCleared.push('salon'); return G.pickWing(FORCE_WING === 'all' ? ALL_WINGS[wingRot++ % ALL_WINGS.length] : FORCE_WING); }
+      if (FORCE_WING) { gs.meta.runsFinished = Math.max(gs.meta.runsFinished, 3); for (const w of ['salon', 'pasillo', 'sotano']) if (!gs.meta.wingsCleared.includes(w)) gs.meta.wingsCleared.push(w); return G.pickWing(FORCE_WING === 'all' ? ALL_WINGS[wingRot++ % ALL_WINGS.length] : FORCE_WING); }
       return G.pickWing(pickR(v.wings.filter(w => w.unlocked)).id);
     }
     case 'map': return G.chooseNode(pickR(v.avail));

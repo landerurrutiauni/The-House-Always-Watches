@@ -4,7 +4,8 @@ import { gs, bus } from './state.js';
 import * as FX from './effects.js';
 import { t } from './i18n.js';
 
-const STRAIGHT = ['straight', 'sflush'], FLUSH = ['flush', 'sflush', 'five'], FULL = ['full', 'four', 'sflush', 'five'];
+// Listas EXPLÍCITAS: los textos de las misiones nombran cada mano que vale (la escalera real es su propia mano, no «una escalera de color»)
+const STRAIGHT = ['straight', 'sflush', 'royal'], FLUSH = ['flush', 'sflush', 'royal'], FULL = ['full', 'four', 'sflush', 'royal', 'five'];
 // ev: roundWon | play | duelWon | listen | buy | rest | event · need: veces · when(datos): condición opcional · reward: efectos de effects.js
 export const MISSIONS = {
   salon: [
@@ -31,6 +32,16 @@ export const MISSIONS = {
     { id: 'cocinas_buy2', ev: 'buy', need: 2, reward: [['sanity', 10]] },
     { id: 'cocinas_full', ev: 'play', need: 1, when: d => FULL.includes(d.hand), reward: [['mod', 'random']] },
     { id: 'cocinas_win2', ev: 'roundWon', need: 2, reward: [['health', 15]] }
+  ],
+  teatro: [
+    { id: 'teatro_win3', ev: 'roundWon', need: 3, reward: [['level', 'random']] },
+    { id: 'teatro_listen', ev: 'listen', need: 2, reward: [['sanity', 10]] },
+    { id: 'teatro_buy', ev: 'buy', need: 1, reward: [['mod', 'random']] }
+  ],
+  vigilancia: [
+    { id: 'vig_clean', ev: 'roundWon', need: 1, when: d => d.discards === 0, reward: [['card', 'random']] },
+    { id: 'vig_events', ev: 'event', need: 3, reward: [['health', 15]] },
+    { id: 'vig_duel', ev: 'duelWon', need: 1, reward: [['money', 25]] }
   ],
   enfermeria: [
     { id: 'enf_rest2', ev: 'rest', need: 2, reward: [['level', 'random']] },

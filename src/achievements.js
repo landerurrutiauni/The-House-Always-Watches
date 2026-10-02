@@ -53,7 +53,7 @@ export function idleStart() { idleStop(); idleTm = setTimeout(() => { idleTm = n
 export function onPlay(cards, res) {
   if (!res) return;
   const rk = cards.map(c => c.rank);
-  if (res.hand === 'sflush' && [1, 10, 11, 12, 13].every(r => rk.includes(r))) unlockEgg('real');
+  if (res.hand === 'royal') unlockEgg('real');
   if (rk.filter(r => r === 1).length >= 4) unlockEgg('ases');
   if (rk.filter(r => r === 7).length >= 3 && ['three', 'full', 'four', 'five'].includes(res.hand)) unlockEgg('jackpot');
 }

@@ -4,7 +4,7 @@ import { t } from '../i18n.js';
 import { h, act, modal, closeTopModal } from '../ui.js';
 import { openHelp } from './table.js';
 
-const SECTIONS = 8;
+const SECTIONS = 9;
 export function openHowTo() {
   const body = h('div', { class: 'howto' });
   for (let i = 1; i <= SECTIONS; i++) {

@@ -17,9 +17,10 @@ export const HANDS = {
   full: { chips: 40, mult: 4, n: 5 },
   four: { chips: 60, mult: 7, n: 4 },
   sflush: { chips: 100, mult: 8, n: 5 },
+  royal: { chips: 120, mult: 10, n: 5 },
   five: { chips: 120, mult: 12, n: 5 }
 };
-export const HAND_ORDER = ['five', 'sflush', 'four', 'full', 'flush', 'straight', 'three', 'twopair', 'pair', 'high'];
+export const HAND_ORDER = ['five', 'royal', 'sflush', 'four', 'full', 'flush', 'straight', 'three', 'twopair', 'pair', 'high'];
 const HAND_RANK = Object.fromEntries(HAND_ORDER.map((h, i) => [h, HAND_ORDER.length - i]));
 
 // Cartas especiales. `wild`: 'suit' | 'rank' | 'both'. `curse`: maldita.
@@ -111,12 +112,12 @@ export function evaluate(cards) {
     }
     const { type: t0, straight, groups } = rankType(ranks);
     let type = t0;
-    if (straight && flushPossible) type = 'sflush';
+    if (straight && flushPossible) type = [...ranks].sort((a, b) => a - b).join(',') === '1,10,11,12,13' ? 'royal' : 'sflush';
     else if (flushPossible && HAND_RANK.flush > HAND_RANK[type]) type = 'flush';
     else if (straight && HAND_RANK.straight > HAND_RANK[type]) type = 'straight';
     // cartas que puntúan
     let idx;
-    if (['five', 'sflush', 'flush', 'straight', 'full'].includes(type)) idx = cards.map((_, i) => i);
+    if (['five', 'royal', 'sflush', 'flush', 'straight', 'full'].includes(type)) idx = cards.map((_, i) => i);
     else if (type === 'four') idx = ranks.map((r, i) => r === groups[0].r ? i : -1).filter(i => i >= 0);
     else if (type === 'three') idx = ranks.map((r, i) => r === groups[0].r ? i : -1).filter(i => i >= 0);
     else if (type === 'twopair') idx = ranks.map((r, i) => (r === groups[0].r || r === groups[1].r) ? i : -1).filter(i => i >= 0);

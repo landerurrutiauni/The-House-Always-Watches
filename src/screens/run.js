@@ -10,7 +10,7 @@ import { makeCard, SPECIALS } from '../cards.js';
 import { fx } from '../fx.js';
 import { audioManager as audio } from '../audio.js';
 
-const oppName = id => (String(id).startsWith('gambler') ? t('opp.' + (id === 'gambler' ? 'gambler_a' : id)) : t('char.' + id));
+const oppName = (id, look) => (String(id).startsWith('gambler') ? t('opp.' + (id === 'gambler' ? (look || 'gambler_a') : id)) : t('char.' + id));
 const ruleList = (rules, weak = []) => [].concat(rules || []).map(r => h('span', { class: 'tag red', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`)))
   .concat(weak.map(r => h('span', { class: 'tag good', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + ' · ' + t('boss.weakened'))));
 const primary = (label, a, arg) => btn(label, a, arg, 'primary', { 'data-primary': '1' });
@@ -23,7 +23,7 @@ function nodeInfo(n) {
   if (!n) return h('p', { class: 'muted' }, t('map.pick'));
   const k = n.kind, box = h('div', null, h('b', null, ico(KIND_ICON[k]), ' ', t('node.' + k)));
   if (k === 'game') box.append(h('div', null, t('map.opp', { name: oppName(n.opp.id) })), h('div', { class: 'rules' }, ...ruleList(n.opp.rule)));
-  else if (k === 'shotgun') box.append(h('div', null, t('map.opp', { name: oppName(n.opp.id) })), h('div', { class: 'muted' }, t('map.shotgun')));
+  else if (k === 'shotgun') box.append(h('div', null, t('map.opp', { name: oppName(n.opp.id, n.opp.look) })), h('div', { class: 'muted' }, t('map.shotgun')));
   else if (k === 'boss') box.append(h('div', null, t('map.opp', { name: t('char.' + n.opp.id) })), h('div', { class: 'rules' }, ...ruleList(G.bossRules(n.opp.id), G.bossWeakened(n.opp.id))));
   else box.append(h('div', { class: 'muted' }, t('map.info.' + k)));
   return box;
@@ -31,7 +31,7 @@ function nodeInfo(n) {
 function mapScreen(v) {
   mapSel = null;
   const rows = v.map.rows, N = rows.length, box = h('div', { class: 'map-box' }); const pos = {};
-  rows.forEach((row, r) => { const vis = row.filter(n => !n.secret); vis.forEach((n, i) => { pos[n.id] = [(i + 1) / (vis.length + 1), 1 - (r + 0.5) / N]; }); row.filter(n => n.secret).forEach(n => { pos[n.id] = [0.92, 1 - (r + 0.5) / N]; }); });
+  rows.forEach((row, r) => { const vis = row.filter(n => !n.secret); vis.forEach((n, i) => { pos[n.id] = [(r + 0.5) / N, (i + 1) / (vis.length + 1)]; }); row.filter(n => n.secret).forEach(n => { pos[n.id] = [(r + 0.5) / N, 0.93]; }); });
   const svgNS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
   const info = h('div', { class: 'panel map-info' + (v.hintKey ? ' hint' : ''), 'aria-live': 'polite' }, v.hintKey ? [h('small', null, t('char.dealer')), t(v.hintKey)] : nodeInfo(null));
   const enter = btn(t('map.enter'), 'map_enter', null, 'primary', { disabled: true, 'data-primary': '1' });
@@ -113,7 +113,7 @@ function merchantScreen(v) {
   const list = v.stock.map(e => { const s = shopEntry(e); return h('div', { class: 'panel shop-item' }, s.art, h('div', { class: 'txt' }, h('b', null, s.name), h('small', null, s.desc)),
     e.sold ? h('span', { class: 'tag' }, t('shop.sold')) : btn(e.kind === 'loan' ? t('shop.take') : (e.kind === 'joker' && !e.can && v.hud.money >= e.price ? t('shop.joker.full') : t('shop.buy', { price: e.price })), 'shop_buy', e.index, e.kind === 'loan' ? 'danger small' : 'small', { disabled: !e.can })); });
   return h('section', { class: 'scr resscr', style: 'justify-content:flex-start' },
-    h('div', { class: 'shop-top panel' }, characterEl('merchant', { scale: 3 }), h('div', null, h('h2', { class: 'ev-title' }, t('char.merchant')), h('p', { class: 'say', style: 'margin:0' }, t('shop.line')))),
+    h('div', { class: 'shop-top panel' }, characterEl('merchant', { scale: 2 }), h('div', null, h('h2', { class: 'ev-title' }, t('char.merchant')), h('p', { class: 'say', style: 'margin:0' }, t('shop.line')))),
     hintBox(v.hintKey),
     h('div', { class: 'shop-list' }, ...list), primary(t('shop.leave'), 'shop_leave'));
 }
@@ -176,7 +176,7 @@ function bossScreen(v) {
   const line = h('p', { class: 'say' });
   typewriter(line, t(v.lineKey), { speed: 22, voice: v.boss });
   if (v.secret) setTimeout(() => fx.glitch(), 300);
-  return h('section', { class: 'scr resscr bossscr' }, h('p', { class: 'muted' }, t('boss.title')), characterEl(v.boss, { scale: sc(6, window.innerHeight < 800 ? 2 : 3) }), h('h2', { class: 'bigtitle' }, t('char.' + v.boss)), line,
+  return h('section', { class: 'scr resscr bossscr' }, h('p', { class: 'muted' }, t('boss.title')), characterEl(v.boss, { scale: 3 }), h('h2', { class: 'bigtitle' }, t('char.' + v.boss)), line,
     h('div', { class: 'panel' }, h('b', null, t('boss.rules')), h('div', { class: 'rules', style: 'justify-content:center' }, ...(ruleList(v.rules, v.weakened).length ? ruleList(v.rules, v.weakened) : [h('span', { class: 'muted' }, t('boss.no_rules'))]))), hintBox(v.hintKey), primary(t('boss.fight'), 'boss_start'));
 }
 act.boss_start = () => G.bossStart();

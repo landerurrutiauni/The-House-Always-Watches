@@ -16,6 +16,7 @@ import { register as regTable } from './screens/table.js';
 import { register as regDuel } from './screens/duel.js';
 import './screens/howto.js';   // registra la acción «howto» (menú, barra superior y tecla ?)
 import { initDebug } from './debug.js';
+import { initStage, acceptRotated } from './stage.js';
 import * as COMBAT from './combat.js';
 import * as ACH from './achievements.js';
 import * as MIS from './missions.js';
@@ -53,6 +54,8 @@ async function boot() {
   loadSettings(); fx.applyDisplay();
   await initLang();
   installActions(); audio.installListeners(); audio.applySettings(settings); audio.bindGame(bus, gs);
+  initStage(); act.rot_play = () => acceptRotated();
+  { const rt = document.querySelector('#rot-text'), rp = document.querySelector('#rot-play'); if (rt) rt.textContent = t('rotate.text'); if (rp) rp.textContent = t('rotate.play'); }
   act.inventory = () => openInventory();
   act.fullscreen = () => toggleFullscreen();
   act.sell_joker = i => { const n = G.sellJoker(+i); if (!n) return; bus.emit('sfx', { name: 'chip' }); bus.emit('stats', {}); const cur = G.getView(); closeTopModal(); if (cur && cur.type === 'round') G.roundView(); else if (cur && cur.type === 'merchant') G.shopRefresh && G.shopRefresh(); else openInventory(); };
@@ -84,7 +87,7 @@ async function boot() {
   G.toMenu();
   window.__HOUSE = { version: CONFIG.VERSION, getView: G.getView, lang: getLang };
   // Solo para pruebas automáticas: index.html?test expone los módulos (no altera nada por sí mismo)
-  if (/[?&]test(=1)?(&|$)/.test(location.search)) { settings.textSpeed = 'instant'; window.__HOUSE_TEST = { G, C: COMBAT, S: SHOT, st: STATE, ACH, MIS, FX }; }
+  if (/[?&]test(=1)?(&|$)/.test(location.search)) { settings.textSpeed = 'instant'; window.__HOUSE_TEST = { G, C: COMBAT, S: SHOT, st: STATE, ACH, MIS, FX, audio, t }; }
   document.body.dataset.ready = '1';
 }
 boot().catch(e => { console.error('[boot]', e); document.body.dataset.error = String(e && e.message || e); });

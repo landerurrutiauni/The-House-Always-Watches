@@ -49,7 +49,7 @@ with sync_playwright() as p:
         lp.close()
     ctx2 = b.new_context(viewport={'width': 1280, 'height': 720}, locale='en-US'); pg = ctx2.new_page(); pg.goto(URL + '?test'); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(300)
     pg.click('#view [data-act="howto"]'); pg.wait_for_selector('.howto-modal'); nsec = pg.evaluate("document.querySelectorAll('.howto-modal details').length"); pg.keyboard.press('Escape')
-    check('S12 la ayuda «Cómo se juega» funciona en el archivo único (8 secciones)', nsec == 8, nsec)
+    check('S12 la ayuda «Cómo se juega» funciona en el archivo único (9 secciones)', nsec == 9, nsec)
     pg.click('[data-act="menu_new"]'); pg.wait_for_selector('.intro'); pg.click('[data-act="intro_skip"]'); pg.wait_for_function('document.body.dataset.view === "map"', timeout=6000)
     check('S13 con un perfil nuevo, la pista del primer mapa aparece en el archivo único', 'tap a room' in pg.inner_text('.map-info').lower(), pg.inner_text('.map-info')[:60])
     b.close()

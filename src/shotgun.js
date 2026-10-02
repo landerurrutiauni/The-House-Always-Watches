@@ -14,6 +14,10 @@ export const FOES = {
   nurse: { lieP: 0.35, noise: 0.08, marks: 3 },
   puppet: { lieP: 0.6, noise: 0.22, marks: 3 },
   pianist: { lieP: 0.3, noise: 0.15, marks: 3 },
+  prompter: { lieP: 0.5, noise: 0.18, marks: 3 },
+  usher: { lieP: 0.2, noise: 0.12, marks: 3 },
+  watcher: { lieP: 0.1, noise: 0.05, marks: 3 },
+  concierge: { lieP: 0.4, noise: 0.14, marks: 3 },
   final: { lieP: 0.45, noise: 0.05, marks: 4 }
 };
 export const LISTEN_COST = 5;

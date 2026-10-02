@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { generateMap, validateMap, available, ROWS, nodeById } from '../src/map.js';
+import { generateMap, validateMap, available, ROWS, SECRET_ROW, nodeById } from '../src/map.js';
 import * as S from '../src/shotgun.js';
 const T = (name, fn) => { try { fn(); globalThis.__p = (globalThis.__p || 0) + 1; console.log('  ok  ' + name); } catch (e) { globalThis.__f = (globalThis.__f || 0) + 1; console.log('  FAIL ' + name + '\n       ' + (e.stack || e).toString().split('\n').slice(0, 4).join('\n       ')); } };
 const pools = { events: ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8'], opps: ['gambler', 'girl'], rules: ['blind_eyes', 'drown'], duelFoes: ['gambler', 'dealer'], secretEvents: ['s1'] };
 console.log('map');
 T('mapas válidos para 200 semillas y 3 alas', () => { for (let s = 1; s <= 200; s++) for (const w of ['salon', 'pasillo', 'sotano']) { const m = generateMap(s, w, pools); assert.ok(validateMap(m)); assert.equal(m.rows.length, ROWS); assert.equal(m.rows[ROWS - 1][0].kind, 'boss'); } });
 T('mapa determinista por semilla', () => assert.equal(JSON.stringify(generateMap(9, 'salon', pools)), JSON.stringify(generateMap(9, 'salon', pools))));
-T('available: inicio y secreto', () => { const m = generateMap(3, 'salon', pools); assert.equal(available(m, null, false).length, 2); const n2 = m.rows[2][0].id; assert.ok(!available(m, n2, false).includes('secret')); assert.ok(available(m, n2, true).includes('secret')); });
+T('available: inicio y secreto', () => { const m = generateMap(3, 'salon', pools); assert.equal(available(m, null, false).length, 2); const n2 = m.rows[SECRET_ROW - 1][0].id; assert.ok(!available(m, n2, false).includes('secret')); assert.ok(available(m, n2, true).includes('secret')); });
 console.log('shotgun');
 T('duelo: 6 cámaras, 2-4 cargadas, anuncio válido', () => { for (let i = 0; i < 100; i++) { const D = S.startDuel({ seed: i, key: 'k', foe: 'girl' }); assert.equal(D.chambers.length, 6); const n = D.chambers.filter(Boolean).length; assert.ok(n >= 2 && n <= 4); assert.equal(n, D.real); assert.ok(D.announce >= 1 && D.announce <= 5); assert.equal(D.lied, D.announce !== D.real); } });
 T('anomalía en el primer duelo (bala esperada sale vacía)', () => { let seen = false; for (let i = 0; i < 50 && !seen; i++) { const D = S.startDuel({ seed: i, key: 'a', foe: 'dealer', first: true }); for (let k = 0; k < 6 && !seen && !D.over; k++) { if (D.turn === 'p' && D.chambers[D.pos]) { const ev = S.playerShoot(D, 'foe'); if (ev.anomaly) { seen = true; assert.equal(ev.loaded, false); assert.equal(D.marks.f, 3); } } else if (D.turn === 'p') S.playerShoot(D, 'table'); else S.foeTurn(D); } } assert.ok(seen); });

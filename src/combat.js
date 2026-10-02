@@ -5,6 +5,7 @@ import { RNG, rngFor } from './rng.js';
 import { gs, addHealth, addSanity, addMoney, addDebt, bus } from './state.js';
 import { muteBus } from './state.js';
 import { JOKERS } from './jokers.js';
+import { eqRow } from './scale.js';
 
 export const OPP_RULES = ['blind_eyes', 'no_repeat', 'cold_blood', 'drown', 'watched', 'interest', 'remember', 'tax', 'mist', 'greedy'];
 
@@ -38,9 +39,9 @@ export function deriveMods(inv = [], perks = {}) {
   };
 }
 
-export const TARGET = { base: 100, growth: 1.44 };   // reajustado para la baraja de 52 cartas (guardián ≈ 50 % con el bot voraz y sin jokers)
+export const TARGET = { base: 100, growth: 1.53 };   // reajustado para 16 salas y la baraja de 52 cartas (guardián ≈ 50 % con el bot voraz y sin jokers)
 export function targetFor(row, kind = 'game', oppMul = 1, pity = 0, mods = { targetMul: 1 }) {
-  const base = TARGET.base * Math.pow(TARGET.growth, row);
+  const base = TARGET.base * Math.pow(TARGET.growth, eqRow(row));
   const k = kind === 'boss' ? 1.45 : kind === 'final' ? 1.7 : 1;
   return Math.max(30, Math.round(base * k * oppMul * (1 - pity) * mods.targetMul / 5) * 5);
 }
@@ -156,9 +157,12 @@ export function resolvePlay(R, cards, stakeId = 'none') {
   if (rl('drown')) { d.sanity -= 3; notes.push('drown'); }
   if (rl('tax')) { const pay = Math.min(5, R.player.money); d.money -= pay; d.debt += 5 - pay; notes.push('tax'); }
   // Fusionar costes
-  const shieldTotal = (R.shield || 0) + d.shield;
-  const hpNet = Math.max(0, d.hpLoss - shieldTotal);
+  // ESCUDO: lo que ya tenías + lo que ganan las cartas de esta jugada absorbe la Salud que cuestan TUS CARTAS (Sangre, Hambre…); el resto se pierde.
+  // No absorbe el coste de las apuestas ni los efectos de los rivales.
+  const shieldBefore = R.shield || 0, shieldTotal = shieldBefore + d.shield;
+  const absorbed = Math.min(d.hpLoss, shieldTotal), hpNet = d.hpLoss - absorbed;
   const out = {
+    shield: { before: shieldBefore, gain: d.shield, cost: d.hpLoss, absorbed, lost: hpNet, after: shieldTotal - absorbed },
     hand: ev.type, idx: ev.idx, total, chips, mult, xmult, steps, combos, notes, grow, glass,
     delta: {
       health: -(hpNet + d.stakeHp) + d.heal, sanity: d.sanity, debt: d.debt, money: d.money,
@@ -347,12 +351,12 @@ export function estimateWin(R, n = 40) {
 // Resultado final de una ronda ganada / perdida (los aplica game.js)
 export function roundRewards(R, row) {
   const left = Math.max(0, R.playsLeft);
-  let money = 12 + row * 3 + left * 2 + R.mods.winMoney;
+  let money = 12 + eqRow(row) * 3 + left * 2 + R.mods.winMoney;
   if (R.rule.includes('greedy')) money = Math.round(money * 1.5);
   return { money };
 }
 export function failCost(row, kind) {
   const k = kind === 'boss' || kind === 'final' ? 1.5 : 1;
-  return { health: Math.round((10 + row * 2.5) * k), sanity: kind === 'boss' ? 10 : 6, debt: Math.round(15 * k) };
+  return { health: Math.round((10 + eqRow(row) * 2.5) * k), sanity: kind === 'boss' ? 10 : 6, debt: Math.round(15 * k) };
 }
 export { makeCard };

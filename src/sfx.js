@@ -76,8 +76,15 @@ const VOICES = {
   cook: { f: 100, type: 'sawtooth', v: .08, d: .06, vary: .35, lp: 700 },
   puppet: { f: 480, type: 'square', v: .055, d: .03, vary: .5, lp: 3500 },
   pianist: { f: 262, type: 'triangle', v: .09, d: .1, vary: 0, lp: 2600, scale: [262, 294, 330, 392, 440, 523] },
-  nurse: { f: 380, type: 'sine', v: .085, d: .07, vary: .1, lp: 2000 }
+  nurse: { f: 380, type: 'sine', v: .085, d: .07, vary: .1, lp: 2000 },
+  prompter: { f: 190, type: 'sawtooth', v: .07, d: .05, vary: .45, lp: 1000, hiss: true },
+  usher: { f: 410, type: 'triangle', v: .09, d: .05, vary: .15, lp: 2400 },
+  watcher: { f: 130, type: 'square', v: .07, d: .035, vary: .04, lp: 1500 },
+  concierge: { f: 240, type: 'triangle', v: .09, d: .06, vary: .2, lp: 1900, vib: 20 }
 };
+// Los jugadores anónimos reutilizan un timbre cada uno
+const GAMBLER_VOICE = { gambler_a: 'merchant', gambler_b: 'woman', gambler_c: 'puppet', gambler_d: 'dealer', gambler_e: 'nun', gambler_f: 'cook', gambler_g: 'archivist', gambler_h: 'child' };
+const VOICE_GAIN = 2.4;   // el balbuceo es corto y agudo: sin esta ganancia quedaba a la mitad del volumen de un efecto normal
 export const VOICE_IDS = Object.keys(VOICES);
 
 export const sfx = {
@@ -85,13 +92,13 @@ export const sfx = {
   voices: VOICE_IDS,
   blip(voice, opts = {}) {
     if (!C.ctx || C.ctx.state !== 'running') return false;
-    const V = VOICES[voice] || VOICES.narrator;
+    const V = VOICES[voice] || VOICES[GAMBLER_VOICE[voice]] || VOICES.narrator;
     try {
       const t = C.ctx.currentTime + .003, out = C.vbus || C.bus;
       const f = V.scale ? V.scale[Math.floor(Math.random() * V.scale.length)] : V.f * (1 + (Math.random() * 2 - 1) * V.vary);
-      tone(out, t, { f, f2: f * .93, type: V.type, a: .004, d: V.d, v: V.v * (opts.vol != null ? opts.vol : 1), lp: V.lp, det: V.vib ? (Math.random() * 2 - 1) * V.vib : 0 });
-      if (V.hiss) burst(out, t, { d: .035, type: 'highpass', f: 3000, q: .7, v: .018 });
-      if (V.bubble && Math.random() < .35) tone(out, t + .02, { f: f * 1.7, f2: f * 2.4, type: 'sine', d: .05, v: V.v * .6, lp: 900 });
+      tone(out, t, { f, f2: f * .93, type: V.type, a: .004, d: V.d, v: V.v * VOICE_GAIN * (opts.vol != null ? opts.vol : 1), lp: V.lp, det: V.vib ? (Math.random() * 2 - 1) * V.vib : 0 });
+      if (V.hiss) burst(out, t, { d: .035, type: 'highpass', f: 3000, q: .7, v: .04 });
+      if (V.bubble && Math.random() < .35) tone(out, t + .02, { f: f * 1.7, f2: f * 2.4, type: 'sine', d: .05, v: V.v * VOICE_GAIN * .6, lp: 900 });
       return true;
     } catch (e) { return false; }
   },

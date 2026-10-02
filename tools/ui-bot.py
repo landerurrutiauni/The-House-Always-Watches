@@ -31,6 +31,7 @@ def main():
         pg.on('requestfailed', lambda r: errors.append('REQFAIL: ' + r.url) if 'localhost' in r.url else None)
         pg.set_default_timeout(4000)
         pg.goto(A.url); pg.wait_for_selector('body[data-ready="1"]', timeout=15000); pg.wait_for_timeout(400)
+        if A.mobile and pg.locator('#rotate-ov:not([hidden])').count(): pg.click('#rot-play'); pg.wait_for_timeout(300)   # móvil vertical: se acepta el aviso de girar y se juega con el escenario girado
         if A.shots: os.makedirs(A.shots, exist_ok=True)
         # consentimiento
         if A.consent != 'none':
@@ -47,7 +48,7 @@ def main():
             for d in dead: errors.append(f'BOTÓN sin acción en {v}: {d}')
         G = lambda code, arg=None: pg.evaluate("async (arg) => { const T = window.__HOUSE_TEST; const G = T.G, C = T.C, S = T.S, st = T.st; " + code + "}", arg)
         if A.wing:
-            pg.evaluate("""(w) => { const T = window.__HOUSE_TEST; const G = T.G, st = T.st; G.newGame(); G.introDone(); const m = st.gs.meta; m.tutorial.round = true; m.runsFinished = 3; m.wingsCleared = ['salon']; m.stats.anomalies = 1; G.beginRun(w); }""", A.wing)
+            pg.evaluate("""(w) => { const T = window.__HOUSE_TEST; const G = T.G, st = T.st; G.newGame(); G.introDone(); const m = st.gs.meta; m.tutorial.round = true; m.runsFinished = 3; m.wingsCleared = ['salon', 'pasillo', 'sotano']; m.stats.anomalies = 1; G.beginRun(w); }""", A.wing)
             pg.wait_for_timeout(300)
         if A.jump:
             pg.evaluate("""async (j) => { const T = window.__HOUSE_TEST; const G = T.G, st = T.st; G.newGame(); G.introDone(); const p = st.gs.player; st.gs.meta.tutorial.round = true; p.maxHealth = 999; p.health = 999; p.sanity = 100; p.money = 500;

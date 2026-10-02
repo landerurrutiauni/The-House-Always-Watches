@@ -1,5 +1,10 @@
-// Generador de mapa de nodos (sin DOM). 8 filas: fila 0 = inicio, fila 6 = descanso+tienda, fila 7 = jefe.
+// Generador de mapa de nodos (sin DOM). ROWS filas (16): fila 0 = inicio, CAMP = campamento a mitad de camino (descanso + tienda),
+// penúltima = descanso + tienda, última = jefe. El nodo secreto está en la fila SECRET_ROW.
 import { RNG, hashStr } from './rng.js';
+import { ROWS } from './scale.js';
+export { ROWS };
+export const CAMP_ROW = Math.floor(ROWS / 2) - 1;
+export const SECRET_ROW = CAMP_ROW - 2;
 
 export const WINGS = {
   salon: { boss: 'girl', bg: 'casino', w: { game: 40, event: 28, shotgun: 10, merchant: 9, rest: 13 } },
@@ -7,9 +12,10 @@ export const WINGS = {
   sotano: { boss: 'drowned', bg: 'basement', w: { game: 36, event: 30, shotgun: 14, merchant: 8, rest: 12 } },
   capilla: { boss: 'nun', bg: 'chapel', w: { game: 34, event: 34, shotgun: 10, merchant: 8, rest: 14 } },
   cocinas: { boss: 'cook', bg: 'kitchen', w: { game: 38, event: 30, shotgun: 12, merchant: 10, rest: 10 } },
-  enfermeria: { boss: 'nurse', bg: 'infirmary', w: { game: 32, event: 32, shotgun: 12, merchant: 8, rest: 16 } }
+  enfermeria: { boss: 'nurse', bg: 'infirmary', w: { game: 32, event: 32, shotgun: 12, merchant: 8, rest: 16 } },
+  teatro: { boss: 'prompter', bg: 'theatre', w: { game: 34, event: 34, shotgun: 12, merchant: 8, rest: 12 } },
+  vigilancia: { boss: 'watcher', bg: 'security', w: { game: 34, event: 30, shotgun: 14, merchant: 10, rest: 12 } }
 };
-export const ROWS = 8;
 
 export function generateMap(seed, wing, pools) {
   for (let attempt = 0; attempt < 30; attempt++) {
@@ -26,6 +32,7 @@ function build(rng, wing, pools) {
   const mk = (row, col, kind) => ({ id: `r${row}c${col}`, row, col, kind, links: [], secret: false });
   rows.push([mk(0, 0, 'game'), mk(0, 1, 'event')]);
   for (let r = 1; r <= ROWS - 3; r++) {
+    if (r === CAMP_ROW) { rows.push([mk(r, 0, 'rest'), mk(r, 1, 'merchant')]); continue; }
     const n = rng.int(2, 3), kinds = [];
     for (let c = 0; c < n; c++) {
       let k;
@@ -56,10 +63,11 @@ function build(rng, wing, pools) {
       else if (rng.chance(0.4)) { const c = rng.pick(B); if (!a.links.includes(c.id)) a.links.push(c.id); }
     });
   }
-  // nodo secreto oculto (fila 3), alcanzable desde la fila 2 y con salida a la fila 4
-  const sec = { id: 'secret', row: 3, col: 9, kind: 'secret', links: rows[4].map(n => n.id).slice(0, 2), secret: true };
-  rows[3].push(sec);
-  rows[2].forEach(n => n.links.push('secret'));
+  // nodo secreto oculto (a mitad de camino), alcanzable desde la fila anterior y con salida a la siguiente
+  const SR = SECRET_ROW;
+  const sec = { id: 'secret', row: SR, col: 9, kind: 'secret', links: rows[SR + 1].map(n => n.id).slice(0, 2), secret: true };
+  rows[SR].push(sec);
+  rows[SR - 1].forEach(n => n.links.push('secret'));
   // contenido
   const evPool = pools.events.slice();
   const usedEv = new Set();
@@ -74,6 +82,7 @@ function build(rng, wing, pools) {
       n.opp = { id: nr.pick(oppIds), rule: nr.pick(pools.rules), name: nr.int(1, 6) };
     } else if (n.kind === 'shotgun') {
       n.opp = { id: nr.pick(pools.duelFoes), name: nr.int(1, 6) };
+      if (n.opp.id === 'gambler' && pools.gamblers) n.opp.look = nr.pick(pools.gamblers);
     } else if (n.kind === 'boss') {
       n.opp = { id: W.boss };
     } else if (n.kind === 'secret') {

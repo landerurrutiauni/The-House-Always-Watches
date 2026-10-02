@@ -46,6 +46,7 @@ import { WINGS, nodeById, available } from './map.js';
 import { SPECIAL_IDS, CURSED_IDS } from './cards.js';
 import { MAX_JOKERS, onRoundWon } from './jokers.js';
 import { saveGame, loadGame, resetProgress, hasSave, saveSettings } from './save.js';
+import { ROWS } from './scale.js';
 
 // ---------------- Estado transitorio (NO se guarda) ----------------
 export const G = { view: null, R: null, D: null, node: null, ev: null, snap: null, rewardCtx: null, shop: null, tut: { plays: 0, discards: 0 }, lastDuel: null, pendingBoss: null };
@@ -58,7 +59,8 @@ export function hud() {
   return {
     health: p.health, maxHealth: p.maxHealth, sanity: p.sanity, money: p.money, debt: p.debt, lives: p.lives,
     tier: sanityTier(), tools: gs.tools.slice(), items: gs.inventory.slice(), jokers: gs.jokers.slice(), deck: gs.deck.length,
-    run: gs.runNumber, deaths: gs.deaths, wing: gs.run ? gs.run.wing : null, row: currentRow(), levels: Object.assign({}, gs.handLevels)
+    run: gs.runNumber, deaths: gs.deaths, wing: gs.run ? gs.run.wing : null, row: currentRow(), levels: Object.assign({}, gs.handLevels),
+    guide: !!(G.R && G.R.tutorial) || (!!gs.run && !(gs.meta.hints && gs.meta.hints.map))   // el botón «?» de la guía late en el tutorial y mientras se ve la primera pista del mapa
   };
 }
 function currentRow() { const r = gs.run; if (!r || !r.pos || !r.map) return -1; const n = nodeById(r.map, r.pos); return n ? n.row : -1; }
@@ -96,7 +98,7 @@ function freshStart() {
   gs.language = lang;
   G.R = G.D = G.node = G.ev = null;
   saveGame();
-  return setView({ type: 'intro', lines: ['intro.1', 'intro.2', 'intro.3', 'intro.4', 'intro.5', 'intro.6'], music: 'menu' });
+  return setView({ type: 'intro', lines: ['intro.1', 'intro.2', 'intro.3', 'intro.4', 'intro.5', 'intro.6', 'intro.7'], music: 'menu' });
 }
 // REINICIAR PROGRESO: borra todo (la UI pide confirmación).
 export function resetAll() { resetProgress(); ACH.resetEggs(); saveSettings(); G.R = G.D = G.node = G.ev = null; return toMenu(); }
@@ -197,7 +199,7 @@ export function finishNode() {
   const node = G.node || (run.pos ? nodeById(run.map, run.pos) : null);
   const interest = FX.nodeInterest();
   if (interest) toast('fx.interest', { n: interest }, 'bad');
-  if (hasItem('ceniza')) addSanity(-2);
+  if (hasItem('ceniza')) addSanity(-1);
   run.nodes++; gs.storyProgress++;
   if (FX.collapseIfNeeded()) { toast('fx.collapse', null, 'bad'); sfx('glitch'); }
   if (checkDeath()) return G.view;
@@ -310,6 +312,8 @@ export const bossRules = id => {
   if (id === 'nun' && know('k_nun_name')) rules = rules.filter(r => r !== 'remember');
   if (id === 'cook' && know('k_cook_jars')) rules = rules.filter(r => r !== 'greedy');
   if (id === 'nurse' && know('k_nurse_eye')) rules = rules.filter(r => r !== 'blind_eyes');
+  if (id === 'prompter' && know('k_prompter_box')) rules = rules.filter(r => r !== 'remember');
+  if (id === 'watcher' && know('k_watcher_blind')) rules = rules.filter(r => r !== 'watched');
   return rules;
 };
 export const bossWeakened = id => BOSSES[id] ? BOSSES[id].rule.filter(r => !bossRules(id).includes(r)) : [];
@@ -333,7 +337,7 @@ function startRoundCtx(ctx) {
 }
 function tutorialHint() {
   const R = G.R; if (!R || !R.tutorial) return null;
-  return 'tut.r' + Math.min(5, G.tut.plays + G.tut.discards + 1);
+  return 'tut.r' + Math.min(6, G.tut.plays + G.tut.discards + 1);
 }
 export function roundView() {
   const R = G.R, ctx = G.roundCtx;
@@ -460,9 +464,9 @@ export function duelStakeOptions() {
 }
 export function enterDuelSetup(node) {
   const first = gs.meta.stats.anomalies === 0;
-  G.duelCtx = { node, foe: node.opp.id, kind: 'game', first };
+  G.duelCtx = { node, foe: node.opp.id, look: node.opp.look || null, kind: 'game', first };
   FX.discoverCharacter(CHARACTERS.includes(node.opp.id) ? node.opp.id : null);
-  return setView({ type: 'duel_setup', foe: node.opp.id, nameKey: oppNameKey(node.opp.id === 'gambler' ? 'gambler_a' : node.opp.id), stakes: duelStakeOptions(), first, hintKey: first ? 'tut.d0' : null, music: 'roulette', bg: 'casino' });
+  return setView({ type: 'duel_setup', foe: node.opp.id, look: node.opp.look || null, nameKey: oppNameKey(node.opp.id === 'gambler' ? (node.opp.look || 'gambler_a') : node.opp.id), stakes: duelStakeOptions(), first, hintKey: first ? 'tut.d0' : null, music: 'roulette', bg: 'casino' });
 }
 function duelListenReliability() { return Math.max(S.LISTEN_RELIABILITY, FX.perks().listen || 0); }
 function duelTools() { return gs.tools.filter(id => TOOLS[id] && TOOLS[id].ctx === 'duel'); }
@@ -475,7 +479,7 @@ function duelHint() {
 export function duelView() {
   const D = G.D, ctx = G.duelCtx;
   return setView({
-    type: 'duel', D, foe: D.foe.id, nameKey: oppNameKey(D.foe.id === 'gambler' ? 'gambler_a' : D.foe.id), tools: duelTools(), hintKey: duelHint(), final: ctx.kind === 'final',
+    type: 'duel', D, foe: D.foe.id, look: ctx.look || null, nameKey: oppNameKey(D.foe.id === 'gambler' ? (ctx.look || 'gambler_a') : D.foe.id), tools: duelTools(), hintKey: duelHint(), final: ctx.kind === 'final',
     stake: D.stake, listenCost: S.LISTEN_COST, listenReliability: duelListenReliability(), music: 'roulette', bg: 'casino'
   });
 }
@@ -648,13 +652,13 @@ export function finaleContinue() {
   return showDoor();
 }
 function startFinalRound() {
-  const node = { id: 'final', row: 6, kind: 'boss', opp: { id: 'dealer' } };
+  const node = { id: 'final', row: ROWS - 2, kind: 'boss', opp: { id: 'dealer' } };
   G.node = node;
-  return startRoundCtx({ kind: 'final', node, opp: { id: 'dealer', rule: BOSSES.dealer.rule.slice() }, row: 6, tutorial: false, bg: 'casino' });
+  return startRoundCtx({ kind: 'final', node, opp: { id: 'dealer', rule: BOSSES.dealer.rule.slice() }, row: ROWS - 2, tutorial: false, bg: 'casino' });
 }
 function startFinalDuel() {
   const run = gs.run;
-  G.duelCtx = { node: { id: 'final', row: 7 }, foe: 'final', kind: 'final', first: false };
+  G.duelCtx = { node: { id: 'final', row: ROWS - 1 }, foe: 'final', kind: 'final', first: false };
   G.D = S.startDuel({ seed: run.seed, key: 'final:' + (run.attempt || 0), foe: 'final', stake: { type: 'life', value: 0 }, first: false, marks: 4 });
   sfx('gun_load');
   return duelView();

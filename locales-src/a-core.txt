@@ -58,7 +58,8 @@ hand.flush|Color|Flush|Couleur|Flush
 hand.full|Full|Full house|Full|Full House
 hand.four|Póker|Four of a kind|Carré|Vierling
 hand.sflush|Escalera de color|Straight flush|Quinte flush|Straight Flush
-hand.five|Quintilla|Five of a kind|Cinq identiques|Fünfling
+hand.royal|Escalera real|Royal flush|Quinte flush royale|Royal Flush
+hand.five|Repóker|Five of a kind|Cinq identiques|Fünfling
 combo.mirada.name|LA MIRADA|THE GAZE|LE REGARD|DER BLICK
 combo.mirada.desc|3 o más Ojos: +30 fichas y revelas 3 cartas.|3 or more Eyes: +30 chips and reveal 3 cards.|3 Œils ou plus : +30 jetons et 3 cartes révélées.|3 oder mehr Augen: +30 Chips und 3 Karten aufgedeckt.
 combo.ritual.name|EL RITUAL|THE RITUAL|LE RITUEL|DAS RITUAL
@@ -108,7 +109,7 @@ item.espejo_roto.desc|+2 mult. Empiezas con −2 de Cordura. Puedes rehacer una 
 item.llave_hueso.name|Llave de hueso|Bone key|Clé d’os|Knochenschlüssel
 item.llave_hueso.desc|Escudo inicial de 4. Abre la puerta oculta. Permite el final de la Puerta.|Starting Shield of 4. Opens the hidden door. Enables the Door ending.|Bouclier initial de 4. Ouvre la porte cachée. Permet la fin de la Porte.|Start-Schild 4. Öffnet die verborgene Tür. Ermöglicht das Ende der Tür.
 item.ceniza.name|Ceniza|Ash|Cendre|Asche
-item.ceniza.desc|+15 fichas por jugada. −2 Cordura al terminar cada sala.|+15 chips per play. −2 Sanity after each room.|+15 jetons par coup. −2 Raison après chaque salle.|+15 Chips pro Zug. −2 Verstand nach jedem Raum.
+item.ceniza.desc|+15 fichas por jugada. −1 Cordura al terminar cada sala.|+15 chips per play. −1 Sanity after each room.|+15 jetons par coup. −1 Raison après chaque salle.|+15 Chips pro Zug. −1 Verstand nach jedem Raum.
 item.ficha_negra.name|Ficha negra|Black chip|Jeton noir|Schwarzer Chip
 item.ficha_negra.desc|Las apuestas multiplican +0,15 más. Puedes deshacer una decisión pagando 50 de Deuda.|Stakes multiply +0.15 more. Undo a decision by paying 50 Debt.|Les mises multiplient +0,15 de plus. Défais une décision contre 50 de Dette.|Einsätze multiplizieren +0,15 mehr. Entscheidung für 50 Schulden zurücknehmen.
 item.ojo_vidrio.name|Ojo de vidrio|Glass eye|Œil de verre|Glasauge

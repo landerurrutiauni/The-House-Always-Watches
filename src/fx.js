@@ -3,6 +3,8 @@
 import { settings } from './state.js';
 import { t } from './i18n.js';
 import { setCharactersActive } from './sprites.js';
+import { toStage, STAGE } from './stage.js';
+const floatSlots = new WeakMap();
 
 const reduced = () => !!settings.reduceEffects;
 const $ = s => document.querySelector(s);
@@ -23,20 +25,30 @@ export const fx = {
   glitch(el, ms = 500) { if (reduced()) return; el = el || $('#view'); if (!el) return; el.classList.add('glitch'); setTimeout(() => el.classList.remove('glitch'), ms); },
   float(target, text, cls = '') {
     const r = target && target.getBoundingClientRect ? target.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+    const [x, y0] = toStage(r.left + r.width / 2, r.top + r.height / 2), now = performance.now();
+    // varios números sobre el mismo elemento en poco tiempo: cada uno sube un escalón para no taparse
+    const prev = floatSlots.get(target), n = prev && now - prev.t < 700 ? Math.min(prev.n + 1, 4) : 0; if (target && target.getBoundingClientRect) floatSlots.set(target, { t: now, n });
     const s = document.createElement('span'); s.className = 'float ' + cls; s.textContent = text;
-    s.style.left = Math.round(r.left + r.width / 2) + 'px'; s.style.top = Math.round(r.top + r.height / 2) + 'px';
-    document.body.appendChild(s); setTimeout(() => s.remove(), 1250);
+    s.style.left = Math.round(x) + 'px'; s.style.top = Math.round(y0 - n * 26) + 'px';
+    (document.getElementById('stage') || document.body).appendChild(s); setTimeout(() => s.remove(), 1250);
   },
   // Texto grande de jugada potente / combo (decorativo). tier 1..3.
-  banner(text, tier = 1) { const b = document.createElement('div'); b.className = 'fxbanner t' + tier; b.textContent = text; b.setAttribute('aria-hidden', 'true'); document.body.appendChild(b); setTimeout(() => b.remove(), 1450); return b; },
+  banner(text, tier = 1) {
+    // Los banners se apilan en una columna central: si dos coinciden, uno queda encima del otro (máx. 3 visibles)
+    const box = document.getElementById('banners') || document.body;
+    const b = document.createElement('div'); b.className = 'fxbanner t' + tier; b.textContent = text; b.setAttribute('aria-hidden', 'true'); box.appendChild(b);
+    while (box.children.length > 3) box.firstChild.remove();
+    setTimeout(() => b.remove(), 1450); return b;
+  },
   // Brasas que suben desde un elemento (jugadas muy potentes).
   embers(target, n = 14) {
     if (reduced() || typeof document === 'undefined') return;
     const r = target && target.getBoundingClientRect ? target.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+    const [bx, by] = toStage(r.left, r.top), k = STAGE.k || 1;
     for (let i = 0; i < n; i++) {
-      const s = document.createElement('span'); s.className = 'ember'; s.style.left = Math.round(r.left + Math.random() * r.width) + 'px'; s.style.top = Math.round(r.top + r.height * (0.4 + Math.random() * 0.5)) + 'px';
+      const s = document.createElement('span'); s.className = 'ember'; s.style.left = Math.round(bx + Math.random() * r.width / k) + 'px'; s.style.top = Math.round(by + r.height / k * (0.4 + Math.random() * 0.5)) + 'px';
       s.style.setProperty('--dx', Math.round(Math.random() * 120 - 60) + 'px'); s.style.setProperty('--dy', Math.round(-(60 + Math.random() * 140)) + 'px'); s.style.animationDelay = (Math.random() * 0.25).toFixed(2) + 's';
-      document.body.appendChild(s); setTimeout(() => s.remove(), 1700);
+      (document.getElementById('stage') || document.body).appendChild(s); setTimeout(() => s.remove(), 1700);
     }
   },
   vibrate(p = 40) { try { if (settings.vibration && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* no soportado */ } },

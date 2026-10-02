@@ -1,7 +1,7 @@
 // Tests de lógica pura (Node). Ejecuta: node tools/test-logic.mjs
 import assert from 'node:assert/strict';
 import { gs, replaceState } from '../src/state.js';
-import { baseDeck, makeCard, evaluate, HANDS, rankChips} from '../src/cards.js';
+import { baseDeck, makeCard, evaluate, HANDS, HAND_ORDER, rankChips } from '../src/cards.js';
 import * as C from '../src/combat.js';
 
 let pass = 0, fail = 0;
@@ -28,7 +28,14 @@ T('sombra (comodín de rango) mejora par a trío', () => assert.equal(evaluate(m
 T('As–Rey: valor en fichas (As 11, figuras 10, resto su número)', () => { assert.equal(rankChips(1), 11); assert.equal(rankChips(11), 10); assert.equal(rankChips(12), 10); assert.equal(rankChips(13), 10); assert.equal(rankChips(7), 7); });
 T('escalera con As ALTO (10-J-Q-K-A)', () => assert.equal(evaluate(mk('blood_10', 'eye_11', 'key_12', 'tooth_13', 'eye_01')).type, 'straight'));
 T('escalera con As BAJO (A-2-3-4-5)', () => assert.equal(evaluate(mk('blood_01', 'eye_02', 'key_03', 'tooth_04', 'eye_05')).type, 'straight'));
-T('escalera de color real (10-J-Q-K-A del mismo palo)', () => assert.equal(evaluate(mk('eye_10', 'eye_11', 'eye_12', 'eye_13', 'eye_01')).type, 'sflush'));
+T('escalera real (10-J-Q-K-A del mismo palo) es una mano propia, mejor que la escalera de color y peor que el repóker', () => {
+  assert.equal(evaluate(mk('eye_10', 'eye_11', 'eye_12', 'eye_13', 'eye_01')).type, 'royal');
+  assert.equal(evaluate(mk('eye_09', 'eye_10', 'eye_11', 'eye_12', 'eye_13')).type, 'sflush', '9-K es escalera de color');
+  assert.equal(evaluate(mk('eye_01', 'eye_02', 'eye_03', 'eye_04', 'eye_05')).type, 'sflush', 'A-5 es escalera de color');
+  assert.equal(evaluate(mk('eye_10', 'eye_11', 'eye_12', 'eye_13', 'blood_01')).type, 'straight', 'sin el mismo palo es escalera');
+  assert.ok(HAND_ORDER.indexOf('five') < HAND_ORDER.indexOf('royal') && HAND_ORDER.indexOf('royal') < HAND_ORDER.indexOf('sflush'));
+  assert.ok(HANDS.royal.chips * HANDS.royal.mult > HANDS.sflush.chips * HANDS.sflush.mult && HANDS.royal.chips * HANDS.royal.mult < HANDS.five.chips * HANDS.five.mult);
+});
 T('el As no «da la vuelta» (Q-K-A-2-3 no es escalera)', () => assert.equal(evaluate(mk('blood_12', 'eye_13', 'key_01', 'tooth_02', 'eye_03')).type, 'high'));
 T('carta alta: puntúa el As (la más alta)', () => { const e = evaluate(mk('blood_13', 'eye_07', 'key_01')); assert.equal(e.type, 'high'); assert.deepEqual(e.idx, [2]); });
 T('par de Ases pesa más que par de Reyes (desempate por fichas)', () => { const pa = evaluate(mk('blood_01', 'eye_01', 'key_05')), pk = evaluate(mk('blood_13', 'eye_13', 'key_05')); assert.equal(pa.type, 'pair'); assert.equal(pk.type, 'pair'); assert.deepEqual(pa.idx, [0, 1]); });
@@ -36,7 +43,7 @@ T('comodín de rango completa una escalera real (10-J-Q-K + sombra)', () => asse
 T('cuatro cartas de cada rango: 13 rangos × 4 palos', () => { const d = baseDeck(); for (let r = 1; r <= 13; r++) assert.equal(d.filter(c => c.rank === r).length, 4); });
 
 T('quintilla con la séptima', () => assert.equal(evaluate(mk('blood_07', 'eye_07', 'key_07', 'tooth_07', 'la_septima')).type, 'five'));
-T('manos: todas definidas', () => assert.equal(Object.keys(HANDS).length, 10));
+T('manos: todas definidas (11, con la escalera real)', () => { assert.equal(Object.keys(HANDS).length, 11); assert.equal(HAND_ORDER.length, 11); });
 
 console.log('combat');
 replaceState({}); gs.deck = baseDeck(); gs.run = { seed: 42 }; gs.deaths = 0;

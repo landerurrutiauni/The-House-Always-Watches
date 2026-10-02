@@ -8,7 +8,7 @@ export const ITEM_PRICE = { moneda_mordida: 55, espejo_roto: 50, llave_hueso: 70
 export const TOOLS = { testigo: { ctx: 'duel', price: 25 }, mala_memoria: { ctx: 'duel', price: 25 }, contrato: { ctx: 'duel', price: 30 }, sal: { ctx: 'round', price: 28 }, vela_corta: { ctx: 'any', price: 35 } };
 export const MAX_TOOLS = 3;
 
-export const CHARACTERS = ['dealer', 'girl', 'chair', 'child', 'merchant', 'woman', 'drowned', 'archivist', 'nun', 'cook', 'nurse', 'puppet', 'pianist'];
+export const CHARACTERS = ['dealer', 'girl', 'chair', 'child', 'merchant', 'woman', 'drowned', 'archivist', 'nun', 'cook', 'nurse', 'puppet', 'pianist', 'prompter', 'usher', 'watcher', 'concierge'];
 
 // `req`: requisito para despertar aquí (formato de effects.check): ['runs', n] = descensos terminados · ['cleared', n] = guardianes derrotados
 export const WING_INFO = {
@@ -17,11 +17,13 @@ export const WING_INFO = {
   sotano: { boss: 'drowned', bg: 'basement', req: ['runs', 1] },
   capilla: { boss: 'nun', bg: 'chapel', req: ['runs', 2] },
   cocinas: { boss: 'cook', bg: 'kitchen', req: ['runs', 3] },
-  enfermeria: { boss: 'nurse', bg: 'infirmary', req: ['cleared', 1] }
+  enfermeria: { boss: 'nurse', bg: 'infirmary', req: ['cleared', 1] },
+  teatro: { boss: 'prompter', bg: 'theatre', req: ['cleared', 2] },
+  vigilancia: { boss: 'watcher', bg: 'security', req: ['cleared', 3] }
 };
 // Rivales y duelistas propios de cada ala (se suman a los generales)
-export const WING_OPPS = { capilla: ['nun', 'pianist', 'child'], cocinas: ['cook', 'puppet', 'merchant'], enfermeria: ['nurse', 'puppet', 'chair'] };
-export const WING_FOES = { capilla: ['nun', 'pianist'], cocinas: ['cook', 'puppet'], enfermeria: ['nurse', 'puppet'] };
+export const WING_OPPS = { capilla: ['nun', 'pianist', 'child'], cocinas: ['cook', 'puppet', 'merchant'], enfermeria: ['nurse', 'puppet', 'chair'], teatro: ['prompter', 'usher', 'puppet', 'pianist'], vigilancia: ['watcher', 'concierge', 'chair', 'nurse'] };
+export const WING_FOES = { capilla: ['nun', 'pianist'], cocinas: ['cook', 'puppet'], enfermeria: ['nurse', 'puppet'], teatro: ['prompter', 'usher'], vigilancia: ['watcher', 'concierge'] };
 
 // Jefes. `rule`: reglas de oponente activas.
 export const BOSSES = {
@@ -32,15 +34,19 @@ export const BOSSES = {
   nun: { rule: ['tax', 'remember'], foe: 'nun', bg: 'chapel' },
   cook: { rule: ['greedy', 'tax'], foe: 'cook', bg: 'kitchen' },
   nurse: { rule: ['blind_eyes', 'drown'], foe: 'nurse', bg: 'infirmary' },
+  prompter: { rule: ['no_repeat', 'remember'], foe: 'prompter', bg: 'theatre' },
+  watcher: { rule: ['watched', 'remember'], foe: 'watcher', bg: 'security' },
   dealer: { rule: ['watched', 'interest'], foe: 'final', bg: 'casino', final: true }
 };
 
-export const GENERIC_OPPS = ['gambler_a', 'gambler_b', 'gambler_c', 'dealer', 'girl', 'chair', 'drowned', 'child'];
+// Jugadores anónimos: cada uno con su propio aspecto, nombre y voz (ya no comparten el sprite del Vendedor)
+export const GAMBLERS = ['gambler_a', 'gambler_b', 'gambler_c', 'gambler_d', 'gambler_e', 'gambler_f', 'gambler_g', 'gambler_h'];
+export const GENERIC_OPPS = [...GAMBLERS, 'dealer', 'girl', 'chair', 'drowned', 'child', 'dealer', 'girl', 'chair', 'drowned', 'child'];
 export const DUEL_FOES = ['gambler', 'dealer', 'girl', 'chair', 'drowned'];
 export const KINDS = ['game', 'event', 'merchant', 'rest', 'shotgun', 'secret', 'boss'];
 
 // Conocimiento (meta). Se obtiene en eventos/jefes y abre opciones/finales.
-export const KNOWLEDGE = ['k_moon', 'k_dealer_deck', 'k_girl_lies', 'k_reflection', 'k_players', 'k_dealer_no_name', 'k_child_self', 'k_chair_founder', 'k_drowned_paid', 'k_door_same', 'k_watcher', 'k_dealer_ledger', 'k_room13', 'k_nun_name', 'k_nurse_eye', 'k_cook_jars', 'k_puppet_script', 'k_pianist_hands'];
+export const KNOWLEDGE = ['k_moon', 'k_dealer_deck', 'k_girl_lies', 'k_reflection', 'k_players', 'k_dealer_no_name', 'k_child_self', 'k_chair_founder', 'k_drowned_paid', 'k_door_same', 'k_watcher', 'k_dealer_ledger', 'k_room13', 'k_nun_name', 'k_nurse_eye', 'k_cook_jars', 'k_puppet_script', 'k_pianist_hands', 'k_prompter_box', 'k_usher_seat', 'k_watcher_blind', 'k_concierge_keys'];
 export const DEALER_CLUES = ['k_dealer_deck', 'k_dealer_no_name', 'k_dealer_ledger', 'k_moon'];
 
 // Recuerdos: ventajas permanentes tras conseguirlos. `when` se evalúa con checkMemories().
@@ -125,7 +131,19 @@ export const EVENTS = {
   puppet_1: { who: 'puppet', bg: 'corridor', chain: 'puppet', a: [['know', 'k_puppet_script'], ['sanity', -5]], b: [['sanity', 3], ['money', 15]] },
   puppet_2: { who: 'puppet', bg: 'corridor', chain: 'puppet', req: ['seen', 'puppet_1'], a: [['debt', -25], ['sanity', -3], ['rel', 'dealer', 0, 1]], b: [['destiny', 1], ['sanity', -4], ['know', 'k_players']] },
   wall_notes: { bg: 'corridor', a: [['sanity', -1], ['money', 12]], b: [['sanity', 2]] },
-  staff_room: { bg: 'kitchen', a: [['know', 'k_players'], ['sanity', -2]], b: [['sanity', 2], ['money', 10]] }
+  staff_room: { bg: 'kitchen', a: [['know', 'k_players'], ['sanity', -2]], b: [['sanity', 2], ['money', 10]] },
+  // ---- El Teatro: El Apuntador y La Acomodadora ----
+  prompter_1: { who: 'prompter', bg: 'theatre', chain: 'prompter', a: [['sanity', -3], ['money', 15], ['rel', 'prompter', 1, 0]], b: [['sanity', 3], ['rel', 'prompter', 0, 1]], hid: { req: ['know', 'k_puppet_script'], fx: [['know', 'k_prompter_box'], ['sanity', -4]] } },
+  prompter_2: { who: 'prompter', bg: 'theatre', chain: 'prompter', req: ['seen', 'prompter_1'], a: [['know', 'k_players'], ['sanity', -4], ['rel', 'dealer', 0, 1]], b: [['destiny', 1], ['health', 8], ['rel', 'prompter', 0, 1]] },
+  usher_1: { who: 'usher', bg: 'theatre', chain: 'usher', a: [['sanity', 8], ['health', 6], ['debt', 10], ['rel', 'usher', 1, 0]], b: [['rel', 'usher', 0, 1], ['money', 8]] },
+  usher_2: { who: 'usher', bg: 'theatre', chain: 'usher', req: ['seen', 'usher_1'], a: [['know', 'k_usher_seat'], ['sanity', -4]], b: [['money', 15], ['sanity', -2], ['rel', 'usher', 0, 1]] },
+  theatre_seats: { bg: 'theatre', a: [['sanity', -3], ['money', 20]], b: [['sanity', 3]] },
+  // ---- La Sala de Vigilancia: El Vigilante y El Conserje ----
+  watcher_1: { who: 'watcher', bg: 'security', chain: 'watcher', a: [['sanity', -4], ['money', 12], ['rel', 'watcher', 1, 0]], b: [['destiny', 1], ['rel', 'watcher', 0, 1], ['sanity', 2]], hid: { req: ['know', 'k_watcher'], fx: [['know', 'k_watcher_blind'], ['sanity', -3]] } },
+  watcher_2: { who: 'watcher', bg: 'security', chain: 'watcher', req: ['seen', 'watcher_1'], a: [['know', 'k_watcher_blind'], ['sanity', -5]], b: [['sanity', 4], ['health', 5]] },
+  concierge_1: { who: 'concierge', bg: 'security', chain: 'concierge', a: [['money', -20], ['health', 30], ['sanity', 8], ['rel', 'concierge', 1, 0]], b: [['know', 'k_concierge_keys'], ['sanity', -2]] },
+  concierge_2: { who: 'concierge', bg: 'security', chain: 'concierge', req: ['seen', 'concierge_1'], a: [['card', 'random'], ['sanity', -4], ['rel', 'concierge', 0, 1]], b: [['debt', -20], ['rel', 'concierge', 1, 0]] },
+  camera_13: { bg: 'security', a: [['sanity', -3], ['money', 20]], b: [['sanity', 3]] }
 };
 export const EVENT_IDS = Object.keys(EVENTS);
 export const CHAINS = {
@@ -133,7 +151,8 @@ export const CHAINS = {
   girl: ['girl_1', 'girl_2', 'girl_3'],
   chair: ['chair_bet', 'chair_secret'],
   child: ['child_1', 'child_2'],
-  nun: ['nun_1', 'nun_2', 'nun_3'], pianist: ['pianist_1', 'pianist_2'], cook: ['cook_1', 'cook_2', 'cook_3'], nurse: ['nurse_1', 'nurse_2', 'nurse_3'], puppet: ['puppet_1', 'puppet_2']
+  nun: ['nun_1', 'nun_2', 'nun_3'], pianist: ['pianist_1', 'pianist_2'], cook: ['cook_1', 'cook_2', 'cook_3'], nurse: ['nurse_1', 'nurse_2', 'nurse_3'], puppet: ['puppet_1', 'puppet_2'],
+  prompter: ['prompter_1', 'prompter_2'], usher: ['usher_1', 'usher_2'], watcher: ['watcher_1', 'watcher_2'], concierge: ['concierge_1', 'concierge_2']
 };
 // Qué "slots" de evento se colocan en el mapa (los encadenados se resuelven al entrar).
 const GENERAL = ['mirror_hall', 'wet_footprints', 'debt_collector', 'cracked_clock', 'dice_pit', 'confession_booth', 'old_photograph', 'blood_vending', 'signed_receipt', 'moon_window', 'phone_call', 'woman_dress', 'drowned_pier', 'archive_ledger', 'merchant_memory'];
@@ -144,7 +163,9 @@ export function eventPool(wing) {
     sotano: ['chain:child', 'chain:dealer', 'drowned_pier', 'drowned_pier', 'chain:nun'],
     capilla: ['chain:nun', 'chain:nun', 'chain:pianist', 'chapel_candles', 'chain:dealer'],
     cocinas: ['chain:cook', 'chain:cook', 'kitchen_fire', 'chain:puppet', 'chain:dealer'],
-    enfermeria: ['chain:nurse', 'chain:nurse', 'chain:puppet', 'chain:child', 'chain:chair']
+    enfermeria: ['chain:nurse', 'chain:nurse', 'chain:puppet', 'chain:child', 'chain:chair'],
+    teatro: ['chain:prompter', 'chain:prompter', 'chain:usher', 'theatre_seats', 'chain:puppet', 'chain:pianist'],
+    vigilancia: ['chain:watcher', 'chain:watcher', 'chain:concierge', 'camera_13', 'chain:chair', 'chain:nurse']
   };
   return GENERAL.concat(['wall_notes', 'staff_room'], extra[wing] || []);
 }

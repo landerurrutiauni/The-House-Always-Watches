@@ -1,11 +1,13 @@
+import { eqRow } from './scale.js';
 // jokers.js — Jokers al estilo Balatro: modificadores pasivos de la jugada (máx. 5 por descenso). Sin DOM.
 // Cada joker tiene un precio, una rareza y fx(S, J, data), que se ejecuta al puntuar (de izquierda a derecha, después de las cartas):
 //   S = { scoring:[{c,i,suit,rank}], cards, hand, R, stake, played }   J = { addChips, addMult, addX, cost }
 // Los pasos que genera cada joker llevan su id (j) para que la interfaz pueda animarlo. `data` = contadores persistentes del descenso.
 export const MAX_JOKERS = 5;
 const PAIRISH = ['pair', 'twopair', 'three', 'full', 'four', 'five'];
-const FLUSHISH = ['flush', 'full', 'four', 'sflush', 'five'];
-const STRAIGHTISH = ['straight', 'sflush'];
+// Listas EXPLÍCITAS (los textos de cada comodín nombran todas las manos que valen; la escalera real es una mano propia)
+export const FLUSHISH = ['flush', 'full', 'four', 'sflush', 'royal', 'five'];
+export const STRAIGHTISH = ['straight', 'sflush', 'royal'];
 const nSuit = (S, su) => S.scoring.filter(s => s.suit === su).length;
 const nFaces = S => S.scoring.filter(s => s.rank >= 11 && s.rank <= 13).length;
 const nAces = S => S.scoring.filter(s => s.rank === 1).length;
@@ -35,7 +37,7 @@ export const JOKER_IDS = Object.keys(JOKERS);
 export const JOKER_PRICE = id => (JOKERS[id] ? JOKERS[id].price : 0);
 export const jokerSellPrice = id => Math.floor(JOKER_PRICE(id) / 2);
 // Peso de aparición por rareza (las raras salen sobre todo en filas altas y de jefes)
-export const rarityWeight = (rarity, row = 0, boss = false) => (rarity === 'common' ? 6 : rarity === 'uncommon' ? 3 + (row >= 3 ? 1 : 0) : (boss ? 4 : 1 + (row >= 4 ? 1 : 0)));
+export const rarityWeight = (rarity, row = 0, boss = false) => { const r = eqRow(row); return rarity === 'common' ? 6 : rarity === 'uncommon' ? 3 + (r >= 3 ? 1 : 0) : (boss ? 4 : 1 + (r >= 4 ? 1 : 0)); };
 export function pickJoker(rng, owned = [], row = 0, boss = false) {
   const pool = JOKER_IDS.filter(id => !owned.includes(id));
   if (!pool.length) return null;

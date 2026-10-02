@@ -7,14 +7,16 @@ import * as E from '../src/effects.js';
 import { OPP_RULES } from '../src/combat.js';
 import { BOSSES } from '../src/content.js';
 import { JOKERS, pickJoker } from '../src/jokers.js';
+import { ROWS } from '../src/scale.js';
 
 const N = +process.argv.slice(2).filter(x => !x.startsWith('--'))[0] || 300;
-const BOSS = (process.argv.find(a => a.startsWith('--boss=')) || '').slice(7) || null;   // reglas del guardián de esa ala en la fila 7 (por defecto: La Chica)
+const BOSS = (process.argv.find(a => a.startsWith('--boss=')) || '').slice(7) || null;
+const RULES = ((process.argv.find(a => a.startsWith('--rules=')) || '').slice(8) || '').split(',').filter(Boolean);   // reglas sueltas para probar combinaciones de un guardián nuevo   // reglas del guardián de esa ala en la fila 7 (por defecto: La Chica)
 const JOKER_BOT = process.argv.includes('--jokers');                                       // el bot también compra/elige comodines
 const POS = process.argv.slice(2).filter(x => !x.startsWith('--'));   // posicionales: nRuns [growth] [base]; las opciones empiezan por --
 if (POS[1]) C.TARGET.growth = +POS[1];
 if (POS[2]) C.TARGET.base = +POS[2];
-const stats = Array.from({ length: 9 }, () => ({ n: 0, win: 0 }));
+const stats = Array.from({ length: 16 }, () => ({ n: 0, win: 0 }));
 let deaths = 0, reachBoss = 0, reachFinal = 0, clears = 0;
 
 function playRound(row, kind, rule, key) {
@@ -44,10 +46,10 @@ for (let run = 0; run < N; run++) {
   replaceState({}); E.startRun('salon'); gs.run.seed = 1000 + run;
   const rng = new RNG(run + 1);
   let alive = true;
-  for (let row = 0; row < 8 && alive; row++) {
-    const kind = row === 7 ? 'boss' : 'game';
-    if (row === 7) reachBoss++;
-    const rule = row === 7 ? (BOSS && BOSSES[BOSS] ? BOSSES[BOSS].rule.slice() : ['no_repeat']) : [rng.pick(OPP_RULES)];
+  for (let row = 0; row < ROWS && alive; row++) {
+    const kind = row === ROWS - 1 ? 'boss' : 'game';
+    if (row === ROWS - 1) reachBoss++;
+    const rule = row === ROWS - 1 ? (RULES.length ? RULES.slice() : BOSS && BOSSES[BOSS] ? BOSSES[BOSS].rule.slice() : ['no_repeat']) : [rng.pick(OPP_RULES)];
     const { R, won } = playRound(row, kind, rule, 'r' + row);
     stats[row].n++; if (won) stats[row].win++;
     if (won) {
@@ -60,7 +62,7 @@ for (let run = 0; run < N; run++) {
       // compra: un comodín si el bot los usa y hay hueco; luego niveles de mano
       if (JOKER_BOT) for (let k = 0; k < 2; k++) { const jid = pickJoker(rng, gs.jokers, row, false); if (jid && gs.jokers.length < 5 && gs.player.money >= JOKERS[jid].price + 10) { gs.player.money -= JOKERS[jid].price; E.addJoker(jid); } }
       while (gs.player.money >= 40) { gs.player.money -= 40; E.levelUp(rng.pick(['pair', 'twopair', 'three', 'straight', 'flush', 'full'])); }
-      if (row === 7) { clears++; }
+      if (row === ROWS - 1) { clears++; }
     } else {
       const f = C.failCost(row, kind); addHealth(-f.health); gs.player.sanity = Math.max(0, gs.player.sanity - f.sanity); gs.player.debt += f.debt;
       if (gs.player.health <= 0) { alive = false; deaths++; }
@@ -71,5 +73,5 @@ for (let run = 0; run < N; run++) {
 }
 console.log(`Partidas simuladas: ${N}`);
 console.log('fila  n     victoria');
-stats.slice(0, 8).forEach((s, i) => console.log(String(i).padEnd(5), String(s.n).padEnd(5), s.n ? (100 * s.win / s.n).toFixed(0) + '%' : '-'));
+stats.slice(0, ROWS).forEach((s, i) => console.log(String(i).padEnd(5), String(s.n).padEnd(5), s.n ? (100 * s.win / s.n).toFixed(0) + '%' : '-'));
 console.log(`llegan al jefe: ${(100 * reachBoss / N).toFixed(0)}%  ·  vencen al jefe: ${(100 * clears / N).toFixed(0)}%  ·  mueren por vida: ${(100 * deaths / N).toFixed(0)}%`);

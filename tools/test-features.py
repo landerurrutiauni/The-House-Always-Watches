@@ -157,7 +157,7 @@ with sync_playwright() as p:
     check('H1 el menú tiene el botón CÓMO SE JUEGA', pg.query_selector('[data-act="howto"]') is not None)
     pg.click('[data-act="howto"]'); pg.wait_for_selector('.howto-modal'); txt = pg.inner_text('.howto-modal')
     nsec = pg.evaluate("document.querySelectorAll('.howto-modal details').length"); nopen = pg.evaluate("document.querySelectorAll('.howto-modal details[open]').length")
-    check('H2 la ayuda tiene 8 secciones plegables (solo la primera desplegada) y ningún texto sin traducir', nsec == 8 and nopen == 1 and not re.search(r'\b(howto|hint|menu|hud|ui)\.[a-z0-9_.]+', txt), (nsec, nopen))
+    check('H2 la ayuda tiene 9 secciones plegables (solo la primera desplegada) y ningún texto sin traducir', nsec == 9 and nopen == 1 and not re.search(r'\b(howto|hint|menu|hud|ui)\.[a-z0-9_.]+', txt), (nsec, nopen))
     pg.click('.howto-modal summary >> nth=2'); pg.wait_for_timeout(100)
     check('H3 se despliegan más secciones (Tus recursos: Health, Sanity, Money, Debt, Shield)', all(w in pg.inner_text('.howto-modal') for w in ['Health', 'Sanity', 'Money', 'Debt', 'Shield']))
     pg.click('.howto-modal button:has-text("SEE HANDS")'); pg.wait_for_timeout(150)

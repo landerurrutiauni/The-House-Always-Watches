@@ -10,6 +10,7 @@ import * as G from '../src/game.js';
 import * as ACH from '../src/achievements.js';
 import * as MIS from '../src/missions.js';
 import { RNG } from '../src/rng.js';
+import { ROWS, eqRow } from '../src/scale.js';
 
 let ok = 0, bad = 0;
 const T = async (name, fn) => { try { await fn(); ok++; console.log('  ok  ' + name); } catch (e) { bad++; console.log('  FAIL ' + name + '\n       ' + String(e.message).split('\n').slice(0, 3).join(' | ')); } };
@@ -20,46 +21,49 @@ const mk = (...ids) => ids.map(i => makeCard(i));
 const heard = []; bus.on('egg', e => heard.push(e.id)); const heardM = []; bus.on('mission', e => heardM.push(e.id));
 
 console.log('alas, personajes e historia');
-await T('hay 6 alas con guardián, fondo y requisito; los guardianes existen', () => {
-  assert.deepEqual(Object.keys(K.WING_INFO), ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria']);
+await T('hay 8 alas con guardián, fondo y requisito; los guardianes existen', () => {
+  assert.deepEqual(Object.keys(K.WING_INFO), ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria', 'teatro', 'vigilancia']);
   for (const [w, i] of Object.entries(K.WING_INFO)) { assert.ok(K.BOSSES[i.boss], 'jefe de ' + w); assert.ok(K.CHARACTERS.includes(i.boss), 'personaje ' + i.boss); assert.ok(i.bg && Array.isArray(i.req)); }
 });
-await T('13 personajes y todos los jefes/duelistas nuevos están entre ellos', () => {
-  assert.equal(K.CHARACTERS.length, 13);
-  for (const id of ['nun', 'cook', 'nurse', 'puppet', 'pianist']) { assert.ok(K.CHARACTERS.includes(id), id); assert.ok(S.FOES[id], 'duelista ' + id); }
+await T('17 personajes y todos los jefes/duelistas nuevos están entre ellos', () => {
+  assert.equal(K.CHARACTERS.length, 17);
+  for (const id of ['nun', 'cook', 'nurse', 'puppet', 'pianist', 'prompter', 'usher', 'watcher', 'concierge']) { assert.ok(K.CHARACTERS.includes(id), id); assert.ok(S.FOES[id], 'duelista ' + id); }
 });
-await T('requisitos de apertura: salón libre; pasillo/sótano 1 descenso; capilla 2; cocinas 3; enfermería 1 guardián', () => {
+await T('requisitos de apertura: salón libre; pasillo/sótano 1 descenso; capilla 2; cocinas 3; enfermería 1 guardián; teatro 2; vigilancia 3', () => {
   reset();
   assert.equal(E.wingUnlocked('salon'), true);
-  for (const w of ['pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria']) assert.equal(E.wingUnlocked(w), false, w);
+  for (const w of ['pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria', 'teatro', 'vigilancia']) assert.equal(E.wingUnlocked(w), false, w);
   gs.meta.runsFinished = 1; assert.equal(E.wingUnlocked('pasillo'), true); assert.equal(E.wingUnlocked('sotano'), true); assert.equal(E.wingUnlocked('capilla'), false);
   gs.meta.runsFinished = 2; assert.equal(E.wingUnlocked('capilla'), true); assert.equal(E.wingUnlocked('cocinas'), false);
   gs.meta.runsFinished = 3; assert.equal(E.wingUnlocked('cocinas'), true); assert.equal(E.wingUnlocked('enfermeria'), false);
-  gs.meta.wingsCleared = ['salon']; assert.equal(E.wingUnlocked('enfermeria'), true);
+  gs.meta.wingsCleared = ['salon']; assert.equal(E.wingUnlocked('enfermeria'), true); assert.equal(E.wingUnlocked('teatro'), false);
+  gs.meta.wingsCleared = ['salon', 'pasillo']; assert.equal(E.wingUnlocked('teatro'), true); assert.equal(E.wingUnlocked('vigilancia'), false);
+  gs.meta.wingsCleared = ['salon', 'pasillo', 'sotano']; assert.equal(E.wingUnlocked('vigilancia'), true);
 });
-await T('cada ala genera un mapa válido de 8 filas con su guardián y eventos propios', () => {
+await T('cada ala genera un mapa válido de 16 salas (con campamento a mitad de camino), su guardián y eventos propios', () => {
   for (const w of Object.keys(K.WING_INFO)) {
-    reset(); E.startRun(w); const rows = gs.run.map.rows; assert.equal(rows.length, 8, w);
+    reset(); E.startRun(w); const rows = gs.run.map.rows; assert.equal(rows.length, 16, w);
+    assert.deepEqual(rows[7].map(n => n.kind), ['rest', 'merchant'], 'campamento en la sala 8 de ' + w);
     const boss = rows.flat().find(n => n.kind === 'boss'); assert.ok(boss && boss.opp.id === K.WING_INFO[w].boss, 'boss de ' + w);
     const kinds = new Set(rows.flat().map(n => n.kind)); assert.ok(kinds.has('game') && kinds.has('event'), 'nodos de ' + w);
   }
 });
 await T('los eventos de cada ala existen; las cadenas nuevas están completas y ordenadas', () => {
   for (const w of Object.keys(K.WING_INFO)) for (const e of K.eventPool(w)) { if (e.startsWith('chain:')) assert.ok(K.CHAINS[e.slice(6)], e); else assert.ok(K.EVENTS[e], e); }
-  for (const [c, ids] of Object.entries({ nun: 3, pianist: 2, cook: 3, nurse: 3, puppet: 2 })) { assert.equal(K.CHAINS[c].length, ids, c); for (const id of K.CHAINS[c]) assert.equal(K.EVENTS[id].chain, c, id); }
+  for (const [c, ids] of Object.entries({ nun: 3, pianist: 2, cook: 3, nurse: 3, puppet: 2, prompter: 2, usher: 2, watcher: 2, concierge: 2 })) { assert.equal(K.CHAINS[c].length, ids, c); for (const id of K.CHAINS[c]) assert.equal(K.EVENTS[id].chain, c, id); }
 });
-await T('los guardianes nuevos se debilitan con su conocimiento (La Hermana, El Cocinero, La Enfermera)', () => {
+await T('los guardianes nuevos se debilitan con su conocimiento (Hermana, Cocinero, Enfermera, Apuntador, Vigilante)', () => {
   fresh('capilla');
-  const pairs = [['nun', 'remember', 'k_nun_name'], ['cook', 'greedy', 'k_cook_jars'], ['nurse', 'blind_eyes', 'k_nurse_eye']];
+  const pairs = [['nun', 'remember', 'k_nun_name'], ['cook', 'greedy', 'k_cook_jars'], ['nurse', 'blind_eyes', 'k_nurse_eye'], ['prompter', 'remember', 'k_prompter_box'], ['watcher', 'watched', 'k_watcher_blind']];
   for (const [boss, rule, kn] of pairs) { assert.ok(G.bossRules(boss).includes(rule), boss + ' trae ' + rule); E.learn(kn); assert.ok(!G.bossRules(boss).includes(rule), boss + ' pierde ' + rule); assert.ok(G.bossWeakened(boss).includes(rule)); }
 });
 await T('cada evento nuevo se puede resolver por ambas opciones sin errores y sus conocimientos existen', () => {
-  const news = ['nun_1', 'nun_2', 'nun_3', 'chapel_candles', 'pianist_1', 'pianist_2', 'cook_1', 'cook_2', 'cook_3', 'kitchen_fire', 'nurse_1', 'nurse_2', 'nurse_3', 'puppet_1', 'puppet_2', 'wall_notes', 'staff_room'];
+  const news = ['nun_1', 'nun_2', 'nun_3', 'chapel_candles', 'pianist_1', 'pianist_2', 'cook_1', 'cook_2', 'cook_3', 'kitchen_fire', 'nurse_1', 'nurse_2', 'nurse_3', 'puppet_1', 'puppet_2', 'wall_notes', 'staff_room', 'prompter_1', 'prompter_2', 'usher_1', 'usher_2', 'theatre_seats', 'watcher_1', 'watcher_2', 'concierge_1', 'concierge_2', 'camera_13'];
   for (const id of news) { assert.ok(K.EVENTS[id], id); for (const o of ['a', 'b']) { fresh('capilla'); E.applyEffects(K.EVENTS[id][o], { rng: new RNG(5) }); } }
-  for (const k of ['k_nun_name', 'k_nurse_eye', 'k_cook_jars', 'k_puppet_script', 'k_pianist_hands']) assert.ok(K.KNOWLEDGE.includes(k), k);
+  for (const k of ['k_nun_name', 'k_nurse_eye', 'k_cook_jars', 'k_puppet_script', 'k_pianist_hands', 'k_prompter_box', 'k_usher_seat', 'k_watcher_blind', 'k_concierge_keys']) assert.ok(K.KNOWLEDGE.includes(k), k);
 });
 await T('duelos con los nuevos rivales: se juegan hasta el final sin errores', () => {
-  for (const foe of ['nun', 'cook', 'nurse', 'puppet', 'pianist']) {
+  for (const foe of ['nun', 'cook', 'nurse', 'puppet', 'pianist', 'prompter', 'usher', 'watcher', 'concierge']) {
     const D = S.startDuel({ seed: 11, key: 'x', foe, stake: { type: 'money', value: 20 } }); let g = 0;
     while (!D.over && g++ < 60) { if (D.turn === 'p') { const ev = S.playerShoot(D, g % 2 ? 'foe' : 'table'); assert.ok(ev && ev.pos >= 0 && Array.isArray(ev.marks ? [] : []) || true); if (!D.over && D.turn === 'f') S.foeTurn(D); } else S.foeTurn(D); }
     assert.ok(D.over, foe);
@@ -94,13 +98,13 @@ await T('Paciencia: un minuto (aquí 30 ms) en el menú sin tocar nada; tocar re
   await new Promise(r => setTimeout(r, 40)); assert.equal(ACH.hasEgg('paciencia'), true);
   reset(); ACH.idleStart(); ACH.idleStop(); await new Promise(r => setTimeout(r, 60)); assert.equal(ACH.hasEgg('paciencia'), false, 'salir del menú lo cancela'); ACH.IDLE.ms = keep;
 });
-await T('Escalera real (10-J-Q-K-A del mismo palo) y Cuatro Ases, jugados de verdad con roundPlay', () => {
+await T('Escalera real (mano propia 10-J-Q-K-A del mismo palo) y Cuatro Ases, jugados de verdad con roundPlay', () => {
   fresh(); G.G.tut = { plays: 0, discards: 0 };
   let R = round(); G.G.R = R; const royal = mk('eye_10', 'eye_11', 'eye_12', 'eye_13', 'eye_01'); R.hand = royal.slice(); R.pocket = [];
-  const res = G.roundPlay(royal.map(c => c.uid)); assert.equal(res.hand, 'sflush'); assert.equal(ACH.hasEgg('real'), true);
+  const res = G.roundPlay(royal.map(c => c.uid)); assert.equal(res.hand, 'royal'); assert.equal(ACH.hasEgg('real'), true);
   reset(); fresh(); R = round(); G.G.R = R; const aces = mk('eye_01', 'blood_01', 'tooth_01', 'key_01', 'eye_05'); R.hand = aces.slice(); R.pocket = [];
   G.roundPlay(aces.map(c => c.uid)); assert.equal(ACH.hasEgg('ases'), true); assert.equal(ACH.hasEgg('real'), false);
-  reset(); fresh(); R = round(); G.G.R = R; const nope = mk('eye_09', 'eye_10', 'eye_11', 'eye_12', 'eye_13'); R.hand = nope.slice(); R.pocket = []; G.roundPlay(nope.map(c => c.uid)); assert.equal(ACH.hasEgg('real'), false, '9-K no es la escalera real');
+  reset(); fresh(); R = round(); G.G.R = R; const nope = mk('eye_09', 'eye_10', 'eye_11', 'eye_12', 'eye_13'); R.hand = nope.slice(); R.pocket = []; G.roundPlay(nope.map(c => c.uid)); assert.equal(ACH.hasEgg('real'), false, '9-K es escalera de color, no real');
 });
 await T('Triple siete: tres sietes en trío o mejor; sietes sueltos no valen', () => {
   fresh(); G.G.tut = { plays: 0, discards: 0 }; let R = round(); G.G.R = R; let cs = mk('eye_07', 'blood_07', 'key_07', 'tooth_02'); R.hand = cs.slice(); R.pocket = []; G.roundPlay(cs.map(c => c.uid)); assert.equal(ACH.hasEgg('jackpot'), true);
@@ -133,13 +137,21 @@ await T('Cordura cero: colapsar al llegar a 0 de Cordura', () => {
 await T('«Reiniciar progreso» borra también los secretos', () => {
   reset(); for (const id of ACH.EGGS) ACH.unlockEgg(id); assert.equal(ACH.eggsFound().length, 12); G.resetAll(); assert.equal(ACH.eggsFound().length, 0); assert.deepEqual(settings.eggs, []);
 });
-await T('el archivo informa de los 12 secretos y de las misiones', () => {
-  reset(); ACH.unlockEgg('real'); const d = G.archiveData(); assert.equal(d.eggs.length, 12); assert.deepEqual(d.eggs.filter(e => e.got).map(e => e.id), ['real']); assert.equal(d.missions.total, 18); assert.equal(d.characters.length, 13);
+await T('el archivo informa de los 12 secretos, los 17 personajes y las misiones', () => {
+  reset(); ACH.unlockEgg('real'); const d = G.archiveData(); assert.equal(d.eggs.length, 12); assert.deepEqual(d.eggs.filter(e => e.got).map(e => e.id), ['real']); assert.equal(d.missions.total, 24); assert.equal(d.characters.length, 17);
 });
 
+await T('el interés de la Deuda se reparte entre las 16 salas: tras un descenso entero, ~+25 % (como antes con 8 salas al 3 %)', () => {
+  fresh(); gs.player.debt = 100; for (let i = 0; i < ROWS; i++) E.nodeInterest();
+  assert.ok(gs.player.debt >= 118 && gs.player.debt <= 135, 'deuda final ' + gs.player.debt);
+  assert.equal(ROWS, 16);
+});
+await T('la dificultad usa la escala equivalente: la sala final de 16 pide lo mismo que antes pedía la 8.ª', () => {
+  assert.equal(eqRow(0), 0); assert.ok(Math.abs(eqRow(ROWS - 1) - 7) < 1e-9); assert.ok(C.targetFor(ROWS - 1, 'boss') > C.targetFor(ROWS - 2, 'game') && C.targetFor(1, 'game') < C.targetFor(5, 'game'));
+});
 console.log('misiones');
-await T('3 misiones por ala (18 en total), ids únicos y recompensas válidas', () => {
-  assert.deepEqual(Object.keys(MIS.MISSIONS), Object.keys(K.WING_INFO)); assert.equal(MIS.MISSION_IDS.length, 18); assert.equal(new Set(MIS.MISSION_IDS).size, 18);
+await T('3 misiones por ala (24 en total), ids únicos y recompensas válidas', () => {
+  assert.deepEqual(Object.keys(MIS.MISSIONS).sort(), Object.keys(K.WING_INFO).sort()); assert.equal(MIS.MISSION_IDS.length, 24); assert.equal(new Set(MIS.MISSION_IDS).size, 24);
   const known = new Set(['money', 'sanity', 'health', 'card', 'mod', 'level', 'joker']);
   for (const [w, list] of Object.entries(MIS.MISSIONS)) { assert.equal(list.length, 3, w); for (const m of list) { assert.ok(m.need >= 1 && m.ev); for (const r of m.reward) assert.ok(known.has(r[0]), m.id); } }
 });
@@ -164,7 +176,7 @@ await T('el tutorial y la ronda final no cuentan; los sucesos de otra ala tampoc
   MIS.track('listen'); MIS.track('rest'); MIS.track('buy'); assert.ok(MIS.list().every(m => m.n === 0), 'listen/rest/buy no son del Salón');
   reset(); assert.deepEqual(MIS.track('roundWon', {}), [], 'sin descenso en curso no hace nada');
 });
-await T('las 18 misiones se pueden cumplir y sus recompensas se aplican sin errores (incluidos card/mod/level/joker)', () => {
+await T('las 24 misiones se pueden cumplir y sus recompensas se aplican sin errores (incluidos card/mod/level/joker)', () => {
   const cand = [{ hand: 'straight', total: 400, discards: 0, sanity: 30, kind: 'game' }, { hand: 'flush', total: 400, discards: 0, sanity: 30, kind: 'game' }, { hand: 'full', total: 400, discards: 0, sanity: 30, kind: 'game' }];
   for (const [w, list] of Object.entries(MIS.MISSIONS)) {
     fresh(w); for (const m of list) { const d = cand.find(c => !m.when || m.when(c)); assert.ok(d, m.id); for (let i = 0; i < m.need; i++) MIS.track(m.ev, d); }

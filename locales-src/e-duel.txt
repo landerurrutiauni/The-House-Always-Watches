@@ -28,3 +28,12 @@ settings.ts.normal|Normal|Normal|Normale|Normal
 settings.ts.fast|Rápida|Fast|Rapide|Schnell
 settings.ts.instant|Instantánea|Instant|Instantanée|Sofort
 duel.n.turn_of|Turno de {name}|{name}’s turn|Tour de {name}|{name} ist dran
+
+duel.h.title|Historial de disparos|Shot history|Historique des tirs|Schussverlauf
+duel.h.p_foe|Tú → Rival|You → Rival|Toi → Rival|Du → Gegner
+duel.h.p_table|Tú → Mesa|You → Table|Toi → Table|Du → Tisch
+duel.h.f_p|Rival → Tú|Rival → You|Rival → Toi|Gegner → Du
+duel.h.f_table|Rival → Mesa|Rival → Table|Rival → Table|Gegner → Tisch
+duel.h.cham|cám. {k}|ch. {k}|ch. {k}|Kam. {k}
+duel.h.skip|{name} pierde el turno|{name} loses the turn|{name} perd son tour|{name} setzt aus
+duel.cap.skip|—|—|—|—

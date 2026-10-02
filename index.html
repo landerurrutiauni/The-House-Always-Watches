@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0b0908">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,10 +24,12 @@
     <header id="hud" hidden></header>
     <main id="view" tabindex="-1"></main>
   </div>
+  <div id="banners" aria-hidden="true"></div>
   <div id="toasts" aria-hidden="true"></div>
   <div id="whispers" aria-hidden="true"></div>
   <div id="modal-root"></div>
 </div>
+<div id="rotate-ov" hidden role="dialog" aria-modal="true"><div class="rot-box"><div class="rot-icon" aria-hidden="true"></div><p id="rot-text">Gira el dispositivo / Rotate your device</p><button type="button" class="btn primary" data-act="rot_play" id="rot-play">▶</button></div></div>
 <div id="live" class="sr" aria-live="polite"></div>
 <noscript><p style="color:#d6c8a8;padding:2em;font-family:monospace">THE HOUSE ALWAYS WATCHES needs JavaScript. / El juego necesita JavaScript.</p></noscript>
 <script type="module" src="src/main.js"></script>

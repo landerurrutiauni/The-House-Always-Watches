@@ -274,6 +274,92 @@ const CHARS = {
     R(g, 2, 54, 44, 10, PAL.w3); R(g, 2, 54, 44, 1, PAL.k0); for (let x = 5; x < 44; x += 5) R(g, x, 54, 1, 10, PAL.w1); for (const x of [7, 12, 22, 27, 37]) R(g, x, 54, 3, 6, PAL.k0);
     R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 16, 7, 8, PAL.t4, PAL.t3); R(g, 16, 7, 16, 4, PAL.k0); R(g, 15, 9, 3, 6, PAL.k0); R(g, 30, 9, 3, 6, PAL.k0);
     R(g, 21, 21, 6, 1, PAL.t1); P(g, 24, 19, PAL.t2);
+  } },
+  // ---- Jugadores anónimos (cada uno con su aspecto) ----
+  gambler_a: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[11, 28], [37, 28], [44, 64], [4, 64]], PAL.c3); poly(g, [[27, 28], [37, 28], [44, 64], [30, 64]], PAL.c2);
+    poly(g, [[19, 28], [29, 28], [24, 47]], PAL.w3); poly(g, [[25, 29], [30, 29], [31, 41], [27, 50], [24, 40]], PAL.r3); R(g, 25, 29, 5, 2, PAL.r2);
+    arms(g, PAL.c3, PAL.c2, 31, 54, PAL.t4);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.t4, PAL.t3); R(g, 16, 8, 16, 5, PAL.b1); R(g, 15, 10, 3, 8, PAL.b1); R(g, 30, 10, 3, 8, PAL.k0); R(g, 21, 22, 6, 1, PAL.t1); P(g, 24, 20, PAL.t2);
+  } },
+  gambler_b: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[12, 28], [36, 28], [43, 64], [5, 64]], PAL.k2); poly(g, [[26, 28], [36, 28], [43, 64], [29, 64]], PAL.k0);
+    poly(g, [[18, 28], [30, 28], [24, 40]], PAL.w2); arms(g, PAL.k2, PAL.k0, 31, 54, PAL.t4);
+    ell(g, 40, 50, 6, 8, PAL.c4); ell(g, 40, 50, 4, 6, PAL.c1); R(g, 38, 56, 4, 6, PAL.b3);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.w3, PAL.w2); R(g, 14, 7, 20, 7, PAL.k0); R(g, 13, 9, 4, 17, PAL.k0); R(g, 31, 9, 4, 17, PAL.k0); R(g, 21, 22, 6, 1, PAL.r3);
+  } },
+  gambler_c: { eye: { y: 17, dx: 3, w: 2, h: 2, kind: 'pit' }, draw(g) {
+    poly(g, [[11, 28], [37, 28], [44, 64], [4, 64]], PAL.b2); poly(g, [[27, 28], [37, 28], [44, 64], [30, 64]], PAL.b1);
+    poly(g, [[19, 28], [29, 28], [24, 44]], PAL.t3); arms(g, PAL.b2, PAL.b1, 31, 54, PAL.t3);
+    R(g, 21, 23, 6, 5, PAL.t3); head(g, 24, 17, 8, 9, PAL.t3, PAL.t2); R(g, 17, 10, 14, 1, PAL.t1); R(g, 19, 25, 10, 1, PAL.t2);
+  } },
+  gambler_d: { eye: { y: 18, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[10, 28], [38, 28], [45, 64], [3, 64]], PAL.k1); poly(g, [[27, 28], [38, 28], [45, 64], [30, 64]], PAL.k0);
+    poly(g, [[19, 28], [29, 28], [24, 46]], PAL.w2); R(g, 22, 29, 4, 2, PAL.r3);
+    arms(g, PAL.k1, PAL.k0, 31, 52, PAL.t3); for (let i = 0; i < 4; i++) { R(g, 2 + i * 3, 44 - i * 2, 8, 12, PAL.w3); R(g, 2 + i * 3, 44 - i * 2, 8, 1, PAL.k0); }
+    R(g, 21, 23, 6, 5, PAL.t3); head(g, 24, 18, 7, 8, PAL.t3, PAL.t2);
+    R(g, 11, 12, 26, 3, PAL.k0); R(g, 16, 5, 16, 8, PAL.k0); R(g, 16, 10, 16, 2, PAL.r3); R(g, 18, 23, 12, 1, PAL.k0); R(g, 16, 22, 3, 2, PAL.k0); R(g, 29, 22, 3, 2, PAL.k0);
+  } },
+  gambler_e: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[13, 28], [35, 28], [43, 64], [5, 64]], PAL.k0); poly(g, [[26, 28], [35, 28], [43, 64], [28, 64]], PAL.c1);
+    arms(g, PAL.k1, PAL.k0, 31, 54, PAL.w3); R(g, 20, 54, 8, 6, PAL.w3); R(g, 22, 40, 4, 3, PAL.g1);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.t4, PAL.t3);
+    R(g, 13, 5, 22, 8, PAL.k0); R(g, 12, 9, 24, 20, PAL.k0); R(g, 17, 14, 14, 11, PAL.t4); head(g, 24, 18, 6, 7, PAL.t4, PAL.t3); R(g, 20, 26, 8, 1, PAL.c3);
+    g.globalAlpha = 0.35; R(g, 17, 14, 14, 12, PAL.k0); g.globalAlpha = 1; R(g, 21, 24, 6, 1, PAL.r3);
+  } },
+  gambler_f: { eye: { y: 17, dx: 5, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[4, 28], [44, 28], [47, 64], [1, 64]], PAL.b3); poly(g, [[27, 28], [44, 28], [47, 64], [30, 64]], PAL.b2);
+    ell(g, 24, 46, 14, 14, PAL.w2); R(g, 17, 36, 14, 24, PAL.w2); R(g, 21, 30, 6, 20, PAL.r3); R(g, 14, 40, 3, 3, PAL.g1); R(g, 31, 44, 3, 3, PAL.g1);
+    arms(g, PAL.b3, PAL.b2, 31, 55, PAL.t3);
+    R(g, 20, 23, 8, 5, PAL.t3); head(g, 24, 17, 9, 8, PAL.t3, PAL.t2); R(g, 18, 8, 12, 3, PAL.k0);
+    R(g, 24, 22, 8, 2, PAL.b1); R(g, 31, 21, 3, 3, PAL.c4); P(g, 34, 20, PAL.t1); P(g, 35, 19, PAL.c4);
+  } },
+  gambler_g: { eye: { y: 17, dx: 4, w: 3, h: 3, kind: 'white' }, draw(g) {
+    poly(g, [[12, 28], [36, 28], [43, 64], [5, 64]], PAL.c3); poly(g, [[26, 28], [36, 28], [43, 64], [29, 64]], PAL.c2);
+    poly(g, [[19, 28], [29, 28], [24, 42]], PAL.w3); R(g, 23, 30, 2, 12, PAL.k0); arms(g, PAL.c3, PAL.c2, 31, 53, PAL.t3);
+    R(g, 9, 44, 18, 14, PAL.r2); R(g, 9, 44, 18, 2, PAL.r3); for (let y = 48; y < 57; y += 3) R(g, 11, y, 14, 1, PAL.t2);
+    R(g, 21, 23, 6, 5, PAL.t3); head(g, 24, 17, 7, 8, PAL.t3, PAL.t2); R(g, 17, 7, 14, 4, PAL.c4); R(g, 14, 10, 20, 2, PAL.k0);
+    R(g, 16, 15, 6, 5, PAL.k0); R(g, 26, 15, 6, 5, PAL.k0); R(g, 17, 16, 4, 3, PAL.w2); R(g, 27, 16, 4, 3, PAL.w2); R(g, 22, 17, 4, 1, PAL.k0); R(g, 21, 22, 6, 1, PAL.t1);
+  } },
+  gambler_h: { eye: { y: 18, dx: 5, w: 3, h: 3, kind: 'white' }, draw(g) {
+    poly(g, [[8, 30], [40, 30], [46, 64], [2, 64]], PAL.w3); poly(g, [[27, 30], [40, 30], [46, 64], [29, 64]], PAL.w2);
+    for (let i = 0; i < 4; i++) ell(g, 24, 34 + i * 7, 3, 3, i % 2 ? PAL.r3 : PAL.k1);
+    poly(g, [[8, 30], [14, 30], [10, 38]], PAL.r3); poly(g, [[40, 30], [34, 30], [38, 38]], PAL.r3);
+    arms(g, PAL.w3, PAL.w2, 33, 55, PAL.w3);
+    head(g, 24, 18, 9, 10, PAL.w3, PAL.w2); R(g, 12, 6, 5, 8, PAL.r3); R(g, 31, 6, 5, 8, PAL.r3); ell(g, 14, 6, 4, 4, PAL.r3); ell(g, 34, 6, 4, 4, PAL.r3);
+    ell(g, 24, 22, 3, 3, PAL.r4); R(g, 20, 27, 8, 1, PAL.r3); P(g, 19, 26, PAL.r3); P(g, 28, 26, PAL.r3); R(g, 17, 13, 1, 6, PAL.b3); R(g, 30, 13, 1, 6, PAL.b3);
+  } },
+  // ---- El Teatro: El Apuntador y La Acomodadora ----
+  prompter: { eye: { y: 22, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    R(g, 2, 14, 44, 50, PAL.b1); poly(g, [[2, 14], [10, 4], [38, 4], [46, 14]], PAL.b1); poly(g, [[8, 20], [14, 10], [34, 10], [40, 20], [40, 64], [8, 64]], PAL.k0); R(g, 4, 14, 2, 50, PAL.b2); R(g, 42, 14, 2, 50, PAL.b2);
+    poly(g, [[13, 40], [35, 40], [40, 64], [8, 64]], PAL.k2); poly(g, [[25, 40], [35, 40], [40, 64], [27, 64]], PAL.k0);
+    R(g, 21, 33, 6, 6, PAL.t3); head(g, 24, 26, 7, 8, PAL.t3, PAL.t2); R(g, 16, 17, 16, 5, PAL.k0); R(g, 15, 19, 3, 8, PAL.k0); R(g, 30, 19, 3, 8, PAL.k0);
+    R(g, 15, 21, 18, 1, PAL.w1); R(g, 17, 21, 5, 4, PAL.w1); R(g, 26, 21, 5, 4, PAL.w1); R(g, 18, 22, 3, 2, PAL.k0); R(g, 27, 22, 3, 2, PAL.k0);
+    R(g, 14, 46, 20, 14, PAL.w3); R(g, 14, 46, 20, 1, PAL.w1); R(g, 24, 46, 1, 14, PAL.w1); for (let y = 49; y < 59; y += 3) { R(g, 16, y, 7, 1, PAL.r3); R(g, 26, y, 7, 1, PAL.t1); }
+    R(g, 10, 52, 5, 5, PAL.t3); R(g, 33, 52, 5, 5, PAL.t3); R(g, 20, 8, 8, 2, PAL.g1); P(g, 24, 6, '#ffd24a');
+  } },
+  usher: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[12, 28], [36, 28], [43, 64], [5, 64]], PAL.r2); poly(g, [[26, 28], [36, 28], [43, 64], [28, 64]], PAL.r1);
+    R(g, 12, 28, 6, 3, PAL.g1); R(g, 30, 28, 6, 3, PAL.g1); for (let y = 36; y < 58; y += 6) { R(g, 22, y, 4, 2, PAL.g1); }
+    arms(g, PAL.r2, PAL.r1, 31, 52, PAL.t4); poly(g, [[4, 48], [0, 40], [0, 58]], '#d9c36a'); g.globalAlpha = 0.45; poly(g, [[4, 50], [-2, 36], [-2, 62]], '#ffe9a0'); g.globalAlpha = 1; R(g, 3, 50, 7, 4, PAL.c4); R(g, 8, 51, 3, 2, PAL.c2);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.t4, PAL.t3); R(g, 14, 9, 20, 6, PAL.r3); R(g, 14, 9, 20, 1, PAL.g1); R(g, 17, 4, 14, 6, PAL.r3); R(g, 22, 3, 4, 2, PAL.g1);
+    R(g, 14, 12, 4, 10, PAL.k1); R(g, 30, 12, 4, 10, PAL.k0); R(g, 21, 22, 6, 1, PAL.r3); P(g, 24, 20, PAL.t2);
+  } },
+  // ---- Sala de Vigilancia: El Vigilante y El Conserje ----
+  watcher: { eye: { y: 19, dx: 4, w: 3, h: 2, kind: 'glow' }, draw(g) {
+    poly(g, [[9, 29], [39, 29], [45, 64], [3, 64]], PAL.c4); poly(g, [[27, 29], [39, 29], [45, 64], [30, 64]], PAL.c3);
+    R(g, 9, 29, 7, 3, PAL.c2); R(g, 32, 29, 7, 3, PAL.c2); R(g, 18, 34, 12, 8, PAL.k0); R(g, 19, 35, 10, 6, '#1f4f46'); R(g, 20, 36, 8, 1, '#4fd6b4'); R(g, 20, 38, 5, 1, '#4fd6b4');
+    R(g, 3, 52, 42, 12, PAL.c1); for (let i = 0; i < 4; i++) { R(g, 5 + i * 10, 54, 8, 7, PAL.k0); R(g, 6 + i * 10, 55, 6, 5, i % 2 ? '#1f4f46' : '#2f3f6a'); R(g, 7 + i * 10, 56, 4, 1, i % 2 ? '#4fd6b4' : '#7a9ad8'); }
+    arms(g, PAL.c4, PAL.c3, 33, 51, PAL.t3);
+    R(g, 21, 24, 6, 5, PAL.t3); head(g, 24, 18, 7, 8, PAL.t3, PAL.t2); R(g, 14, 8, 20, 6, PAL.c2); R(g, 12, 13, 24, 3, PAL.c1); R(g, 21, 9, 6, 4, PAL.g1); R(g, 22, 10, 4, 2, PAL.k0); R(g, 21, 24, 6, 1, PAL.t1);
+  } },
+  concierge: { eye: { y: 17, dx: 4, w: 3, h: 2, kind: 'white' }, draw(g) {
+    poly(g, [[10, 28], [38, 28], [45, 64], [3, 64]], PAL.b2); poly(g, [[27, 28], [38, 28], [45, 64], [30, 64]], PAL.b1);
+    poly(g, [[19, 28], [29, 28], [24, 48]], PAL.w3); R(g, 23, 29, 2, 14, PAL.g1); for (const y of [34, 40, 46]) R(g, 22, y, 4, 2, PAL.g1);
+    arms(g, PAL.b2, PAL.b1, 31, 53, PAL.t4); ell(g, 38, 46, 5, 5, PAL.g1); ell(g, 38, 46, 3, 3, PAL.b1); R(g, 40, 49, 2, 10, PAL.g1); R(g, 40, 54, 4, 2, PAL.g1); R(g, 40, 58, 5, 2, PAL.g1);
+    ell(g, 10, 46, 4, 4, PAL.g1); ell(g, 10, 46, 2, 2, PAL.b1); R(g, 9, 49, 2, 8, PAL.g1); R(g, 6, 54, 4, 2, PAL.g1);
+    R(g, 21, 23, 6, 5, PAL.t4); head(g, 24, 17, 7, 8, PAL.t4, PAL.t3); R(g, 16, 7, 16, 4, PAL.w1); R(g, 15, 9, 3, 6, PAL.w1); R(g, 30, 9, 3, 6, PAL.w1);
+    ell(g, 20, 17, 3, 3, PAL.g1); ell(g, 28, 17, 3, 3, PAL.g1); ell(g, 20, 17, 2, 2, PAL.k0); ell(g, 28, 17, 2, 2, PAL.k0); R(g, 22, 17, 4, 1, PAL.g1); R(g, 20, 22, 8, 1, PAL.w1);
   } }
 };
 const _bodyCache = {};
@@ -499,6 +585,40 @@ SCENES.infirmary = function (g, w, h, rnd) {
   const ix = Math.round(w * 0.64); R(g, ix, fy - Math.round(h * 0.26), 1, Math.round(h * 0.26), PAL.c4); R(g, ix - 4, fy - Math.round(h * 0.26), 9, 1, PAL.c4); R(g, ix - 3, fy - Math.round(h * 0.26) + 1, 3, 6, '#b8c8c4'); R(g, ix - 2, fy - Math.round(h * 0.26) + 7, 1, Math.round(h * 0.1), '#b8c8c4'); R(g, ix - 3, fy - 2, 7, 2, PAL.c4);
   lights(g, w, h, [{ x: w * 0.5, y: h * 0.06, r: h * 0.7, a: 0.6 }], [190, 215, 205]); specks(g, w, h, rnd, Math.round(w * h / 700), '#b8c8c4');
 };
+
+SCENES.theatre = function (g, w, h, rnd) {
+  const fy = Math.round(h * 0.6), cx = Math.round(w / 2), top = Math.round(h * 0.1), cw = Math.round(w * 0.2);
+  vgrad(g, w, 0, fy, '#14080a', '#2a1012');
+  for (let y = 0; y < fy; y += 10) R(g, 0, y, w, 1, '#1c0b0d');
+  for (const side of [0, 1]) {
+    const x0 = side ? w - cw : 0;
+    for (let x = 0; x < cw; x++) { const f = Math.sin((x + side * 2) * 0.85) * 0.5 + 0.5; R(g, x0 + x, 0, 1, fy + 3, f > 0.66 ? PAL.r4 : f > 0.33 ? PAL.r3 : PAL.r2); }
+    R(g, side ? x0 : x0 + cw - 2, 0, 2, fy + 3, PAL.r1);
+  }
+  R(g, 0, 0, w, top, PAL.r2); for (let x = 0; x < w; x += 8) ell(g, x + 4, top, 5, 4, PAL.r3); R(g, 0, top + 3, w, 1, PAL.g1);
+  floorPersp(g, w, fy, h, PAL.b3, PAL.b1, 0.3); R(g, 0, fy - 1, w, 2, PAL.k0); R(g, 0, fy + 1, w, 1, PAL.g1);
+  g.globalAlpha = 0.17; poly(g, [[cx - w * 0.03, top], [cx + w * 0.03, top], [cx + w * 0.2, fy + (h - fy) * 0.55], [cx - w * 0.2, fy + (h - fy) * 0.55]], '#ffe9a8'); g.globalAlpha = 1;
+  g.globalAlpha = 0.5; ell(g, cx, fy + (h - fy) * 0.5, Math.round(w * 0.19), Math.max(2, Math.round((h - fy) * 0.15)), '#8a6a3a'); g.globalAlpha = 1;
+  const sy = h - Math.round(h * 0.11), n = 9;
+  for (let i = 0; i < n; i++) { const x = Math.round(i * w / (n - 1)) - 8, bw = Math.round(w / (n - 1)) + 6; R(g, x, sy + 4, bw, h - sy, PAL.k0); ell(g, x + bw / 2, sy + 4, bw / 2, Math.max(4, Math.round(h * 0.035)), PAL.k0); R(g, x + 3, sy + 2, bw - 6, 1, PAL.r1); }
+  lights(g, w, h, [{ x: cx, y: fy * 0.85, r: h * 0.75, a: 0.75 }, { x: cw * 0.5, y: fy * 0.5, r: h * 0.3, a: 0.25 }, { x: w - cw * 0.5, y: fy * 0.5, r: h * 0.3, a: 0.25 }]); specks(g, w, h, rnd, Math.round(w * h / 800), '#d8b888');
+};
+SCENES.security = function (g, w, h, rnd) {
+  const fy = Math.round(h * 0.74), cols = 6, rows = 3, mw = Math.floor(w / (cols + 1)), mh = Math.max(6, Math.floor(h * 0.17)), x0 = Math.round((w - cols * mw) / 2), y0 = Math.round(h * 0.05);
+  R(g, 0, 0, w, h, '#06100f'); vgrad(g, w, 0, fy, '#07120f', '#0d1d1a');
+  const tints = [['#1f4f46', '#7dd6c0'], ['#243a5c', '#8fb0e8'], ['#3a4a40', '#aac4b0']];
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const x = x0 + c * mw + 1, y = y0 + r * (mh + 4), T = tints[(c + r * 2) % 3];
+    R(g, x - 1, y - 1, mw - 1, mh + 2, PAL.k0); R(g, x, y, mw - 3, mh, '#0a1816');
+    for (let yy = 0; yy < mh; yy += 2) R(g, x, y + yy, mw - 3, 1, ((yy + c * 2 + r) % 6 === 0) ? T[0] : '#102a26');
+    R(g, x + 2, y + mh - 4, 5, 3, T[1]); R(g, x + 9, y + mh - 3, Math.max(3, mw - 15), 2, T[1]); if (rnd() < 0.35) R(g, x + 2, y + 2, mw - 7, 1, T[1]);
+  }
+  R(g, 0, fy, w, h - fy, '#080d0c'); R(g, 0, fy, w, 4, PAL.c3); R(g, 0, fy + 4, w, 2, PAL.k0);
+  const kx = Math.round(w * 0.3), kw = Math.round(w * 0.4); R(g, kx, fy - 3, kw, 4, PAL.c2); for (let x = kx + 2; x < kx + kw - 2; x += 3) R(g, x, fy - 2, 2, 1, PAL.c4);
+  ell(g, cx0(w), fy + 14 > h ? h - 4 : fy + 14, Math.round(w * 0.1), Math.round(h * 0.08), PAL.k0); R(g, Math.round(w / 2) - 2, fy + 6, 4, Math.round(h * 0.2), PAL.k0);
+  lights(g, w, h, [{ x: w * 0.5, y: h * 0.18, r: h * 0.95, a: 0.7 }], [90, 215, 190]); specks(g, w, h, rnd, Math.round(w * h / 900), '#7dd6c0');
+};
+const cx0 = w => Math.round(w / 2);
 SCENES.menu = SCENES.casino; SCENES.table = SCENES.casino;
 export function backgroundCanvas(kind, w, h, seed = 1) {
   const [c, g] = mk(w, h), rnd = mulberry32(hashStr(kind + seed));

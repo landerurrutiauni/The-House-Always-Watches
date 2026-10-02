@@ -13,7 +13,7 @@ mission.reward.mod|una mejora de carta|a card upgrade|une amélioration de carte
 mission.reward.level|un nivel de mano|a hand level|un niveau de main|eine Handstufe
 mission.reward.joker|un comodín|a joker|un joker|ein Joker
 mission.salon_win2|Gana 2 rondas de cartas|Win 2 card rounds|Gagne 2 manches de cartes|Gewinne 2 Kartenrunden
-mission.salon_straight|Juega una escalera|Play a straight|Joue une suite|Spiele eine Straße
+mission.salon_straight|Juega una Escalera, una Escalera de color o una Escalera real|Play a Straight, a Straight flush or a Royal flush|Joue une Suite, une Quinte flush ou une Quinte flush royale|Spiele eine Straße, einen Straight Flush oder einen Royal Flush
 mission.salon_duel|Gana un duelo de la escopeta|Win a shotgun duel|Gagne un duel du fusil|Gewinne ein Schrotflinten-Duell
 mission.pasillo_events|Resuelve 3 eventos|Resolve 3 events|Résous 3 événements|Löse 3 Ereignisse
 mission.pasillo_clean|Gana una ronda sin descartar|Win a round without discarding|Gagne une manche sans défausser|Gewinne eine Runde ohne Abwerfen
@@ -22,10 +22,10 @@ mission.sotano_rest|Descansa una vez|Rest once|Repose-toi une fois|Rast einmal
 mission.sotano_big|Puntúa 300 o más con una sola jugada|Score 300 or more with a single play|Marque 300 ou plus en un seul coup|Erziele 300 oder mehr mit einem einzigen Zug
 mission.sotano_win3|Gana 3 rondas de cartas|Win 3 card rounds|Gagne 3 manches de cartes|Gewinne 3 Kartenrunden
 mission.capilla_events|Resuelve 2 eventos|Resolve 2 events|Résous 2 événements|Löse 2 Ereignisse
-mission.capilla_flush|Juega un color (o mejor)|Play a flush (or better)|Joue une couleur (ou mieux)|Spiele einen Flush (oder besser)
+mission.capilla_flush|Juega un Color, una Escalera de color o una Escalera real|Play a Flush, a Straight flush or a Royal flush|Joue une Couleur, une Quinte flush ou une Quinte flush royale|Spiele einen Flush, einen Straight Flush oder einen Royal Flush
 mission.capilla_listen|Escucha una cámara en un duelo|Listen to a chamber in a duel|Écoute une chambre pendant un duel|Horche in einem Duell eine Kammer ab
 mission.cocinas_buy2|Compra 2 cosas al Vendedor|Buy 2 things from the Vendor|Achète 2 choses au Vendeur|Kaufe 2 Dinge beim Händler
-mission.cocinas_full|Juega un full (o mejor)|Play a full house (or better)|Joue un full (ou mieux)|Spiele ein Full House (oder besser)
+mission.cocinas_full|Juega un Full o una mano mejor (Póker, Escalera de color, Escalera real, Repóker)|Play a Full house or better (Four of a kind, Straight flush, Royal flush, Five of a kind)|Joue un Full ou mieux (Carré, Quinte flush, Quinte flush royale, Cinq identiques)|Spiele ein Full House oder besser (Vierling, Straight Flush, Royal Flush, Fünfling)
 mission.cocinas_win2|Gana 2 rondas de cartas|Win 2 card rounds|Gagne 2 manches de cartes|Gewinne 2 Kartenrunden
 mission.enf_rest2|Descansa 2 veces|Rest twice|Repose-toi deux fois|Rast zweimal
 mission.enf_low|Gana una ronda con menos de 40 de Cordura|Win a round with Sanity below 40|Gagne une manche avec moins de 40 de Raison|Gewinne eine Runde mit weniger als 40 Verstand
@@ -71,3 +71,13 @@ archive.eggs|Secretos|Secrets|Secrets|Geheimnisse
 archive.missions|Misiones cumplidas|Missions completed|Missions accomplies|Erfüllte Missionen
 archive.hint|Pista|Hint|Indice|Hinweis
 archive.char_locked|Aún no has coincidido con este personaje.|You haven’t crossed paths with this character yet.|Tu n’as pas encore croisé ce personnage.|Du bist diesem Charakter noch nicht begegnet.
+rotate.text|Gira el dispositivo: el juego está pensado en horizontal. Si prefieres seguir en vertical, el escenario se girará.|Rotate your device: the game is designed for landscape. If you’d rather stay in portrait, the stage will be turned.|Tourne ton appareil : le jeu est conçu en mode paysage. Si tu préfères rester en portrait, la scène sera tournée.|Dreh dein Gerät: Das Spiel ist für Querformat gemacht. Wenn du im Hochformat bleiben willst, wird die Bühne gedreht.
+rotate.play|JUGAR EN VERTICAL|PLAY IN PORTRAIT|JOUER EN PORTRAIT|IM HOCHFORMAT SPIELEN
+archive.tab.endings|Finales y recuerdos|Endings & memories|Fins et souvenirs|Enden & Erinnerungen
+archive.tab.chars|Personajes|Characters|Personnages|Figuren
+archive.tab.eggs|Secretos|Secrets|Secrets|Geheimnisse
+archive.tab.know|Saber|Knowledge|Savoir|Wissen
+archive.tab.stats|Datos|Stats|Données|Daten
+archive.page|Página {n}/{m}|Page {n}/{m}|Page {n}/{m}|Seite {n}/{m}
+archive.prev|Anterior|Previous|Précédent|Zurück
+archive.next|Siguiente|Next|Suivant|Weiter
