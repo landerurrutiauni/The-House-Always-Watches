@@ -99,6 +99,8 @@ with sync_playwright() as p:
         step('descanso', "() => { const T = window.__HOUSE_TEST; T.G.beginRun('salon'); T.G.enterRest(); }")
         step('suceso', "() => { const T = window.__HOUSE_TEST; T.G.beginRun('salon'); T.G.debugEvent('nun_2'); }")
         step('suceso+resultado', "() => 0", '[data-act=\"ev_choose\"]', lambda: (pg.evaluate("() => { document.querySelector('[data-act=\"ev_choose\"][data-arg=\"a\"]').click(); }"), pg.wait_for_timeout(1800)))
+        step('muerte', "() => { const T = window.__HOUSE_TEST, G = T.G; G.beginRun('salon'); T.st.gs.player.health = 0; T.st.gs.player.lives = 1; G.checkDeath(); }", '.deathscr')
+        step('menú+archivo', "() => { window.__HOUSE_TEST.st.gs.deaths = 2; window.__HOUSE_TEST.G.toMenu(); }", '[data-act="menu_archive"]')
         step('archivo', "() => { window.__HOUSE_TEST.G.openArchive(); }", '.archive')
         for tab in ['chars', 'eggs', 'know', 'stats']: step('archivo-' + tab, "() => { document.querySelector('[data-act=\"arc_tab\"][data-arg=\"" + tab + "\"]').click(); }", '.archive')
         step('ajustes', "() => { window.__HOUSE_TEST.G.toMenu(); setTimeout(() => document.querySelector('#view [data-act=\"settings\"]').click(), 60); }", '.modal')

@@ -115,7 +115,6 @@ img{image-rendering:pixelated}
 .menu-foot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:.8em;margin-top:6px}
 .menu-foot a,.menu-foot button{background:none;border:0;color:var(--t1);text-decoration:underline;cursor:pointer;padding:6px}
 .ver{text-align:center;font-size:.72em;color:var(--c4)}
-.secret-btn{letter-spacing:.5em}
 .intro{display:flex;flex-direction:column;align-items:center;min-height:100%;gap:18px;padding:12px;background:#000;cursor:pointer}
 .intro .line{font-size:1.5em;min-height:2.6em;text-align:center;max-width:26ch;color:var(--w2)}
 .intro .line.you{color:var(--t1);font-style:italic}
@@ -570,3 +569,11 @@ p>.tag,li>.tag,b+.tag,h3>.tag,.say>.tag{margin-left:.45em}
 .hc .hrow-d .hr{color:#fff;border-color:#fff}.hc .hrow-d.you-hit .hr{color:#ffd0c8;border-color:#ffa095}.hc .hrow-d.foe-hit .hr{color:#e3f0b8;border-color:#e3f0b8}
 .hc .tip-pop .tp-tag,.hc .tip-pop .tp-title,.hc .tip-pop .tp-body{color:#fff}
 .hc :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ---------- Botón «Archivo»: visible desde el principio; bloqueado con su pista hasta abrirse ---------- */
+.btn.locked{border-style:dashed;display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.15;cursor:help}
+.btn.locked small{display:block;font-size:.7em;letter-spacing:.02em;text-transform:none;color:var(--t1)}
+.hc .btn.locked{background:#000;color:#fff;border:2px dashed #fff}
+.hc .btn.locked small{color:#e4e4e4}
+
+.hc .bigtitle.lose,.hc .lose{color:#ffa095}.hc .bigtitle.win,.hc .win{color:#d9ecae}

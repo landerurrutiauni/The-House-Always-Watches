@@ -78,10 +78,12 @@ export const getView = () => G.view;
 export function menuState() {
   return {
     hasSave: hasSave(), runInProgress: !!(gs.run), deaths: gs.deaths, endings: gs.meta.endings.slice(), run: gs.runNumber,
-    secretButton: secretButtonVisible(), introSeen: gs.meta.introSeen
+    secretButton: archiveUnlocked(), archive: archiveUnlocked(), introSeen: gs.meta.introSeen
   };
 }
-export const secretButtonVisible = () => gs.deaths >= 3 || gs.meta.endings.length >= 1 || know('k_watcher');
+// El Archivo (historia de los personajes, recuerdos, conocimiento, secretos y datos) se abre tras tu PRIMERA muerte, al ver un final o al saber que alguien te mira
+export const archiveUnlocked = () => gs.deaths >= 1 || gs.meta.endings.length >= 1 || know('k_watcher');
+export const secretButtonVisible = archiveUnlocked;   // nombre antiguo
 export function toMenu() { return setView({ type: 'menu', music: 'menu' }); }
 
 export function newGame() {

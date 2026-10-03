@@ -4,7 +4,7 @@ import { gs, settings, bus } from '../state.js';
 import { CONFIG } from '../config.js';
 import { t, setLang, getLang } from '../i18n.js';
 import { saveSettings } from '../save.js';
-import { h, btn, act, modal, ico, sigil, typewriter, closeTopModal, setBackground, announce, fsButton } from '../ui.js';
+import { h, btn, act, modal, ico, sigil, typewriter, closeTopModal, setBackground, announce, fsButton, toast } from '../ui.js';
 import { pixelText, characterEl, backgroundCanvas, PAL } from '../sprites.js';
 import { audioManager as audio } from '../audio.js';
 import { fx } from '../fx.js';
@@ -58,7 +58,8 @@ function menuScreen() {
     btn(t('menu.settings'), 'settings', null, ''),
     fsButton('text', ''),
     btn(t('menu.reset'), 'menu_reset', null, 'ghost danger', { disabled: !ms.hasSave }),
-    ms.secretButton ? btn(t('menu.secret'), 'menu_archive', null, 'ghost secret-btn', { 'aria-label': t('archive.title') }) : null,
+    ms.archive ? btn(t('menu.archive'), 'menu_archive', null, 'ghost')
+      : h('button', { type: 'button', class: 'btn ghost locked', 'data-act': 'menu_archive_locked', 'aria-label': t('menu.archive') + ': ' + t('menu.archive_locked') }, t('menu.archive'), h('small', null, t('menu.archive_locked'))),
     h('div', { class: 'menu-foot' }, h('a', { href: 'legal/privacy.html', target: '_blank', rel: 'noopener' }, t('menu.legal.privacy')), canOpenPreferences() ? h('button', { type: 'button', 'data-act': 'cookies' }, t('menu.cookies')) : null),
     h('div', { class: 'ver' }, t('menu.version', { v: CONFIG.VERSION }), ms.deaths ? ' · ' + t('menu.deaths', { n: ms.deaths }) : ''));
   const ch = characterEl('dealer', { scale: 5 });
@@ -70,6 +71,7 @@ act.menu_continue = () => { audio.unlock(); G.continueGame(); };
 act.menu_new = () => { audio.unlock(); const ms = G.menuState(); if (ms.runInProgress) confirmModal(t('menu.confirm_new.title'), t('menu.confirm_new.text'), () => G.newGame()); else G.newGame(); };
 act.menu_reset = () => confirmModal(t('menu.confirm_reset.title'), t('menu.confirm_reset.text'), () => confirmModal(t('menu.confirm_reset.title'), t('menu.confirm_reset.text2'), () => G.resetAll(), true), true);
 act.menu_archive = () => G.openArchive();
+act.menu_archive_locked = () => toast(t('menu.archive_locked_long'), 'info');   // el Archivo aún no está abierto: se explica cómo abrirlo
 act.cookies = () => openPreferences();
 
 // ---------------- Intro ----------------
@@ -107,9 +109,10 @@ function deathScreen(v) {
     h('h2', { class: 'bigtitle lose' }, t('death.title')), h('p', { class: 'say' }, t('death.sub')),
     h('div', { class: 'panel ledger' }, h('span', null, t('death.debt')), h('b', { class: 'red' }, ico('ledger'), ' ' + v.carry), h('span', null, t('death.memories')), h('b', null, (v.allMemories || []).length + '/' + MEMORY_ORDER.length), h('span', null, t('death.knowledge')), h('b', null, (v.knowledge || []).length + '/' + KNOWLEDGE.length), h('span', null, t('death.deaths', { n: '' })), h('b', null, v.deaths)),
     h('div', { class: 'panel', style: 'width:min(520px,94%)' }, h('h3', null, t('death.memories')), mems.length ? h('ul', { class: 'memlist' }, ...mems) : h('p', { class: 'muted' }, t('death.none'))),
-    btn(t('death.retry'), 'death_next', null, 'primary'));
+    h('div', { class: 'row center' }, btn(t('death.retry'), 'death_next', null, 'primary'), btn(t('menu.archive'), 'death_archive', null, 'ghost')));
 }
 act.death_next = () => G.afterDeath();
+act.death_archive = () => G.openArchive();   // el lore (personajes, recuerdos, saber) está en el Archivo
 
 // ---------------- Puerta final ----------------
 function doorScreen(v) {

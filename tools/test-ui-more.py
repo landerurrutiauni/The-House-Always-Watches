@@ -31,9 +31,9 @@ PROBE = """(() => { const o = AudioNode.prototype.connect; window.__peak = 0;
 PROBE2 = """(() => { const o = AudioNode.prototype.connect; window.__peak2 = 0; window.__cs = 0; window.__ce = 0;
   window.__fftReset = () => { window.__peak2 = 0; window.__cs = 0; window.__ce = 0; }; window.__fftCentroid = () => (window.__ce > 0 ? window.__cs / window.__ce : 0);
   AudioNode.prototype.connect = function (d, ...r) { const x = o.call(this, d, ...r);
-    try { if (d && d.constructor && d.constructor.name === 'AudioDestinationNode' && !window.__an2) { const ctx = this.context, an = ctx.createAnalyser(); an.fftSize = 2048; an.smoothingTimeConstant = 0; o.call(this, an); window.__an2 = an; const buf = new Float32Array(an.fftSize), fq = new Uint8Array(an.frequencyBinCount), hz = ctx.sampleRate / an.fftSize;
+    try { if (d && d.constructor && d.constructor.name === 'AudioDestinationNode' && !window.__an2) { const ctx = this.context, an = ctx.createAnalyser(); an.fftSize = 2048; an.smoothingTimeConstant = 0; o.call(this, an); window.__an2 = an; const buf = new Float32Array(an.fftSize), fq = new Float32Array(an.frequencyBinCount), hz = ctx.sampleRate / an.fftSize;
       setInterval(() => { an.getFloatTimeDomainData(buf); let m = 0; for (let i = 0; i < buf.length; i++) m = Math.max(m, Math.abs(buf[i])); window.__peak2 = Math.max(window.__peak2, m);
-        if (m > 0.01) { an.getByteFrequencyData(fq); let e = 0, c = 0; for (let i = 1; i < fq.length; i++) { const v = (fq[i] / 255) ** 2; e += v; c += v * i * hz; } if (e > 0) { window.__cs += c; window.__ce += e; } } }, 15); } } catch (err) {}
+        if (m > 0.01) { an.getFloatFrequencyData(fq); let e = 0, c = 0; for (let i = 1; i < fq.length; i++) { if (fq[i] < -75) continue; const v = Math.pow(10, fq[i] / 10); e += v; c += v * i * hz; } if (e > 0) { window.__cs += c; window.__ce += e; } } }, 15); } } catch (err) {}
     return x; }; })();"""
 
 with sync_playwright() as p:
@@ -362,7 +362,7 @@ with sync_playwright() as p:
     results = {}
     for says in (True, False):
         pg.evaluate("""async (says) => { const T = window.__HOUSE_TEST, G = T.G; G.beginRun('salon'); G.enterDuelSetup({ id: 'r2c0', row: 2, kind: 'shotgun', opp: { id: 'gambler', look: 'gambler_d' } }); window.__names = [];
-          const m = await import('/src/sfx.js'); if (!window.__patched) { window.__patched = true; const orig = m.sfx.play.bind(m.sfx); m.sfx.play = (n, o) => { window.__names.push(n); return orig(n, o); }; } }""", says)
+          const m = await import('/src/sfx.js'); if (!window.__patched) { window.__patched = true; const orig = m.sfx.play.bind(m.sfx); m.sfx.play = (n, o) => { window.__names.push(n); if (/^listen_/.test(n)) window.__fftReset(); return orig(n, o); }; } }""", says)
         pg.wait_for_selector('[data-act="duel_stake"][data-arg="money"]'); pg.click('[data-act="duel_stake"][data-arg="money"]'); pg.wait_for_selector('.drum .ch')
         pg.evaluate("""(says) => { const D = window.__HOUSE_TEST.G.G.D; D.rng.chance = () => true; D.chambers[D.pos] = says; D.turn = 'p'; window.__HOUSE_TEST.st.gs.player.sanity = 80; }""", says)
         pg.evaluate("() => { window.__names = []; window.__fftReset(); }")
@@ -372,7 +372,7 @@ with sync_playwright() as p:
     check('L1 si crees oír una bala suena «listen_loaded»; si crees oír vacío, «listen_empty» (y nada más del tipo escuchar)', L['names'] == ['listen_loaded'] and E['names'] == ['listen_empty'], (L['names'], E['names']))
     check('L2 el texto y el marco acompañan: «Crees oír… una bala» con marco is-loaded; «…vacío» con is-empty', 'is-loaded' in L['cls'] and 'bala' in L['txt'] and 'is-empty' in E['cls'] and 'vacío' in E['txt'], (L['cls'], L['txt'], E['cls'], E['txt']))
     check('L3 los dos sonidos se OYEN de verdad en la salida de audio (pico > 0,03 en ambos)', L['peak'] > 0.03 and E['peak'] > 0.03, (L['peak'], E['peak']))
-    check('L4 y SUENAN distinto: el de «cargada» es grave (centroide espectral bajo) y el de «vacía» es agudo (al menos 2× más alto)', L['cent'] > 0 and E['cent'] > 1.8 * L['cent'], {'cargada_Hz': round(L['cent']), 'vacia_Hz': round(E['cent'])})
+    check('L4 y SUENAN distinto: el de «cargada» es grave (centroide ≈ 200 Hz) y el de «vacía» es agudo (≈ 2,7 kHz: al menos 4× más alto)', L['cent'] > 0 and E['cent'] > 4 * L['cent'], {'cargada_Hz': round(L['cent']), 'vacia_Hz': round(E['cent'])})
     check('L5 sin errores JS al escuchar', not pg.errs, pg.errs[:2]); ctx.close()
 
     # ---------- 16) Niebla: las cartas ocultas no se ordenan ----------
@@ -405,6 +405,33 @@ with sync_playwright() as p:
     pg.evaluate("() => { window.__HOUSE_TEST.G.leaveToMenu(); }"); pg.wait_for_timeout(5500)
     st17 = pg.evaluate("() => ({ view: window.__HOUSE_TEST.G.getView().type, duel: document.querySelectorAll('.duel2, .duel').length })")
     check('N7 si sales del duelo con la narración en curso (p. ej. «Volver al inicio»), la narración se detiene: sin errores y la pantalla sigue siendo el menú', st17['view'] == 'menu' and st17['duel'] == 0 and not pg.errs, (st17, pg.errs[:2])); ctx.close()
+
+    # ---------- 18) El Archivo (lore de personajes y más) se encuentra ----------
+    ctx, pg = boot(b)
+    ARC = """() => { const st = document.querySelector('#stage').getBoundingClientRect(), k = st.width / 1280; const b = document.querySelector('[data-act="menu_archive"], [data-act="menu_archive_locked"]'); if (!b) return null; const r = b.getBoundingClientRect(); const m = document.querySelector('.menu-main').getBoundingClientRect();
+      return { act: b.dataset.act, txt: b.textContent.trim(), locked: b.getAttribute('aria-disabled') === 'true', bottom: Math.round((m.bottom - st.top) / k), btnBottom: Math.round((r.bottom - st.top) / k) }; }"""
+    pg.evaluate("() => { const T = window.__HOUSE_TEST; T.st.gs.meta.introSeen = true; T.st.gs.deaths = 0; T.st.gs.meta.endings = []; T.G.toMenu(); }"); pg.wait_for_selector('.menu-main'); pg.wait_for_timeout(500)
+    a0 = pg.evaluate(ARC)
+    check('V1 en un perfil nuevo el menú YA muestra «Archivo» (bloqueado, con su pista «Se abre tras tu primera muerte») y cabe en el escenario', a0 and a0['act'] == 'menu_archive_locked' and 'Archivo' in a0['txt'] and 'primera muerte' in a0['txt'] and a0['bottom'] <= 715, a0); shot(pg, 'menu_archive_locked')
+    pg.click('[data-act="menu_archive_locked"]'); pg.wait_for_timeout(300)
+    tv = pg.evaluate("() => ({ toast: (document.querySelector('#toasts .toast') || {}).textContent || '', archive: document.querySelectorAll('.archive').length })")
+    check('V2 pulsarlo bloqueado NO abre el Archivo y explica qué guarda y cuándo se abre', tv['archive'] == 0 and 'historia de cada personaje' in tv['toast'] and 'primera vez' in tv['toast'], tv)
+    pg.evaluate("() => { const T = window.__HOUSE_TEST; T.st.gs.deaths = 1; T.G.toMenu(); }"); pg.wait_for_selector('[data-act="menu_archive"]'); pg.wait_for_timeout(400); a1 = pg.evaluate(ARC)
+    check('V3 tras la PRIMERA muerte el botón se abre, se llama «Archivo» (no «???») y sigue cabiendo en el menú', a1 and a1['act'] == 'menu_archive' and a1['txt'].lower() == 'archivo' and a1['bottom'] <= 715, a1); shot(pg, 'menu_archive_open')
+    pg.evaluate("() => { const T = window.__HOUSE_TEST; for (const id of ['girl', 'nun']) T.FX.discoverCharacter(id); }")
+    pg.click('[data-act="menu_archive"]'); pg.wait_for_selector('.archive'); pg.wait_for_timeout(300)
+    ar = pg.evaluate("() => ({ title: (document.querySelector('.archive h2, .archive .bigtitle, #view h2') || {}).textContent || '', tabs: [...document.querySelectorAll('.arc-tabs button')].map(b => b.dataset.arg) })")
+    check('V4 el Archivo se titula «Archivo» y ofrece Finales y recuerdos / Personajes / Secretos / Saber / Datos', ar['title'].strip().lower() == 'archivo' and ar['tabs'] == ['endings', 'chars', 'eggs', 'know', 'stats'], ar)
+    pg.click('[data-act="arc_tab"][data-arg="chars"]'); pg.wait_for_timeout(300)
+    bios = pg.evaluate("() => [...document.querySelectorAll('.arc-char:not(.off)')].map(e => e.textContent.length)")
+    check('V5 la pestaña Personajes enseña la biografía (lore) de los personajes que has conocido', len(bios) == 2 and all(n > 80 for n in bios), bios)
+    pg.click('.archive [data-act="archive_back"]'); pg.wait_for_selector('.menu-main'); pg.evaluate("() => { const T = window.__HOUSE_TEST; T.st.gs.deaths = 0; T.st.gs.meta.endings = []; }")
+    # pantalla de muerte con acceso directo al Archivo
+    pg.evaluate("() => { const T = window.__HOUSE_TEST, G = T.G; G.newGame(); G.introDone(); G.beginRun('salon'); T.st.gs.player.health = 0; T.st.gs.player.lives = 1; G.checkDeath(); }"); pg.wait_for_selector('.deathscr', timeout=6000); pg.wait_for_timeout(400)
+    dv = pg.evaluate("() => ({ btns: [...document.querySelectorAll('.deathscr .btn')].map(b => b.dataset.act), scroll: document.querySelector('#view').scrollHeight - document.querySelector('#view').clientHeight, off: [...document.querySelectorAll('.deathscr .btn')].some(b => { const r = b.getBoundingClientRect(), s = document.querySelector('#stage').getBoundingClientRect(); return r.bottom > s.bottom + 2; }) })")
+    check('V6 la pantalla de muerte tiene el botón «Archivo» junto a «Volver a intentarlo», sin deslizar ni salirse', 'death_archive' in dv['btns'] and 'death_next' in dv['btns'] and dv['scroll'] <= 2 and not dv['off'], dv); shot(pg, 'death_archive')
+    pg.click('[data-act="death_archive"]'); pg.wait_for_selector('.archive'); check('V7 desde la muerte, «Archivo» abre el Archivo (donde está el lore)', pg.locator('.arc-tabs').count() == 1)
+    check('V8 sin errores JS al buscar el Archivo', not pg.errs, pg.errs[:2]); ctx.close()
     b.close()
 
 bad = [n for n, ok in res if not ok]

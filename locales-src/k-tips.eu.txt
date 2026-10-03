@@ -9,3 +9,6 @@ hud.deck.tip|Ikusi zure karta guztiak, bereziak nabarmenduta. Palu, balio, berez
 duel.cap.heard_loaded|KARGATUTA?
 duel.cap.heard_empty|HUTSIK?
 table.sort_fog|Lainoarekin, ezkutuko kartak dauden lekuan geratzen dira.
+menu.archive|Artxiboa
+menu.archive_locked|Zure lehen heriotzaren ondoren irekitzen da
+menu.archive_locked_long|Artxiboak pertsonaia bakoitzaren istorioa, zure oroitzapenak eta dakizuna gordetzen ditu. Lehen aldiz hiltzen zarenean edo amaiera bat ikusten duzunean irekitzen da.

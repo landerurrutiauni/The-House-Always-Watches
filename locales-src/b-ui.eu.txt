@@ -35,7 +35,6 @@ menu.new|PARTIDA BERRIA
 menu.continue|JARRAITU
 menu.reset|AURRERAPENA BERRABIARAZI
 menu.settings|EZARPENAK
-menu.secret|???
 menu.cookies|Cookieak
 menu.legal.privacy|Pribatutasuna eta oharra
 menu.version|v{v}
@@ -213,7 +212,7 @@ death.knowledge|EZAGUTZA
 death.deaths|Heriotzak {n}
 death.none|Oraindik bat ere ez. Jarraitu kontuz hiltzen.
 death.retry|MAHAIRA ITZULI
-archive.title|???
+archive.title|Artxiboa
 archive.endings|Amaierak
 archive.chars|Pertsonaiak
 archive.memories|Oroitzapenak

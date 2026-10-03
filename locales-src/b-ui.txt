@@ -36,7 +36,6 @@ menu.new|NUEVA PARTIDA|NEW GAME|NOUVELLE PARTIE|NEUES SPIEL
 menu.continue|CONTINUAR|CONTINUE|CONTINUER|WEITERSPIELEN
 menu.reset|REINICIAR PROGRESO|RESET PROGRESS|RÉINITIALISER LA PROGRESSION|FORTSCHRITT ZURÜCKSETZEN
 menu.settings|AJUSTES|SETTINGS|PARAMÈTRES|EINSTELLUNGEN
-menu.secret|???|???|???|???
 menu.cookies|Cookies|Cookies|Cookies|Cookies
 menu.legal.privacy|Privacidad y aviso|Privacy and notice|Confidentialité et avertissement|Datenschutz und Hinweise
 menu.version|v{v}|v{v}|v{v}|v{v}
@@ -214,7 +213,7 @@ death.knowledge|CONOCIMIENTO|KNOWLEDGE|CONNAISSANCES|WISSEN
 death.deaths|Muertes {n}|Deaths {n}|Morts {n}|Tode {n}
 death.none|Ninguno todavía. Sigue muriendo con cuidado.|None yet. Keep dying carefully.|Aucun pour l’instant. Continue de mourir avec soin.|Noch keine. Stirb weiter mit Bedacht.
 death.retry|VOLVER A LA MESA|BACK TO THE TABLE|RETOUR À LA TABLE|ZURÜCK AN DEN TISCH
-archive.title|???|???|???|???
+archive.title|Archivo|Archive|Archives|Archiv
 archive.endings|Finales|Endings|Fins|Enden
 archive.chars|Personajes|Characters|Personnages|Figuren
 archive.memories|Recuerdos|Memories|Souvenirs|Erinnerungen

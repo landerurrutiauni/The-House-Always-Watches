@@ -89,8 +89,8 @@ def main():
                         if els: rnd.choice(els).click(timeout=1500, force=True)
                     pg.wait_for_timeout(100); continue
                 if v == 'menu':
-                    if pg.query_selector('.secret-btn') and rnd.random() < 0.35:
-                        pg.click('.secret-btn'); pg.wait_for_timeout(200); continue
+                    if pg.query_selector('[data-act="menu_archive"]') and rnd.random() < 0.35:
+                        pg.click('[data-act="menu_archive"]'); pg.wait_for_timeout(200); continue
                     pg.click('[data-act="menu_continue"]:not([disabled])' if pg.query_selector('[data-act="menu_continue"]:not([disabled])') else '[data-act="menu_new"]')
                     pg.wait_for_timeout(300)
                     if pg.query_selector('.modal'): pg.click('.modal .btn.primary, .modal .btn.danger')

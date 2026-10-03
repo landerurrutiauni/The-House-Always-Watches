@@ -334,4 +334,20 @@ await T('Alto contraste: el tema tiene reglas para los componentes añadidos des
   assert.ok(/classList\.add\('hc'\)/.test(fs.readFileSync(new URL('../legal/legal.js', import.meta.url), 'utf8')), 'legal.js aplica .hc'); assert.ok(/\.hc\{/.test(fs.readFileSync(new URL('../legal/legal.css', import.meta.url), 'utf8')), 'legal.css tiene .hc');
 });
 
+
+console.log('6.ª tanda: el Archivo (lore) se encuentra');
+await T('El Archivo se abre tras la PRIMERA muerte, al ver un final o con «Norbaitek begiratzen du»; antes no', () => {
+  reset(); assert.equal(G.archiveUnlocked(), false, 'perfil nuevo: bloqueado'); assert.equal(G.menuState().archive, false);
+  gs.deaths = 1; assert.equal(G.archiveUnlocked(), true, 'tras la primera muerte'); assert.equal(G.menuState().archive, true); assert.equal(G.secretButtonVisible(), true, 'alias antiguo');
+  reset(); gs.meta.endings = ['partida']; assert.equal(G.archiveUnlocked(), true, 'tras un final');
+  reset(); E.learn('k_watcher'); assert.equal(G.archiveUnlocked(), true, 'al saber que alguien mira');
+});
+await T('El Archivo tiene nombre real en los 5 idiomas (no «???») y el menú explica cómo abrirlo', async () => {
+  const fs = await import('node:fs');
+  for (const l of ['es', 'en', 'fr', 'de', 'eu']) { const L = JSON.parse(fs.readFileSync(new URL('../locales/' + l + '.json', import.meta.url), 'utf8'));
+    assert.ok(L['archive.title'] && !/\?/.test(L['archive.title']), l + ': archive.title = ' + L['archive.title']); assert.ok(L['menu.archive'] && !/\?/.test(L['menu.archive']), l + ': menu.archive');
+    assert.ok(!('menu.secret' in L), l + ': menu.secret sigue existiendo'); assert.ok(L['menu.archive_locked'].length > 10 && L['menu.archive_locked_long'].length > 60, l + ': textos de bloqueo'); }
+  const es = JSON.parse(fs.readFileSync(new URL('../locales/es.json', import.meta.url), 'utf8')); assert.ok(/primera vez/.test(es['menu.archive_locked_long']) && /personaje/.test(es['menu.archive_locked_long']));
+});
+
 console.log(`\n${ok} ok, ${bad} fallos`); process.exit(bad ? 1 : 0);

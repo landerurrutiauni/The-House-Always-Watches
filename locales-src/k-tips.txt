@@ -9,3 +9,6 @@ hud.deck.tip|Mira todas tus cartas, con las especiales resaltadas. Puedes ordena
 duel.cap.heard_loaded|¿CARGADA?|LOADED?|CHARGÉE ?|GELADEN?
 duel.cap.heard_empty|¿VACÍA?|EMPTY?|VIDE ?|LEER?
 table.sort_fog|Con Niebla, las cartas ocultas se quedan donde están.|With Mist, hidden cards stay where they are.|Avec le Brouillard, les cartes cachées restent à leur place.|Bei Nebel bleiben verdeckte Karten an ihrem Platz.
+menu.archive|Archivo|Archive|Archives|Archiv
+menu.archive_locked|Se abre tras tu primera muerte|Opens after your first death|S’ouvre après ta première mort|Öffnet sich nach deinem ersten Tod
+menu.archive_locked_long|El Archivo guarda la historia de cada personaje, tus recuerdos y lo que sabes. Se abre cuando mueres por primera vez o ves un final.|The Archive keeps each character’s story, your memories and what you know. It opens the first time you die or see an ending.|Les Archives gardent l’histoire de chaque personnage, tes souvenirs et ce que tu sais. Elles s’ouvrent la première fois que tu meurs ou que tu vois une fin.|Das Archiv bewahrt die Geschichte jeder Figur, deine Erinnerungen und dein Wissen. Es öffnet sich, wenn du zum ersten Mal stirbst oder ein Ende siehst.
