@@ -249,7 +249,6 @@ settings.mute_music|Musika mututu
 settings.mute_sfx|Efektuak mututu
 settings.reduce_intense|Soinu biziak murriztu
 settings.display|Pantaila eta irisgarritasuna
-settings.text_size|Testuaren tamaina
 settings.quality|Kalitate grafikoa
 settings.q.high|Altua
 settings.q.medium|Ertaina

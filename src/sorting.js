@@ -11,7 +11,12 @@ const CMP = {
   special: (x, y) => nsp(x[0]) - nsp(y[0]) || suitIx(x[0]) - suitIx(y[0]) || pw(y[0]) - pw(x[0]) || x[1] - y[1],
   recent: (x, y) => y[1] - x[1]                                    // las últimas en llegar primero
 };
-export function sortCards(cards, mode = 'suit') {
+// `fixed`: uids que NO se mueven (cartas ocultas por la Niebla). Se quedan en su hueco y solo se ordenan las demás: así el orden nunca delata el valor de una carta oculta.
+export function sortCards(cards, mode = 'suit', fixed = null) {
   const cmp = CMP[mode]; if (!cmp) return cards.slice();
+  if (fixed && fixed.size && cards.some(c => fixed.has(c.uid))) {
+    const sorted = sortCards(cards.filter(c => !fixed.has(c.uid)), mode); let k = 0;
+    return cards.map(c => (fixed.has(c.uid) ? c : sorted[k++]));
+  }
   return cards.map((c, i) => [c, i]).sort(cmp).map(x => x[0]);
 }

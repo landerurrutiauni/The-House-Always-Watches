@@ -4,6 +4,7 @@
   'use strict';
   var LANGS = ['es', 'en', 'fr', 'de', 'eu'], NAMES = { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch', eu: 'Euskara' }, SETTINGS_KEY = 'thaw.settings.v1';
   var body = document.body, page = body.getAttribute('data-page') || 'privacy', GAME = body.getAttribute('data-game') || '../index.html';
+  try { var cs = JSON.parse(window.localStorage.getItem(SETTINGS_KEY) || 'null'); if (cs && cs.contrast) body.classList.add('hc'); } catch (e) { /* sin almacenamiento */ }
   var cache = {};
 
   function detect() {

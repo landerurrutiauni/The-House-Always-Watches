@@ -13,7 +13,7 @@ let tier = 0, whisperTimer = null, whisperOn = false;
 export const fx = {
   applyDisplay() {
     const b = document.body, d = document.documentElement;
-    d.style.setProperty('--ts', String(settings.textSize || 1));
+    d.style.removeProperty('--ts');   // el tamaño del texto es fijo (el escenario entero se escala a la ventana)
     b.classList.toggle('hc', !!settings.contrast); b.classList.toggle('reduce', !!settings.reduceEffects);
     for (const q of ['high', 'medium', 'low']) b.classList.toggle('q-' + q, settings.quality === q);
     setCharactersActive(!settings.reduceEffects && settings.quality !== 'low');

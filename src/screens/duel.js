@@ -108,7 +108,7 @@ function duelScreen(v) {
       h('div', { class: 'panel duel-narr' }, narrTitleEl, skipHint, narrEl),
       h('div', { class: 'panel duel-histp' }, h('h3', null, t('duel.h.title')), histEl)),
     actions);
-  if (D.over) { setTimeout(() => G.duelFinish(), 900); actions.querySelectorAll('.btn').forEach(b => { b.disabled = true; }); }
+  if (D.over) { setTimeout(() => { if (root.isConnected && G.G.D === D) G.duelFinish(); }, 900); actions.querySelectorAll('.btn').forEach(b => { b.disabled = true; }); }
   root.addEventListener('click', e => { if (busy && !e.target.closest('.duel-act')) { speedUp = true; if (cur) cur.skip(); } });
 
   // ---- Narración de un evento (un disparo) ----
@@ -156,11 +156,14 @@ function duelScreen(v) {
     if (busy || !pTurn) return; setBusy(true); speedUp = false; cap.textContent = '\u00a0'; cap.className = 'duel-cap';
     try {
       const r = G.duelShoot(at, { silent: true }); if (!r) return;
+      const alive = () => root.isConnected && G.G.D === D;   // si sales del duelo a media narración, se detiene
       let first = true;
-      for (const e of r.events) { await narrateEvent(e, first); first = false; if (e.over) break; }
+      for (const e of r.events) { if (!alive()) return; await narrateEvent(e, first); first = false; if (e.over) break; }
+      if (!alive()) return;
       cap.className = 'duel-cap'; cap.textContent = '\u00a0';
       if (!r.over) { await wait(600); setTitle(t('duel.turn_you')); }
       else await wait(900);
+      if (!alive()) return;
       busy = false; speedUp = false;
       if (r.over) G.duelFinish(); else G.duelView();
     } catch (err) { console.error('[duel]', err); } finally { busy = false; }
@@ -170,6 +173,7 @@ function duelScreen(v) {
     if (busy || !pTurn) return; const r = G.duelListen(); if (!r) return;
     setBusy(true); showCap('…', 'wait'); await wait(520);
     audio.playSFX(r.says ? 'listen_loaded' : 'listen_empty'); showCap(t(r.says ? 'duel.cap.heard_loaded' : 'duel.cap.heard_empty'), r.says ? 'bang' : 'click'); await wait(650);
+    if (!root.isConnected || G.G.D !== D) return;
     narr = [{ text: t(r.says ? 'duel.heard_loaded' : 'duel.heard_empty'), cls: 'good' }]; narrTitle = t('duel.turn_you'); busy = false; G.duelView();
   };
   act.duel_tool = async id => {

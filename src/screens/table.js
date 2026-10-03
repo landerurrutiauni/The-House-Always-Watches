@@ -86,7 +86,9 @@ function tableScreen(v) {
   const info = h('div', { class: 'cardinfo', 'aria-live': 'polite' });
   const pocket = h('div', { class: 'pocketbar' });
   const hand = h('div', { class: 'hand', role: 'group', 'aria-label': t('table.hand_label') });
-  const sortBox = h('span', { class: 'sortbtns', role: 'group', 'aria-label': t('table.sort_hint'), title: t('table.sort_hint') });
+  const sortBox = h('span', { class: 'sortbtns', role: 'group', 'aria-label': t('table.sort_hint') });
+  const fogged = () => !!(R.hidden && R.hidden.size);   // con Niebla, las cartas ocultas se quedan donde están
+  attachTip(sortBox, () => ({ title: t('deck.sort').replace(/[:：]\s*$/, ''), body: t('table.sort_hint') + (fogged() ? ' ' + t('table.sort_fog') : '') }));
   const drawSort = () => sortBox.replaceChildren(h('span', { class: 'muted' }, t('deck.sort')), ...['rank', 'suit'].map(k => h('button', { type: 'button', class: 'btn small' + (settings.handSort === k ? ' on' : ' ghost'), 'aria-pressed': settings.handSort === k ? 'true' : 'false', 'data-act': 'tb_sort', 'data-arg': k }, t('deck.sort.' + k))));
   drawSort();
   act.tb_sort = k => { settings.handSort = settings.handSort === k ? null : k; saveSettings(); drawHand(); drawSort(); };
@@ -131,7 +133,7 @@ function tableScreen(v) {
   }
   function drawHand() {
     hand.style.setProperty('--n', String(Math.max(5, R.hand.length)));
-    hand.replaceChildren(...(settings.handSort ? sortCards(R.hand, settings.handSort) : R.hand).map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid), hidden: R.hidden.has(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }));
+    hand.replaceChildren(...(settings.handSort ? sortCards(R.hand, settings.handSort, R.hidden) : R.hand).map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid), hidden: R.hidden.has(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }));
     fill(pocket, h('span', null, ico('pocket'), ' ' + t('table.pocket') + ' ' + R.pocket.length + '/' + R.mods.pocket), ...R.pocket.map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }), R.pocket.length ? h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'tb_unstash' }, t('table.unstash')) : null);
     peek.replaceChildren(); if (R.peekN > 0) { peek.append(h('span', null, ico('eye'), ' ' + t('table.peek'))); R.drawPile.slice(-R.peekN).reverse().forEach(c => peek.append(cardEl(c, { static: true, noname: true }))); }
     info.replaceChildren(st.info ? h('span', null, h('b', null, st.info.name), ' — ', st.info.desc) : h('span', { class: 'muted' }, t('table.tap_info')));

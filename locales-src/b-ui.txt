@@ -250,7 +250,6 @@ settings.mute_music|Silenciar música|Mute music|Couper la musique|Musik stummsc
 settings.mute_sfx|Silenciar efectos|Mute effects|Couper les effets|Effekte stummschalten
 settings.reduce_intense|Reducir sonidos intensos|Reduce intense sounds|Réduire les sons intenses|Intensive Klänge reduzieren
 settings.display|Pantalla y accesibilidad|Display and accessibility|Affichage et accessibilité|Anzeige und Barrierefreiheit
-settings.text_size|Tamaño del texto|Text size|Taille du texte|Textgröße
 settings.quality|Calidad gráfica|Graphics quality|Qualité graphique|Grafikqualität
 settings.q.high|Alta|High|Haute|Hoch
 settings.q.medium|Media|Medium|Moyenne|Mittel

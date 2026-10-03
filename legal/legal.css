@@ -16,3 +16,8 @@ a{color:#e8dcc0}
 .btn:hover{border-color:#e8dcc0}.btn.small{padding:.3em .7em;min-height:36px}.btn.on{background:#5c1515;border-color:#e8dcc0}
 .btn:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:2px}
 @media (max-width:520px){body{font-size:15px}.langs .btn{flex:1 1 40%;text-align:center}}
+
+/* Alto contraste (el mismo ajuste que el juego): texto blanco sobre negro, bordes blancos, enlaces subrayados */
+.hc{--bg:#000;--panel:#000;--line:#fff;--text:#fff;--muted:#e4e4e4;--gold:#ffe14d}
+.hc h1,.hc h2,.hc a{color:#fff}.hc a{text-decoration:underline}.hc .btn,.hc button,.hc select{background:#000;color:#fff;border:2px solid #fff}
+.hc :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}

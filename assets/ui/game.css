@@ -3,12 +3,12 @@
   --k0:#050404; --k1:#0b0908; --k2:#14110f; --c1:#1e1a18; --c2:#2a2522; --c3:#3a3330; --c4:#4d4540;
   --b1:#2b1d14; --b2:#4a3526; --b3:#6b4a33; --b4:#8a6a4a; --t1:#8f8066; --t2:#b9a98a; --t3:#d6c8a8; --t4:#e8dcc0;
   --r1:#3a0c0c; --r2:#5c1515; --r3:#8a1c1c; --r4:#b12a2a; --w1:#9a968a; --w2:#cfcabd; --w3:#efe9d8; --gold:#b08a3a;
-  --ts:1; --cw:84px; --ov:6px; --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px); --sal:env(safe-area-inset-left,0px); --sar:env(safe-area-inset-right,0px);
+  --cw:84px; --ov:6px; --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px); --sal:env(safe-area-inset-left,0px); --sar:env(safe-area-inset-right,0px);
   font-family:"Courier New","Lucida Console",ui-monospace,Menlo,monospace;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:#000;color:var(--t3);overscroll-behavior:none}
-body{font-size:calc(16px*var(--ts));line-height:1.45;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none;overflow:hidden}
+body{font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none;overflow:hidden}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [hidden]{display:none!important}
 button{font:inherit;color:inherit}
@@ -329,12 +329,6 @@ img{image-rendering:pixelated}
 @keyframes tilt{0%,93%,100%{transform:none}94%{transform:translate(2px,-1px) skewX(1deg)}96%{transform:translate(-3px,1px)}98%{transform:skewX(-1.5deg)}}
 
 /* ---------- Accesibilidad ---------- */
-.hc{--t3:#ffffff;--t4:#ffffff;--t2:#f0f0f0;--t1:#d8d8d8;--w2:#fff}
-.hc .panel,.hc .btn,.hc .chip,.hc .toast{border-color:#fff}
-.hc .panel,.hc .cookie-box,.hc #hud{background:#000}
-.hc #bg canvas{opacity:.35}
-.hc .btn.primary{background:#7a0f0f}
-.hc .muted{color:#e0e0e0}
 
 /* ---------- Mesa: zona inferior fija (mano + controles) y ajustes para pantallas pequeñas ---------- */
 .dock{position:sticky;bottom:0;z-index:4;margin-top:auto;padding-top:2px;background:linear-gradient(180deg,#0b090800 0,#0b0908d8 16px)}
@@ -555,3 +549,24 @@ p>.tag,li>.tag,b+.tag,h3>.tag,.say>.tag{margin-left:.45em}
 .tip-pop .tp-title{font-size:1.02em}
 .heard.is-loaded{border-left:3px solid #ff6a4a;padding-left:.5em}
 .heard.is-empty{border-left:3px solid #7fa0b8;padding-left:.5em}
+
+/* ---------- ALTO CONTRASTE completo: texto ≥ 7:1 y bordes ≥ 3:1 en TODA la interfaz, sin transparencias (lo vigila tools/test-contrast.py) ---------- */
+.hc{--t1:#e4e4e4;--t2:#f0f0f0;--t3:#ffffff;--t4:#ffffff;--w1:#e4e4e4;--w2:#ffffff;--w3:#ffffff;--gold:#ffe14d;--b2:#ffffff;--b3:#ffffff;--b4:#ffffff;--c3:#c8c8c8;--c4:#e0e0e0}
+.hc #bg canvas{opacity:.12}
+.hc *{text-shadow:none}
+.hc .panel,.hc .hands-panel,.hc .cookie-box,.hc #hud,.hc .modal,.hc .tip-pop,.hc .toast,.hc .miss,.hc .arc-char,.hc .arc-cell,.hc .sys-tip,.hc .hrow-d,.hc .tag,.hc .chip,.hc .deck-info,.hc .stat,.hc .stakecard,.hc .jslot,.hc .dock,.hc .infobar{background:#000}
+.hc .panel,.hc .hands-panel,.hc .btn,.hc .chip,.hc .toast,.hc .modal,.hc .tip-pop,.hc .miss,.hc .arc-char,.hc .arc-cell,.hc .sys-tip,.hc .tag,.hc .shieldchip{border-color:#fff}
+.hc .hands-panel{box-shadow:0 0 0 3px #000}
+.hc .hands-panel h3,.hc .hrow .hl,.hc .gold,.hc .sys-tip{color:var(--gold)}
+.hc .hrow .hn,.hc .hrow .hv{color:#fff}
+.hc .hrow.cur{background:var(--gold);border-left-color:#fff}.hc .hrow.cur *{color:#000}
+.hc .muted,.hc .ver,.hc small{color:#e4e4e4}
+.hc .red{color:#ffa095}.hc .good{color:#d9ecae}
+.hc .tag.red{color:#ffd6d0;border-color:#ffa095}.hc .tag.good{color:#d9ecae;border-color:#d9ecae}.hc .tag.new,.hc .tag.gold{color:var(--gold);border-color:var(--gold)}
+.hc .btn.primary{background:#8a1010;border-color:#fff}
+.hc .btn:disabled,.hc .btn[aria-disabled=true]{opacity:1;background:#000;color:#d0d0d0;border:2px dashed #b0b0b0}
+.hc .arc-char.off,.hc .arc-cell.off,.hc .arc-char.off *,.hc .arc-cell.off *,.hc .lost{color:#d0d0d0;opacity:1}
+.hc .hrow-d.pending{opacity:1}
+.hc .hrow-d .hr{color:#fff;border-color:#fff}.hc .hrow-d.you-hit .hr{color:#ffd0c8;border-color:#ffa095}.hc .hrow-d.foe-hit .hr{color:#e3f0b8;border-color:#e3f0b8}
+.hc .tip-pop .tp-tag,.hc .tip-pop .tp-title,.hc .tip-pop .tp-body{color:#fff}
+.hc :focus-visible{outline:3px solid var(--gold);outline-offset:2px}

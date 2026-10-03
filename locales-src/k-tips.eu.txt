@@ -8,3 +8,4 @@ hud.lives.tip|Kandela bakoitza bizitza bat da. Batekin hasten zara; Osasuna 0ra 
 hud.deck.tip|Ikusi zure karta guztiak, bereziak nabarmenduta. Palu, balio, berezi edo berrien arabera ordena ditzakezu.
 duel.cap.heard_loaded|KARGATUTA?
 duel.cap.heard_empty|HUTSIK?
+table.sort_fog|Lainoarekin, ezkutuko kartak dauden lekuan geratzen dira.

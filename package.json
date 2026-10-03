@@ -13,6 +13,7 @@
     "test:ui": "python3 tools/ui-bot.py --fast --steps 300 --budget 120",
     "test:extras": "python3 tools/test-ui-extras.py",
     "test:more": "python3 tools/test-ui-more.py",
+    "test:contrast": "python3 tools/test-contrast.py",
     "test:features": "python3 tools/test-features.py",
     "test:single": "python3 tools/test-single.py",
     "balance": "node tools/sim-balance.mjs",

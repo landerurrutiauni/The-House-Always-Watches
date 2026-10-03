@@ -305,4 +305,33 @@ await T('Lo que dice el texto de Deuda es verdad: sube el objetivo, la convierte
   fresh(); gs.player.lives = 2; gs.player.health = 0; assert.equal(E.tryRevive(), 'life', 'una vela de reserva te levanta'); assert.equal(gs.player.lives, 1, 'y se gasta'); assert.equal(gs.player.health, Math.round(gs.player.maxHealth * 0.4), 'con el 40 % de Salud');
 });
 
+
+console.log('5.ª tanda: Niebla y orden, tamaño de texto fijo');
+await T('Niebla: al ordenar, las cartas ocultas NO se mueven y el resultado no depende de su valor (no se puede espiar ordenando)', async () => {
+  const { sortCards } = await import('../src/sorting.js'); const ids = ['key_03', 'blood_01', 'eye_13', 'blood_12', 'tooth_07', 'eye_02', 'key_09', 'tooth_11'];
+  let seed = 12345; const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
+  for (const mode of ['suit', 'rank', 'special', 'recent']) for (let trial = 0; trial < 40; trial++) {
+    const cs = mk(...ids); for (let i = cs.length - 1; i > 0; i--) { const j = rnd(i + 1); [cs[i], cs[j]] = [cs[j], cs[i]]; }
+    const a1 = rnd(cs.length); let a2 = rnd(cs.length); if (a2 === a1) a2 = (a1 + 1) % cs.length; const hidden = new Set([cs[a1].uid, cs[a2].uid]);
+    const out = sortCards(cs, mode, hidden);
+    cs.forEach((c, k) => { if (hidden.has(c.uid)) assert.equal(out[k].uid, c.uid, `la oculta de la posición ${k} se ha movido (${mode})`); });
+    assert.deepEqual(out.map(c => c.uid).sort(), cs.map(c => c.uid).sort(), 'mismas cartas');
+    assert.deepEqual(out.filter(c => !hidden.has(c.uid)).map(c => c.uid), sortCards(cs.filter(c => !hidden.has(c.uid)), mode).map(c => c.uid), 'las visibles se ordenan entre sí como siempre');
+    const alt = cs.map(c => (hidden.has(c.uid) ? { ...c, rank: (c.rank % 13) + 1, suit: c.suit === 'eye' ? 'key' : 'eye', sp: !c.sp } : c));
+    assert.deepEqual(sortCards(alt, mode, hidden).map(c => c.uid), out.map(c => c.uid), `el orden depende del valor de una carta oculta (${mode}): se podría espiar`);
+  }
+  const cs2 = mk(...ids); assert.deepEqual(sortCards(cs2, 'suit', new Set()).map(c => c.uid), sortCards(cs2, 'suit').map(c => c.uid), 'sin ocultas, orden normal');
+});
+await T('El tamaño del texto ya no es un ajuste: no está en los valores por defecto ni en los textos de Ajustes', async () => {
+  const fs = await import('node:fs'); assert.ok(!('textSize' in defaultSettings()), 'defaultSettings.textSize sigue existiendo');
+  for (const l of ['es', 'en', 'fr', 'de', 'eu']) { const L = JSON.parse(fs.readFileSync(new URL('../locales/' + l + '.json', import.meta.url), 'utf8')); assert.ok(!('settings.text_size' in L), l + ': settings.text_size'); assert.ok('settings.text_speed' in L, l + ': la velocidad del texto sí se mantiene'); }
+  const css = fs.readFileSync(new URL('../assets/ui/game.css', import.meta.url), 'utf8'); assert.ok(!/var\(--ts\)/.test(css), 'el CSS aún usa --ts');
+});
+await T('Alto contraste: el tema tiene reglas para los componentes añadidos después (manos, descripciones, historial) y la página de privacidad lo respeta', async () => {
+  const fs = await import('node:fs'); const css = fs.readFileSync(new URL('../assets/ui/game.css', import.meta.url), 'utf8');
+  for (const sel of ['.hc .hands-panel', '.hc .tip-pop', '.hc .hrow-d', '.hc .sys-tip', '.hc .btn:disabled']) assert.ok(css.includes(sel), 'falta ' + sel + ' en el tema de alto contraste');
+  assert.ok(/\.hc\{[^}]*--gold:#ffe14d/.test(css), 'variables de alto contraste');
+  assert.ok(/classList\.add\('hc'\)/.test(fs.readFileSync(new URL('../legal/legal.js', import.meta.url), 'utf8')), 'legal.js aplica .hc'); assert.ok(/\.hc\{/.test(fs.readFileSync(new URL('../legal/legal.css', import.meta.url), 'utf8')), 'legal.css tiene .hc');
+});
+
 console.log(`\n${ok} ok, ${bad} fallos`); process.exit(bad ? 1 : 0);

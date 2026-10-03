@@ -34,7 +34,6 @@ export function openSettings() {
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.language')), langBox),
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.audio')), slider('music', t('settings.music')), slider('sfx', t('settings.sfx')), slider('ambient', t('settings.ambient')), slider('voice', t('settings.voices')), tog('muteMusic', t('settings.mute_music')), tog('muteSfx', t('settings.mute_sfx')), tog('muteVoices', t('settings.mute_voices')), tog('reduceIntense', t('settings.reduce_intense'))),
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.display')),
-      h('div', { class: 'set-row' }, h('label', null, t('settings.text_size')), seg('textSize', [[1, '100%'], [1.15, '115%'], [1.3, '130%'], [1.5, '150%']])),
       h('div', { class: 'set-row' }, h('label', null, t('settings.quality')), seg('quality', [['high', t('settings.q.high')], ['medium', t('settings.q.medium')], ['low', t('settings.q.low')]])),
       h('div', { class: 'set-row' }, h('label', null, t('settings.text_speed')), seg('textSpeed', [['normal', t('settings.ts.normal')], ['fast', t('settings.ts.fast')], ['instant', t('settings.ts.instant')]])),
       tog('contrast', t('settings.contrast')), tog('reduceEffects', t('settings.reduce_effects')), tog('vibration', t('settings.vibration')), fsRow()),

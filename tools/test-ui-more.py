@@ -374,6 +374,37 @@ with sync_playwright() as p:
     check('L3 los dos sonidos se OYEN de verdad en la salida de audio (pico > 0,03 en ambos)', L['peak'] > 0.03 and E['peak'] > 0.03, (L['peak'], E['peak']))
     check('L4 y SUENAN distinto: el de «cargada» es grave (centroide espectral bajo) y el de «vacía» es agudo (al menos 2× más alto)', L['cent'] > 0 and E['cent'] > 1.8 * L['cent'], {'cargada_Hz': round(L['cent']), 'vacia_Hz': round(E['cent'])})
     check('L5 sin errores JS al escuchar', not pg.errs, pg.errs[:2]); ctx.close()
+
+    # ---------- 16) Niebla: las cartas ocultas no se ordenan ----------
+    ctx, pg = boot(b); pg.evaluate(PREP)
+    pg.evaluate("""async () => { const T = window.__HOUSE_TEST, G = T.G; const cards = await import('/src/cards.js'); G.beginRun('salon'); G.enterRound({ id: 'r1c0', row: 1, kind: 'game', opp: { id: 'dealer', rule: ['mist'] } }); const R = G.G.R;
+      R.hand = ['key_03', 'blood_01', 'eye_13', 'blood_12', 'tooth_07', 'eye_02', 'key_09', 'tooth_11'].map(id => cards.makeCard(id)); R.pocket = []; R.hidden = new Set([R.hand[1].uid, R.hand[5].uid]); G.roundView(); window.__orig = R.hand.map(c => c.uid); window.__hid = [...R.hidden]; }"""); pg.wait_for_selector('.tbl .sortbtns'); pg.wait_for_timeout(400)
+    ORD = "() => [...document.querySelectorAll('.hand .card')].map(c => c.dataset.arg)"
+    o0 = pg.evaluate(ORD); orig = pg.evaluate("() => window.__orig"); hid = pg.evaluate("() => window.__hid")
+    pg.click('.sortbtns [data-arg="rank"]'); pg.wait_for_timeout(250); o1 = pg.evaluate(ORD)
+    pw = pg.evaluate("""async () => { const c = await import('/src/cards.js'); const R = window.__HOUSE_TEST.G.G.R; return Object.fromEntries(R.hand.map(x => [x.uid, c.rankPower(x.rank)])); }""")
+    vis1 = [u for u in o1 if u not in hid]
+    check('N1 con Niebla, ordenar por Valor deja las 2 cartas ocultas EXACTAMENTE en su hueco (posiciones 2.ª y 6.ª) y ordena solo las visibles', [o1[1], o1[5]] == [orig[1], orig[5]] and all(pw[vis1[i]] >= pw[vis1[i + 1]] for i in range(len(vis1) - 1)) and sorted(o1) == sorted(orig), (orig, o1))
+    pg.click('.sortbtns [data-arg="suit"]'); pg.wait_for_timeout(250); o2 = pg.evaluate(ORD)
+    check('N2 …y lo mismo al ordenar por Palo (y las visibles cambian de sitio, así que sí se ordena algo)', [o2[1], o2[5]] == [orig[1], orig[5]] and o2 != o1 and o2 != orig, (o1, o2))
+    hidden_dom = pg.evaluate("() => [...document.querySelectorAll('.hand .card')].map((c, i) => [i, /oculta|hidden|ezkutu|cachée|verdeckt/i.test((c.getAttribute('aria-label') || '') + c.className)]).filter(x => x[1]).map(x => x[0])")
+    check('N3 las cartas que se ven ocultas en pantalla siguen siendo las de esos dos huecos', hidden_dom == [1, 5], hidden_dom)
+    pg.hover('.sortbtns'); pg.wait_for_timeout(150); tpn = pg.evaluate("() => { const p = document.querySelector('.tip-pop'); return p && !p.hidden ? p.textContent : ''; }")
+    check('N4 al pasar el ratón por «Ordenar», con Niebla avisa de que las ocultas se quedan donde están', 'Niebla' in tpn and 'donde están' in tpn, tpn)
+    pg.evaluate("() => { const R = window.__HOUSE_TEST.G.G.R; R.hidden.clear(); window.__HOUSE_TEST.G.roundView(); }"); pg.wait_for_selector('.tbl .sortbtns'); pg.wait_for_timeout(300)
+    o3 = pg.evaluate(ORD); pg.hover('.sortbtns'); pg.wait_for_timeout(150); tpn2 = pg.evaluate("() => { const p = document.querySelector('.tip-pop'); return p && !p.hidden ? p.textContent : ''; }")
+    full = pg.evaluate("""async () => { const m = await import('/src/sorting.js'); const R = window.__HOUSE_TEST.G.G.R; return m.sortCards(R.hand, 'suit').map(c => c.uid); }""")
+    check('N5 sin Niebla se ordena TODO normalmente (ninguna carta queda fija: el orden coincide con el orden completo por Palo) y el aviso de Niebla no sale', o3 == full and 'Niebla' not in tpn2 and o3 != orig, (o3, full, tpn2))
+    check('N5b sin Niebla, por Palo las 8 cartas quedan agrupadas (Sangre primero)', pg.evaluate("() => [...document.querySelectorAll('.hand .card')].slice(0, 2).every(c => /Sangre/.test(c.getAttribute('aria-label')))"), pg.evaluate("() => [...document.querySelectorAll('.hand .card')].map(c => c.getAttribute('aria-label').split(' — ')[0])"))
+    check('N6 sin errores JS con la Niebla', not pg.errs, pg.errs[:2]); ctx.close()
+
+    # ---------- 17) Salir del duelo a mitad de narración no rompe nada ----------
+    ctx, pg = boot(b); pg.evaluate(PREP)
+    pg.evaluate("() => { const T = window.__HOUSE_TEST; T.st.settings.textSpeed = 'normal'; T.G.beginRun('salon'); T.st.gs.player.money = 100; T.G.enterDuelSetup({ id: 'r2c0', row: 2, kind: 'shotgun', opp: { id: 'gambler', look: 'gambler_d' } }); }"); pg.wait_for_selector('[data-act="duel_stake"][data-arg="money"]'); pg.click('[data-act="duel_stake"][data-arg="money"]'); pg.wait_for_selector('.drum .ch')
+    pg.click('[data-act="duel_shoot"][data-arg="foe"]'); pg.wait_for_timeout(900)
+    pg.evaluate("() => { window.__HOUSE_TEST.G.leaveToMenu(); }"); pg.wait_for_timeout(5500)
+    st17 = pg.evaluate("() => ({ view: window.__HOUSE_TEST.G.getView().type, duel: document.querySelectorAll('.duel2, .duel').length })")
+    check('N7 si sales del duelo con la narración en curso (p. ej. «Volver al inicio»), la narración se detiene: sin errores y la pantalla sigue siendo el menú', st17['view'] == 'menu' and st17['duel'] == 0 and not pg.errs, (st17, pg.errs[:2])); ctx.close()
     b.close()
 
 bad = [n for n, ok in res if not ok]

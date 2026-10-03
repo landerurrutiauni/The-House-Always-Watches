@@ -2,7 +2,7 @@
 """Verificación de funciones transversales en Chromium real (Playwright). Uso: python3 tools/test-features.py [--url http://localhost:8080/index.html]
 Cubre: sin anuncios ni terceros, consentimiento para servicios opcionales (si se declaran), persistencia (continuar/nueva/reiniciar),
 audio (señal real en la salida), accesibilidad, cambio de idioma en caliente, pantalla completa y panel de depuración."""
-import sys, json, re
+import re, sys, json, re
 from pathlib import Path
 from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
@@ -117,9 +117,14 @@ with sync_playwright() as p:
 
     # ---------- E. Accesibilidad, calidad, idioma en caliente ----------
     ctx, pg = boot(b); pg.click('[data-act="settings"]')
-    pg.check('label.tog:has-text("High contrast") input'); pg.check('label.tog:has-text("Reduce effects") input'); pg.click('.seg button:has-text("130%")'); pg.click('.seg button:has-text("Low")')
+    pg.check('label.tog:has-text("High contrast") input'); pg.check('label.tog:has-text("Reduce effects") input'); pg.click('.seg button:has-text("Low")')
     cls = pg.evaluate("document.body.className"); fs = pg.evaluate("getComputedStyle(document.body).fontSize")
-    check('E1 alto contraste, reducir efectos, calidad baja y texto 130% se aplican al instante', 'hc' in cls and 'reduce' in cls and 'q-low' in cls and fs in ('20.8px', '23.4px', '27.3px', '33.8px'), (cls, fs))
+    check('E1 alto contraste, reducir efectos y calidad baja se aplican al instante; el tamaño del texto es fijo (16 px)', 'hc' in cls and 'reduce' in cls and 'q-low' in cls and fs == '16px', (cls, fs))
+    nots = pg.evaluate("() => ({ labels: [...document.querySelectorAll('.modal .set-row label')].map(l => l.textContent), pct: [...document.querySelectorAll('.modal .seg button')].filter(b => /%$/.test(b.textContent.trim())).length })")
+    check('E1b Ajustes ya NO ofrece cambiar el tamaño del texto (ni el 100/115/130/150 %)', not any(re.search(r'size|tama[ñn]o|taille|gr[öo](ß|ss)e|tamaina', l, re.I) for l in nots['labels']) and nots['pct'] == 0, nots)   # (la «velocidad» del texto sí existe)
+    pg.evaluate("() => { const k = Object.keys(localStorage).find(x => /settings/i.test(x)); const o = JSON.parse(localStorage.getItem(k) || '{}'); o.textSize = 1.5; localStorage.setItem(k, JSON.stringify(o)); }"); pg.reload(); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(250)
+    check('E1c un ajuste antiguo de tamaño de texto guardado (150 %) se ignora', pg.evaluate("getComputedStyle(document.body).fontSize") == '16px')
+    pg.click('[data-act="settings"]'); pg.wait_for_selector('.modal')
     pg.keyboard.press('Escape'); pg.reload(); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(250)
     cls = pg.evaluate("document.body.className"); check('E2 los ajustes persisten tras recargar', 'hc' in cls and 'reduce' in cls and 'q-low' in cls, cls)
     pg.click('[data-act="settings"]'); pg.click('.seg button[lang="es"]'); pg.wait_for_timeout(300)

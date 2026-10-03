@@ -8,3 +8,4 @@ hud.lives.tip|Cada vela es una vida. Empiezas con una; si tu Salud llega a 0 y t
 hud.deck.tip|Mira todas tus cartas, con las especiales resaltadas. Puedes ordenarlas por palo, valor, especiales o recientes.|See all your cards, special ones highlighted. Sort them by suit, rank, special or newest.|Vois toutes tes cartes, les spéciales en évidence. Trie-les par couleur, valeur, spéciales ou récentes.|Sieh dir alle deine Karten an, besondere hervorgehoben. Sortiere sie nach Farbe, Wert, Besonderen oder Neuesten.
 duel.cap.heard_loaded|¿CARGADA?|LOADED?|CHARGÉE ?|GELADEN?
 duel.cap.heard_empty|¿VACÍA?|EMPTY?|VIDE ?|LEER?
+table.sort_fog|Con Niebla, las cartas ocultas se quedan donde están.|With Mist, hidden cards stay where they are.|Avec le Brouillard, les cartes cachées restent à leur place.|Bei Nebel bleiben verdeckte Karten an ihrem Platz.
