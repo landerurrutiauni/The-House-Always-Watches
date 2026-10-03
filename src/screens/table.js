@@ -3,7 +3,7 @@ import * as G from '../game.js';
 import * as C from '../combat.js';
 import { gs, settings } from '../state.js';
 import { t, cardName } from '../i18n.js';
-import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc, jokerEl, guideTip } from '../ui.js';
+import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc, jokerEl, guideTip, ruleTag, attachTip } from '../ui.js';
 import { MAX_JOKERS } from '../jokers.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
 import { audioManager as audio } from '../audio.js';
@@ -58,15 +58,16 @@ function tableScreen(v) {
   const ruleDescs = [...R.rule.map(r => [r, false]), ...(v.weakened || []).map(r => [r, true])];
   const pct = Math.max(0, Math.min(100, R.score / R.target * 100));
   const scorebar = h('div', { class: 'scorebar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': R.target, 'aria-valuenow': R.score, 'aria-label': t('table.score') }, h('i', { style: 'width:' + pct + '%' }), h('span', null, R.score + ' / ' + R.target));
-  const shieldChip = h('span', { class: 'shieldchip' + (R.shield > 0 ? ' on' : ''), title: t('shield.tip'), tabindex: '0', 'aria-label': t('shield.tip') }, ico('shield'), ' ' + t('ui.res.shield') + ' ', h('b', null, R.shield));
+  const shieldChip = h('span', { class: 'shieldchip' + (R.shield > 0 ? ' on' : ''), tabindex: '0', 'aria-label': t('shield.tip') }, ico('shield'), ' ' + t('ui.res.shield') + ' ', h('b', null, R.shield));
+  attachTip(shieldChip, () => ({ title: t('ui.res.shield') + ' · ' + R.shield, body: t('shield.tip') }));
   const setShield = n => { shieldChip.querySelector('b').textContent = n; shieldChip.classList.toggle('on', n > 0); };
   const descs = ruleDescs.filter(x => !x[1]).map(([r]) => t(`rule.${r}.name`) + ': ' + t(`rule.${r}.desc`));
   const opp = h('div', { class: 'panel opp' }, characterEl(v.opp.id, { scale: sc(1, 1) }), h('div', { class: 'opp-info' },
     h('div', { class: 'opp-head' }, h('span', { class: 'opp-name' }, oppName(v.opp.id)), v.kind !== 'game' ? h('span', { class: 'tag red' }, t(v.kind === 'final' ? 'table.final' : 'table.boss')) : null,
-      ...(ruleDescs.length ? ruleDescs.map(([r, weak]) => h('span', { class: 'tag ' + (weak ? 'good' : 'red'), title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + (weak ? ' · ' + t('boss.weakened') : ''))) : [h('span', { class: 'muted', style: 'font-size:.8em' }, t('table.no_rule'))])),
+      ...(ruleDescs.length ? ruleDescs.map(([r, weak]) => ruleTag(r, !!weak)) : [h('span', { class: 'muted', style: 'font-size:.8em' }, t('table.no_rule'))])),
     descs.length ? h('div', { class: 'muted ruledesc' }, descs.join(' · ')) : null,
     scorebar,
-    h('div', { class: 'counts' }, h('span', null, ico('cards'), ' ' + t('table.plays') + ' ', h('b', null, R.playsLeft)), h('span', null, ico('x'), ' ' + t('table.discards') + ' ', h('b', null, R.discardsLeft)), shieldChip, h('button', { type: 'button', class: 'deckbtn', 'data-act': 'deck_round', title: t('deck.view.left') }, t('table.deck', { n: R.drawPile.length })),
+    h('div', { class: 'counts' }, h('span', null, ico('cards'), ' ' + t('table.plays') + ' ', h('b', null, R.playsLeft)), h('span', null, ico('x'), ' ' + t('table.discards') + ' ', h('b', null, R.discardsLeft)), shieldChip, h('button', { type: 'button', class: 'deckbtn', 'data-act': 'deck', title: t('deck.title') }, t('table.deck', { n: R.drawPile.length })),
       v.odds != null && !v.tutorial ? h('span', { class: 'muted' }, t('table.odds', { p: Math.round(v.odds * 100) })) : null)));
   main.append(opp);
   if (v.hintKey) main.append(h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(v.hintKey)));
@@ -114,7 +115,7 @@ function tableScreen(v) {
         for (const s of res.steps) if (s.j && !costs.querySelector('[data-j="' + s.j + '"]')) costs.append(h('span', { class: 'tag gold', 'data-j': s.j, title: t(`joker.${s.j}.name`) }, '★ ' + t(`joker.${s.j}.name`)));
         const d = res.delta; for (const k of ['health', 'sanity', 'debt', 'money']) if (d[k]) costs.append(resChip(k, d[k]));
         const sl = shieldLines(res.shield); if (sl.length) costs.append(h('div', { class: 'shieldnote' }, ico('shield'), ' ' + sl.join(' · ')));
-        if (res.notes.length) for (const n of res.notes) costs.append(h('span', { class: 'tag red', title: t(`rule.${n}.desc`) }, t(`rule.${n}.name`)));
+        if (res.notes.length) for (const n of res.notes) costs.append(ruleTag(n, false));
         if (res.total + R.score >= R.target) costs.append(h('span', { class: 'tag good' }, t('table.enough')));
       }
     }

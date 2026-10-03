@@ -253,7 +253,7 @@ await T('Escudo: frases cortas (≤ 40 caracteres) y sin sermones en los 4 idiom
 });
 
 console.log('euskera');
-await T('Euskera: está en la configuración, se detecta del navegador y las 1249 claves están traducidas (con las mismas variables)', async () => {
+await T('Euskera: está en la configuración, se detecta del navegador y todas las claves están traducidas (con las mismas variables)', async () => {
   const fs = await import('node:fs'); const CFG = (await import('../src/config.js')).CONFIG; assert.ok(CFG.LANGS.includes('eu') && CFG.LANG_NAMES.eu === 'Euskara');
   const ld = l => JSON.parse(fs.readFileSync(new URL('../locales/' + l + '.json', import.meta.url), 'utf8')); const es = ld('es'), eu = ld('eu');
   assert.deepEqual(Object.keys(eu).sort(), Object.keys(es).sort(), 'mismas claves que el español');
@@ -269,4 +269,40 @@ await T('Euskera: los nombres de carta salen bien («Odolaren Asa», «Giltzaren
   assert.equal(lg.cardName(mk('blood_01')[0]), 'Odolaren Asa'); assert.equal(lg.cardName(mk('key_07')[0]), 'Giltzaren 7'); assert.equal(lg.cardName(mk('eye_13')[0]), 'Begiaren Errege'); assert.equal(lg.t('hand.royal'), 'Eskala erreala'); assert.equal(lg.t('hand.five'), 'Repokerra');
   await lg.setLang('es', { silent: true });
 });
+
+console.log('4.ª tanda: sonidos al escuchar, descripciones de recursos y reglas, sin «por robar»');
+await T('Escuchar: hay DOS sonidos distintos (cargada / vacía) y el duelo ya no usa el susurro genérico', async () => {
+  const fs = await import('node:fs'); const sfxSrc = fs.readFileSync(new URL('../src/sfx.js', import.meta.url), 'utf8'), duelSrc = fs.readFileSync(new URL('../src/screens/duel.js', import.meta.url), 'utf8'), gameSrc = fs.readFileSync(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.ok(/listen_loaded:\s*\(o, t\)/.test(sfxSrc) && /listen_empty:\s*\(o, t\)/.test(sfxSrc), 'ambos sonidos definidos');
+  assert.ok(/r\.says \? 'listen_loaded' : 'listen_empty'/.test(duelSrc), 'se elige según lo que oyes');
+  assert.ok(!/sfx\('whisper'\)/.test(gameSrc.slice(gameSrc.indexOf('export function duelListen'), gameSrc.indexOf('export function duelListen') + 500)), 'sin susurro genérico en duelListen');
+  const D = S.startDuel({ seed: 3, key: 'l', foe: 'gambler', stake: { type: 'money', value: 20 } }); D.chambers[D.pos] = true; D.rng.chance = () => true; const r1 = S.listen(D, 1); assert.equal(r1.says, true);
+  D.chambers[D.pos] = false; const r2 = S.listen(D, 1); assert.equal(r2.says, false);
+});
+await T('Sin vista de «cartas por robar»: el visor solo enseña el mazo completo y ningún texto la ofrece', async () => {
+  const fs = await import('node:fs'); const dv = fs.readFileSync(new URL('../src/deckview.js', import.meta.url), 'utf8');
+  assert.ok(!/drawPile|which|deck_round/.test(dv), 'deckview.js no toca el mazo de robo');
+  for (const f of ['table.js', 'run.js', 'duel.js', 'menu.js']) { const src = fs.readFileSync(new URL('../src/screens/' + f, import.meta.url), 'utf8'); const bad = (src.match(/drawPile(?!\.length|\.slice\(-R\.peekN\))/g) || []); /* solo se permite el contador y lo que revelan los Ojos */ assert.equal(bad.length, 0, f + ' muestra el contenido del mazo de robo'); }
+  for (const l of ['es', 'en', 'fr', 'de', 'eu']) { const L = JSON.parse(fs.readFileSync(new URL('../locales/' + l + '.json', import.meta.url), 'utf8')); for (const k of ['deck.left', 'deck.view.left', 'deck.view.full']) assert.ok(!(k in L), l + ': sigue existiendo ' + k); }
+});
+await T('Cada recurso (Salud, Cordura, Dinero, Deuda, Velas) y el mazo tienen explicación breve en los 5 idiomas; la Deuda cuenta para qué sirve', async () => {
+  const fs = await import('node:fs');
+  for (const l of ['es', 'en', 'fr', 'de', 'eu']) { const L = JSON.parse(fs.readFileSync(new URL('../locales/' + l + '.json', import.meta.url), 'utf8'));
+    for (const k of ['health', 'sanity', 'money', 'debt', 'lives', 'deck']) { const x = L['hud.' + k + '.tip']; assert.ok(x && x.length >= 40 && x.length <= 300, `${l} hud.${k}.tip: ${x ? x.length : 'falta'} caracteres`); }
+    assert.ok(L['rule.label'] && L['rule.weak_note'], l + ': textos de reglas'); }
+  const es = JSON.parse(fs.readFileSync(new URL('../locales/es.json', import.meta.url), 'utf8'));
+  assert.ok(/puntos/.test(es['hud.debt.tip']) && /objetivos suben/.test(es['hud.debt.tip']), 'la Deuda dice qué cuesta y para qué sirve');
+});
+await T('Lo que dice el texto de Deuda es verdad: sube el objetivo, la convierten en puntos La Deuda, El Trapero y el combo; las velas son vidas', () => {
+  const score = (R, cards) => C.resolvePlay({ levels: R.levels, mods: R.mods, rule: R.rule, history: R.history, shield: R.shield, deaths: R.deaths, playsLeft: R.playsLeft, jokers: gs.jokers.slice(), jokerData: gs.jokerData, player: { health: gs.player.health, maxHealth: gs.player.maxHealth, sanity: gs.player.sanity, money: gs.player.money, debt: gs.player.debt } }, cards, 'none');
+  const round = () => C.startRound({ key: 'd', target: 99999, opp: { id: 'dealer', rule: [] }, tutorial: false, row: 1, kind: 'game' });
+  fresh(); gs.player.debt = 400; assert.ok(E.debtSurcharge() > 0 && E.debtSurcharge() <= 0.25, 'recargo por deuda ' + E.debtSurcharge());
+  fresh(); gs.player.debt = 0; gs.jokerData = {}; let R = round(); const sinDeuda = score(R, mk('blood_03', 'eye_03')).total;
+  gs.jokers = ['trapero']; const trap0 = score(R, mk('blood_03', 'eye_03')).total; gs.player.debt = 240; R = round(); const trapConDeuda = score(R, mk('blood_03', 'eye_03')).total; gs.jokers = [];
+  assert.equal(trap0, sinDeuda, 'sin Deuda, El Trapero no suma'); assert.ok(trapConDeuda > sinDeuda, `El Trapero convierte la Deuda en puntos: ${trapConDeuda} > ${sinDeuda}`);
+  gs.player.debt = 0; R = round(); const ld0 = score(R, mk('la_deuda')).total; gs.player.debt = 240; R = round(); const ld1 = score(R, mk('la_deuda')).total; assert.ok(ld1 > ld0, `La carta La Deuda puntúa más con más Deuda: ${ld1} > ${ld0}`);
+  gs.player.debt = 0; R = round(); const co0 = score(R, mk('tooth_03', 'tooth_05', 'tooth_08', 'tooth_10', 'tooth_12')).mult; gs.player.debt = 240; R = round(); const co1 = score(R, mk('tooth_03', 'tooth_05', 'tooth_08', 'tooth_10', 'tooth_12')).mult; assert.ok(co1 > co0, `el combo LA DEUDA suma más mult con más Deuda: ${co1} > ${co0}`);
+  fresh(); gs.player.lives = 2; gs.player.health = 0; assert.equal(E.tryRevive(), 'life', 'una vela de reserva te levanta'); assert.equal(gs.player.lives, 1, 'y se gasta'); assert.equal(gs.player.health, Math.round(gs.player.maxHealth * 0.4), 'con el 40 % de Salud');
+});
+
 console.log(`\n${ok} ok, ${bad} fallos`); process.exit(bad ? 1 : 0);

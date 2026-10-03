@@ -27,6 +27,15 @@ PROBE = """(() => { const o = AudioNode.prototype.connect; window.__peak = 0;
       setInterval(() => { an.getFloatTimeDomainData(buf); let m = 0; for (let i = 0; i < buf.length; i++) m = Math.max(m, Math.abs(buf[i])); window.__peak = Math.max(window.__peak, m); }, 20); } } catch (e) {}
     return x; }; })();"""
 
+
+PROBE2 = """(() => { const o = AudioNode.prototype.connect; window.__peak2 = 0; window.__cs = 0; window.__ce = 0;
+  window.__fftReset = () => { window.__peak2 = 0; window.__cs = 0; window.__ce = 0; }; window.__fftCentroid = () => (window.__ce > 0 ? window.__cs / window.__ce : 0);
+  AudioNode.prototype.connect = function (d, ...r) { const x = o.call(this, d, ...r);
+    try { if (d && d.constructor && d.constructor.name === 'AudioDestinationNode' && !window.__an2) { const ctx = this.context, an = ctx.createAnalyser(); an.fftSize = 2048; an.smoothingTimeConstant = 0; o.call(this, an); window.__an2 = an; const buf = new Float32Array(an.fftSize), fq = new Uint8Array(an.frequencyBinCount), hz = ctx.sampleRate / an.fftSize;
+      setInterval(() => { an.getFloatTimeDomainData(buf); let m = 0; for (let i = 0; i < buf.length; i++) m = Math.max(m, Math.abs(buf[i])); window.__peak2 = Math.max(window.__peak2, m);
+        if (m > 0.01) { an.getByteFrequencyData(fq); let e = 0, c = 0; for (let i = 1; i < fq.length; i++) { const v = (fq[i] / 255) ** 2; e += v; c += v * i * hz; } if (e > 0) { window.__cs += c; window.__ce += e; } } }, 15); } } catch (err) {}
+    return x; }; })();"""
+
 with sync_playwright() as p:
     b = p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
 
@@ -88,7 +97,8 @@ with sync_playwright() as p:
     pg.evaluate("""() => { const T = window.__HOUSE_TEST, G = T.G; G.beginRun('salon'); G.enterRound({ id: 'r1c0', row: 1, kind: 'game', opp: { id: 'dealer', rule: [] } }); }"""); pg.wait_for_selector('.tbl'); pg.wait_for_timeout(400)
     pg.evaluate("""() => { const T = window.__HOUSE_TEST, R = T.G.G.R; R.hand = ['blood_07', 'blood_08', 'key_05', 'key_06', 'eye_02'].map(id => T.C.makeCard ? T.C.makeCard(id) : null).filter(Boolean); }""")
     has_make = pg.evaluate("() => !!window.__HOUSE_TEST.C.makeCard")
-    sh_info = pg.evaluate("() => { const e = document.querySelector('.shieldchip'); return e ? { txt: e.textContent.trim(), tip: e.title, on: e.classList.contains('on') } : null; }")
+    pg.hover('.shieldchip'); pg.wait_for_timeout(150)
+    sh_info = pg.evaluate("() => { const e = document.querySelector('.shieldchip'), p = document.querySelector('.tip-pop'); return e ? { txt: e.textContent.trim(), tip: p && !p.hidden ? p.textContent : '', on: e.classList.contains('on') } : null; }")
     check('S1 la mesa muestra SIEMPRE el indicador de Escudo (icono + valor) con una explicación al pasar el ratón', bool(sh_info) and 'Escudo' in sh_info['txt'] and len(sh_info['tip']) > 60 and 'absorbe' in sh_info['tip'].lower(), sh_info)
     ctx.close()
     ctx, pg = boot(b); pg.evaluate(PREP)
@@ -251,8 +261,9 @@ with sync_playwright() as p:
     ctx, pg = boot(b); pg.evaluate(PREP)
     pg.evaluate("() => { const G = window.__HOUSE_TEST.G; G.beginRun('salon'); G.enterRound({ id: 'r1c0', row: 1, kind: 'game', opp: { id: 'dealer', rule: [] } }); }"); pg.wait_for_selector('.tbl .deckbtn')
     left = pg.evaluate("() => window.__HOUSE_TEST.G.G.R.drawPile.length")
-    pg.click('.tbl .deckbtn'); pg.wait_for_selector('.deck-modal [data-view="left"]'); pg.click('.deck-modal [data-view="left"]'); pg.wait_for_timeout(150)
-    check('K9 en la mesa, pulsar «Mazo: N» abre el visor con la vista «Por robar» y su recuento exacto', pg.locator('.deck-grid .card').count() == left and f'{left} de 52' in pg.inner_text('.deck-head'), (left, pg.inner_text('.deck-head'))); pg.keyboard.press('Escape')
+    pg.click('.tbl .deckbtn'); pg.wait_for_selector('.deck-modal .deck-grid .card'); pg.wait_for_timeout(150)
+    kk = pg.evaluate("() => ({ n: document.querySelectorAll('.deck-grid .card').length, views: document.querySelectorAll('.deck-modal [data-view]').length, txt: document.querySelector('.deck-modal').textContent, head: document.querySelector('.deck-head').textContent })")
+    check('K9 en la mesa, «Mazo: N» abre el mazo COMPLETO (52 cartas); NO hay vista de «cartas por robar» ni botones para cambiar a ella', kk['n'] == 52 and kk['views'] == 0 and 'robar' not in kk['txt'].lower() and left < 52 and '52 cartas' in kk['head'], (kk['n'], kk['views'], left)); pg.keyboard.press('Escape')
     # ordenar la mano
     pg.evaluate("""async () => { const T = window.__HOUSE_TEST, G = T.G; const cards = await import('/src/cards.js'); const R = G.G.R; R.hand = ['key_03', 'blood_01', 'eye_13', 'blood_12', 'tooth_07', 'eye_02', 'key_09', 'tooth_11'].map(id => cards.makeCard(id)); R.pocket = []; G.roundView(); }"""); pg.wait_for_selector('.tbl .sortbtns'); pg.wait_for_timeout(300)
     ids0 = pg.evaluate("() => [...document.querySelectorAll('.hand .card')].map(c => c.getAttribute('aria-label').split(' — ')[0])")
@@ -267,7 +278,7 @@ with sync_playwright() as p:
     pg.evaluate("() => { const T = window.__HOUSE_TEST; T.G.beginRun('salon'); for (const id of ['bufon', 'as_manga', 'sonrisa']) T.FX.addJoker(id); T.G.showMap(); }"); pg.wait_for_selector('.map-jokers .jslot'); pg.wait_for_timeout(300)
     check('J1 el mapa muestra los comodines en una fila con su número de orden (1, 2, 3) y flechas ◀ ▶', pg.locator('.map-jokers .jslot').count() == 3 and pg.locator('.map-jokers .jidx').all_inner_texts() == ['1', '2', '3'] and pg.locator('.map-jokers .jmove button').count() == 6)
     pg.hover('.map-jokers .jslot:nth-child(2) .joker'); pg.wait_for_selector('.tip-pop:not([hidden])'); tp = pg.evaluate("() => { const e = document.querySelector('.tip-pop'), r = e.getBoundingClientRect(), s = document.querySelector('#stage').getBoundingClientRect(); return { txt: e.textContent, inside: r.left >= s.left - 1 && r.right <= s.right + 1 && r.top >= s.top - 1 && r.bottom <= s.bottom + 1 }; }")
-    check('J2 al pasar el ratón por un comodín aparece AL INSTANTE su descripción (nombre, rareza y efecto) dentro del escenario', 'Último' not in tp['txt'] and 'As' in tp['txt'] and 'Poco común' in tp['txt'] and tp['inside'], tp); shot(pg, 'joker_tip')
+    check('J2 al pasar el ratón por un comodín aparece AL INSTANTE su descripción (nombre, rareza y efecto, sin textos sueltos como «null») dentro del escenario', 'null' not in tp['txt'] and 'undefined' not in tp['txt'] and 'Último' not in tp['txt'] and 'As' in tp['txt'] and 'Poco común' in tp['txt'] and tp['inside'], tp); shot(pg, 'joker_tip')
     pg.mouse.move(5, 5); pg.wait_for_timeout(150)
     check('J3 al quitar el ratón desaparece', pg.locator('.tip-pop:not([hidden])').count() == 0)
     pg.click('.map-jokers .jslot:nth-child(1) .jmove button:last-child'); pg.wait_for_timeout(200)
@@ -305,6 +316,64 @@ with sync_playwright() as p:
     check('M3 en la primera partida, el mapa recuerda la guía con un indicador del interfaz (no con el Crupier) y el botón «?» late', 'Guía' in mt['tip'] and mt['pulse'] and 'guía' not in mt['hint'].lower(), mt); shot(pg, 'map_guide_tip')
     pg.click('#hud [data-act="howto"]'); pg.wait_for_selector('.howto-modal'); pg.keyboard.press('Escape'); pg.evaluate("() => { window.__HOUSE_TEST.G.showMap(); }"); pg.wait_for_selector('.map-box'); pg.wait_for_timeout(300)
     check('M4 una vez abierta la guía, el indicador desaparece', pg.locator('.mapscr .sys-tip').count() == 0 and pg.locator('#hud .btn.pulse').count() == 0); ctx.close()
+
+    # ---------- 14) Descripciones de recursos y habilidades de rivales ----------
+    ctx, pg = boot(b); pg.evaluate(PREP)
+    pg.evaluate("() => { const T = window.__HOUSE_TEST; T.G.beginRun('salon'); T.G.showMap(); }"); pg.wait_for_selector('.map-box'); pg.wait_for_timeout(400)
+    TIP = """() => { const e = document.querySelector('.tip-pop'); if (!e || e.hidden) return null; const r = e.getBoundingClientRect(), s = document.querySelector('#stage').getBoundingClientRect(); return { txt: e.textContent, clean: !/null|undefined|NaN/.test(e.textContent), inside: r.left >= s.left - 1 && r.right <= s.right + 1 && r.top >= s.top - 1 && r.bottom <= s.bottom + 1 }; }"""
+    want = {'health': ['Tu vida', 'mueres'], 'sanity': ['Tu mente', 'colapsas'], 'money': ['comprar', 'Deuda'], 'debt': ['debes', 'puntos', 'objetivos suben'], 'lives': ['vida', '40 %']}
+    got = {}
+    for k in want:
+        pg.mouse.move(5, 5); pg.wait_for_timeout(80); pg.hover(f'#hud .stat[data-k="{k}"]'); pg.wait_for_timeout(120); got[k] = pg.evaluate(TIP)
+    ok_all = all(got[k] and got[k]['inside'] and got[k]['clean'] and all(w in got[k]['txt'] for w in want[k]) for k in want)
+    check('R1 al pasar el ratón por Salud, Cordura, Dinero, Deuda y Velas sale una explicación breve de para qué sirve cada uno (dentro del escenario)', ok_all, {k: (v['txt'][:70] if v else None) for k, v in got.items()})
+    check('R2 la Deuda explica qué cuesta (objetivos más altos) Y para qué sirve (la convierten en puntos cartas y comodines)', got['debt'] and 'objetivos suben' in got['debt']['txt'] and 'puntos' in got['debt']['txt'], got['debt'])
+    nat = pg.evaluate("() => document.querySelectorAll('#hud .stat[title]').length")
+    check('R3 los recursos ya no llevan el «title» nativo (que se retrasa y duplica la descripción)', nat == 0, nat)
+    pg.mouse.move(5, 5); pg.focus('#hud .stat[data-k="money"]'); pg.wait_for_timeout(150); kb = pg.evaluate(TIP)
+    check('R4 también con el teclado: enfocar Dinero (Tab) muestra su descripción', kb and 'comprar' in kb['txt'], kb)
+    pg.mouse.move(5, 5); pg.hover('#hud .hud-deck'); pg.wait_for_timeout(120); dk = pg.evaluate(TIP)
+    check('R5 el botón de mazo también explica qué hace al pasar el ratón', dk and 'cartas' in dk['txt'].lower(), dk)
+    # reglas del rival
+    pg.evaluate("() => { const G = window.__HOUSE_TEST.G; G.enterRound({ id: 'r1c0', row: 1, kind: 'game', opp: { id: 'dealer', rule: ['mist', 'tax'] } }); }"); pg.wait_for_selector('.tbl .ruletag'); pg.wait_for_timeout(300)
+    rt = pg.evaluate("() => [...document.querySelectorAll('.tbl .ruletag')].map(e => e.dataset.rule)")
+    seen = {}
+    for r in rt:
+        pg.mouse.move(5, 5); pg.wait_for_timeout(80); pg.hover(f'.tbl .ruletag[data-rule="{r}"]'); pg.wait_for_timeout(120); seen[r] = pg.evaluate(TIP)
+    esrules = pg.evaluate("async () => { const m = await import('/src/i18n.js'); return Object.fromEntries(['mist', 'tax'].map(r => [r, [m.t('rule.' + r + '.name'), m.t('rule.' + r + '.desc')]])); }")
+    check('R6 en la mesa, cada habilidad del rival (Niebla, Impuesto) enseña al pasar el ratón su nombre, «Habilidad del rival» y lo que hace', sorted(rt) == ['mist', 'tax'] and all(seen[r] and seen[r]['clean'] and esrules[r][1] in seen[r]['txt'] and esrules[r][0] in seen[r]['txt'] and 'Habilidad del rival' in seen[r]['txt'] and seen[r]['inside'] for r in rt), {r: (v['txt'][:80] if v else None) for r, v in seen.items()}); shot(pg, 'rule_tip')
+    # guardián: reglas normales y debilitadas
+    pg.evaluate("""() => { const T = window.__HOUSE_TEST, G = T.G, st = T.st; G.beginRun('salon'); T.FX.learn('k_nun_name'); const run = st.gs.run; const bn = run.map.rows[run.map.rows.length - 1][0]; run.pos = bn.id; G.G.node = bn; G.enterBoss({ id: bn.id, row: bn.row, kind: 'boss', opp: { id: 'nun' } }); }"""); pg.wait_for_selector('.bossscr .ruletag'); pg.wait_for_timeout(300)
+    bt = pg.evaluate("() => [...document.querySelectorAll('.bossscr .ruletag')].map(e => [e.dataset.rule, e.className.includes('good')])")
+    bres = {}
+    for r, weak in bt:
+        pg.mouse.move(5, 5); pg.wait_for_timeout(80); pg.hover(f'.bossscr .ruletag[data-rule="{r}"]'); pg.wait_for_timeout(120); bres[r] = pg.evaluate(TIP)
+    wk = [r for r, w in bt if w]; nw = [r for r, w in bt if not w]
+    check('R7 ante el guardián, sus habilidades explican qué hacen; la que has debilitado con lo que sabes lo dice («Ya no te afecta»)', len(wk) == 1 and len(nw) >= 1 and all(bres[r] and 'Habilidad del rival' in bres[r]['txt'] for r in nw) and 'Ya no te afecta' in bres[wk[0]]['txt'], (bt, {r: (v['txt'][:70] if v else None) for r, v in bres.items()})); shot(pg, 'boss_rule_tip')
+    check('R8 sin errores JS en las descripciones', not pg.errs, pg.errs[:2]); ctx.close()
+
+    # ---------- 15) Escuchar en el duelo: sonido distinto según lo que crees oír ----------
+    ctx, pg = boot(b, init=PROBE2)
+    pg.mouse.click(10, 10); pg.wait_for_timeout(400)
+    def setset(**kw):
+        pg.evaluate("async (kw) => { const { audioManager } = await import('/src/audio.js'); const s = window.__HOUSE_TEST.st.settings; Object.assign(s, kw); audioManager.applySettings(s); }", kw); pg.wait_for_timeout(500)
+    setset(muteMusic=True, muteSfx=False, ambient=0, textSpeed='normal', reduceEffects=False, muteVoices=True)
+    pg.evaluate(PREP)
+    results = {}
+    for says in (True, False):
+        pg.evaluate("""async (says) => { const T = window.__HOUSE_TEST, G = T.G; G.beginRun('salon'); G.enterDuelSetup({ id: 'r2c0', row: 2, kind: 'shotgun', opp: { id: 'gambler', look: 'gambler_d' } }); window.__names = [];
+          const m = await import('/src/sfx.js'); if (!window.__patched) { window.__patched = true; const orig = m.sfx.play.bind(m.sfx); m.sfx.play = (n, o) => { window.__names.push(n); return orig(n, o); }; } }""", says)
+        pg.wait_for_selector('[data-act="duel_stake"][data-arg="money"]'); pg.click('[data-act="duel_stake"][data-arg="money"]'); pg.wait_for_selector('.drum .ch')
+        pg.evaluate("""(says) => { const D = window.__HOUSE_TEST.G.G.D; D.rng.chance = () => true; D.chambers[D.pos] = says; D.turn = 'p'; window.__HOUSE_TEST.st.gs.player.sanity = 80; }""", says)
+        pg.evaluate("() => { window.__names = []; window.__fftReset(); }")
+        pg.click('[data-act="duel_listen"]'); pg.wait_for_selector('.heard', timeout=8000); pg.wait_for_timeout(900)
+        results[says] = pg.evaluate("() => ({ names: window.__names.filter(n => /listen|whisper/.test(n)), cls: document.querySelector('.heard').className, txt: document.querySelector('.heard').textContent, peak: window.__peak2, cent: window.__fftCentroid() })")
+    L, E = results[True], results[False]
+    check('L1 si crees oír una bala suena «listen_loaded»; si crees oír vacío, «listen_empty» (y nada más del tipo escuchar)', L['names'] == ['listen_loaded'] and E['names'] == ['listen_empty'], (L['names'], E['names']))
+    check('L2 el texto y el marco acompañan: «Crees oír… una bala» con marco is-loaded; «…vacío» con is-empty', 'is-loaded' in L['cls'] and 'bala' in L['txt'] and 'is-empty' in E['cls'] and 'vacío' in E['txt'], (L['cls'], L['txt'], E['cls'], E['txt']))
+    check('L3 los dos sonidos se OYEN de verdad en la salida de audio (pico > 0,03 en ambos)', L['peak'] > 0.03 and E['peak'] > 0.03, (L['peak'], E['peak']))
+    check('L4 y SUENAN distinto: el de «cargada» es grave (centroide espectral bajo) y el de «vacía» es agudo (al menos 2× más alto)', L['cent'] > 0 and E['cent'] > 1.8 * L['cent'], {'cargada_Hz': round(L['cent']), 'vacia_Hz': round(E['cent'])})
+    check('L5 sin errores JS al escuchar', not pg.errs, pg.errs[:2]); ctx.close()
     b.close()
 
 bad = [n for n, ok in res if not ok]

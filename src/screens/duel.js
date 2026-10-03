@@ -63,7 +63,7 @@ function duelScreen(v) {
       return h('span', { class: 'ch' + (i === dr.cur ? ' cur' : '') + (i === dr.aim ? ' aim' : '') + (spent ? ' spent ' + (f ? 'l' : 'e') : '') }, spent ? (f ? '●' : '○') : String(i + 1)); }));
   };
   drawDrum();
-  const heard = D.heard && D.heard.pos === D.pos ? h('div', { class: 'good heard' }, ico('ear'), ' ' + t(D.heard.says ? 'duel.heard_loaded' : 'duel.heard_empty')) : null;
+  const heard = D.heard && D.heard.pos === D.pos ? h('div', { class: 'good heard ' + (D.heard.says ? 'is-loaded' : 'is-empty') }, ico('ear'), ' ' + t(D.heard.says ? 'duel.heard_loaded' : 'duel.heard_empty')) : null;
   const truth = D.truthKnown ? h('div', { class: 'gold' }, ico('eye'), ' ' + t('duel.truth', { n: D.real }) + ' ' + t(D.lied ? 'duel.truth.lied' : 'duel.truth.honest')) : null;
   const announceTxt = h('span', null, t('duel.announce', { name: foe, n: D.announce }));
   const extraBox = h('div', null, heard, truth);
@@ -165,7 +165,13 @@ function duelScreen(v) {
       if (r.over) G.duelFinish(); else G.duelView();
     } catch (err) { console.error('[duel]', err); } finally { busy = false; }
   };
-  act.duel_listen = () => { if (busy || !pTurn) return; const r = G.duelListen(); if (r) { narr = [{ text: t(r.says ? 'duel.heard_loaded' : 'duel.heard_empty'), cls: 'good' }]; narrTitle = t('duel.turn_you'); G.duelView(); } };
+  // Escuchar: un instante de suspense («…») y luego el sonido de lo que CREES oír (cargada: golpe grave metálico · vacía: tic hueco y agudo)
+  act.duel_listen = async () => {
+    if (busy || !pTurn) return; const r = G.duelListen(); if (!r) return;
+    setBusy(true); showCap('…', 'wait'); await wait(520);
+    audio.playSFX(r.says ? 'listen_loaded' : 'listen_empty'); showCap(t(r.says ? 'duel.cap.heard_loaded' : 'duel.cap.heard_empty'), r.says ? 'bang' : 'click'); await wait(650);
+    narr = [{ text: t(r.says ? 'duel.heard_loaded' : 'duel.heard_empty'), cls: 'good' }]; narrTitle = t('duel.turn_you'); busy = false; G.duelView();
+  };
   act.duel_tool = async id => {
     if (busy || !pTurn) return; const r = G.duelTool(id); if (!r) return;
     if (r.id === 'contrato') narr = [{ text: r.lied ? t('duel.contract.lied', { name: foe }) : t('duel.contract.honest'), cls: r.lied ? 'good' : 'red' }];

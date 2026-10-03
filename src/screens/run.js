@@ -2,7 +2,7 @@
 import * as G from '../game.js';
 import { gs, settings } from '../state.js';
 import { t } from '../i18n.js';
-import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc, jokerEl, jokerDesc, modal, guideTip } from '../ui.js';
+import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc, jokerEl, jokerDesc, modal, guideTip, ruleTag } from '../ui.js';
 import { rewardText, list as missionList } from '../missions.js';
 import { WING_INFO } from '../content.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
@@ -11,8 +11,7 @@ import { fx } from '../fx.js';
 import { audioManager as audio } from '../audio.js';
 
 const oppName = (id, look) => (String(id).startsWith('gambler') ? t('opp.' + (id === 'gambler' ? (look || 'gambler_a') : id)) : t('char.' + id));
-const ruleList = (rules, weak = []) => [].concat(rules || []).map(r => h('span', { class: 'tag red', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`)))
-  .concat(weak.map(r => h('span', { class: 'tag good', title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + ' · ' + t('boss.weakened'))));
+const ruleList = (rules, weak = []) => [].concat(rules || []).map(r => ruleTag(r, false)).concat(weak.map(r => ruleTag(r, true)));
 const primary = (label, a, arg) => btn(label, a, arg, 'primary', { 'data-primary': '1' });
 const hintBox = key => (key ? h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(key)) : null);   // pista de una sola vez
 

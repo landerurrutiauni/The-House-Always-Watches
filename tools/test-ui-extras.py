@@ -227,7 +227,8 @@ with sync_playwright() as p:
     check('T1 el panel de manos (11 manos, con la escalera real) está a la izquierda y visible', pg.locator('.tbl > .hands-panel').is_visible() and pg.locator('.tbl > .hands-panel .hrow').count() == 11 and pg.locator('.tbl > .hands-panel').bounding_box()['x'] < pg.locator('.tbl-main').bounding_box()['x'], pg.locator('.hands-panel .hrow').count())
     check('T1b «Escalera real» aparece en el panel como mano propia, distinta de «Escalera de color»', pg.locator('.hrow[data-hand="royal"]').count() == 1 and pg.locator('.hrow[data-hand="sflush"]').count() == 1 and 'real' in pg.inner_text('.hrow[data-hand="royal"]').lower() and 'real' not in pg.inner_text('.hrow[data-hand="sflush"]').lower())
     check('T3 la barra de comodines muestra 3 comodines y 2 huecos vacíos', pg.locator('.jokerbar .joker[data-joker]').count() == 3 and pg.locator('.jokerbar .joker.empty').count() == 2, (pg.locator('.jokerbar .joker[data-joker]').count(), pg.locator('.jokerbar .joker.empty').count()))
-    check('T3b el ESCUDO tiene un indicador permanente en la mesa con su explicación', pg.locator('.shieldchip').count() == 1 and len(pg.get_attribute('.shieldchip', 'title') or '') > 40, pg.get_attribute('.shieldchip', 'title'))
+    pg.hover('.shieldchip'); pg.wait_for_timeout(150); sht = pg.evaluate("() => { const p = document.querySelector('.tip-pop'); return p && !p.hidden ? p.textContent : ''; }")
+    check('T3b el ESCUDO tiene un indicador permanente en la mesa con su explicación (al pasar el ratón)', pg.locator('.shieldchip').count() == 1 and len(sht) > 40, sht)
     # banners de combo: dos a la vez no se superponen
     pg.evaluate("() => { const f = window.__HOUSE_TEST.FXV || null; }")
     pg.evaluate("""async () => { const { fx } = await import('/src/fx.js'); fx.banner('LA MIRADA', 1); fx.banner('ESCALERA REAL', 3); fx.banner('CERRADURA', 1); }""")

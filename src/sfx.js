@@ -37,6 +37,9 @@ const R = {
   knock: (o, t) => [0, .22, .4].forEach(d => { tone(o, t + d, { f: 200, f2: 110, type: 'triangle', d: .1, v: .4 }); burst(o, t + d, { d: .05, f: 900, q: 2, v: .2 }); }),
   bulb: (o, t) => { for (let i = 0; i < 5; i++) tone(o, t + i * .06 + Math.random() * .03, { f: 100, type: 'sawtooth', d: .05, v: .05, lp: 900 }); },
   click_empty: (o, t) => { burst(o, t, { d: .03, f: 3800, q: 6, v: .35 }); tone(o, t, { f: 1800, f2: 900, type: 'square', d: .02, v: .05 }); },
+  // Escuchar en el duelo: suena distinto según lo que CREES oír. Cargada = golpe grave y metálico con un anillo de latón (grave, 150–600 Hz); vacía = tic hueco y aireado (agudo, 3–5 kHz).
+  listen_loaded: (o, t) => { [0, .045, .085].forEach((d, i) => burst(o, t + d, { d: .02, f: 900 + i * 120, q: 6, v: .16 })); tone(o, t + .12, { f: 150, f2: 62, type: 'triangle', d: .26, v: .55 }); burst(o, t + .12, { d: .07, f: 650, q: 4, v: .32 }); tone(o, t + .15, { f: 540, f2: 500, type: 'sine', d: .45, v: .12 }); },
+  listen_empty: (o, t) => { burst(o, t, { d: .035, f: 4300, q: 6, v: .22 }); burst(o, t + .05, { d: .3, type: 'highpass', f: 3600, f2: 5200, v: .07 }); tone(o, t, { f: 2600, f2: 1900, type: 'sine', d: .16, v: .05 }); burst(o, t + .22, { d: .03, f: 4300, q: 6, v: .09 }); },
   gun_load: (o, t) => { for (let i = 0; i < 6; i++) burst(o, t + i * .07, { d: .025, f: 3000 + i * 150, q: 5, v: .18 }); burst(o, t + .5, { d: .05, f: 1200, q: 3, v: .3 }); },
   shot: (o, t) => { tone(o, t, { f: 95, f2: 32, d: .5, v: .7 }); burst(o, t, { d: .35, type: 'lowpass', f: 2600, f2: 120, v: .5 }); },
   heartbeat: (o, t) => { tone(o, t, { f: 62, f2: 34, d: .22, v: .8 }); tone(o, t + .23, { f: 52, f2: 32, d: .2, v: .55 }); },

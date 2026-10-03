@@ -1,0 +1,10 @@
+rule.label|Arerioaren trebetasuna
+rule.weak_note|Ez zaitu jada eragiten: dakizunarekin ahuldu duzu.
+hud.health.tip|Zure bizitza. 0ra iristen bada, hil egiten zara. Odol-kartek, Osasun-apustuek eta galdutako txandek gastatzen dute; atseden batean lo eginez edo dendako bendekin berreskuratzen da.
+hud.sanity.tip|Zure burua. Dueloan entzutean eta apustuek, karta madarikatuek eta gertaerek gastatzen dute. Gutxi dagoenean pantaila distortsionatzen da; 0 denean erori egiten zara (−20 Osasun, +25 Zentzutasun). Atseden batean arnasa hartuz berreskuratzen da.
+hud.money.tip|Dendan erosteko balio du (komodinak, objektuak, kartak, bendak…) eta atseden batean Zorra ordaintzeko. Txandak eta dueloak irabazita lortzen da.
+hud.debt.tip|Etxeari zor diozuna: maileguekin, apustuekin eta interesarekin hazten da. Handia denean, helburuak igotzen dira (%25era arte). Horren truke, karta eta komodin batzuek puntu bihurtzen dute. Atsedenetan ordaintzen da.
+hud.lives.tip|Kandela bakoitza bizitza bat da. Batekin hasten zara; Osasuna 0ra iristen bada eta beste bat baduzu, kontsumitu egiten da eta Osasunaren %40rekin itzultzen zara.
+hud.deck.tip|Ikusi zure karta guztiak, bereziak nabarmenduta. Palu, balio, berezi edo berrien arabera ordena ditzakezu.
+duel.cap.heard_loaded|KARGATUTA?
+duel.cap.heard_empty|HUTSIK?

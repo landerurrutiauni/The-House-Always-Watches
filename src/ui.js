@@ -142,7 +142,8 @@ let prevHud = null;
 export function renderHud(hud) {
   const el = $('#hud'); if (!hud) { el.hidden = true; return; }
   el.hidden = false;
-  const st = (k, icon, key, val, extra = '', bar) => h('span', { class: 'stat ' + k + extra, 'data-k': k, title: t(key) + ': ' + val, 'aria-label': t(key) + ': ' + val }, ico(icon), h('span', { class: 'lbl' }, t(key)), h('span', { class: 'v' }, val), bar != null ? h('span', { class: 'bar', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(0, Math.min(100, bar)) + '%' })) : null);
+  // Cada recurso explica para qué sirve al pasar el ratón, tocar o enfocar (hud.<k>.tip)
+  const st = (k, icon, key, val, extra = '', bar) => { const el = h('span', { class: 'stat ' + k + extra, 'data-k': k, tabindex: '0', 'aria-label': t(key) + ': ' + val + '. ' + t(`hud.${k}.tip`) }, ico(icon), h('span', { class: 'lbl' }, t(key)), h('span', { class: 'v' }, val), bar != null ? h('span', { class: 'bar', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(0, Math.min(100, bar)) + '%' })) : null); attachTip(el, () => ({ title: t(key) + ' · ' + val, body: t(`hud.${k}.tip`), cls: 'res-' + k })); return el; };
   const inv = h('button', { type: 'button', class: 'hud-inv btn small ghost', 'data-act': 'inventory', 'aria-label': t('hud.inventory') }, ico('pocket'), ' ' + (hud.items.length + hud.tools.length + (hud.jokers ? hud.jokers.length : 0)));
   fill(el,
     st('health', 'heart', 'hud.health', hud.health + '/' + hud.maxHealth, '', hud.health / hud.maxHealth * 100),
@@ -150,7 +151,7 @@ export function renderHud(hud) {
     st('money', 'coin', 'hud.money', hud.money),
     st('debt', 'ledger', 'hud.debt', hud.debt),
     hud.lives > 0 ? st('lives', 'candle', 'hud.lives', '×' + hud.lives) : null,
-    h('button', { type: 'button', class: 'btn small ghost hud-deck', 'data-act': 'deck', 'aria-label': t('hud.deck') + ': ' + gs.deck.length, title: t('hud.deck') + ': ' + gs.deck.length }, ico('cards'), ' ' + gs.deck.length),
+    (() => { const b = h('button', { type: 'button', class: 'btn small ghost hud-deck', 'data-act': 'deck', 'aria-label': t('hud.deck') + ': ' + gs.deck.length }, ico('cards'), ' ' + gs.deck.length); attachTip(b, () => ({ title: t('hud.deck') + ' · ' + gs.deck.length, body: t('hud.deck.tip') })); return b; })(),
     h('span', { class: 'hud-inv' }, ...hud.tools.map(id => h('span', { class: 'chip tool', title: t(`tool.${id}.name`) + ': ' + t(`tool.${id}.desc`) }, sigil(id, '', PAL.g1))), inv),
     h('button', { type: 'button', class: 'btn small ghost' + (hud.guide ? ' pulse' : ''), 'data-act': 'howto', 'aria-label': t('hud.howto'), title: t('hud.howto') }, ico('help')),
     fsButton('icon', 'small ghost'),
@@ -193,7 +194,7 @@ export function showTip(target, c) {
   const host = document.getElementById('stage') || document.body;
   if (!tipNode) { tipNode = h('div', { class: 'tip-pop', role: 'tooltip' }); tipNode.hidden = true; host.appendChild(tipNode); document.addEventListener('pointerdown', e => { lastPtr = e.pointerType || 'mouse'; if (tipTarget && !tipTarget.contains(e.target)) hideTip(); }, true); }
   tipNode.className = 'tip-pop ' + (c.cls || '');
-  tipNode.replaceChildren(h('b', { class: 'tp-title' }, c.title), c.tag ? h('span', { class: 'tp-tag' }, c.tag) : null, h('div', { class: 'tp-body' }, c.body), c.foot ? h('div', { class: 'tp-foot' }, c.foot) : null);
+  tipNode.replaceChildren(...[h('b', { class: 'tp-title' }, c.title), c.tag ? h('span', { class: 'tp-tag' }, c.tag) : null, h('div', { class: 'tp-body' }, c.body), c.foot ? h('div', { class: 'tp-foot' }, c.foot) : null].filter(Boolean));   // sin nulos: replaceChildren(null) escribiría el texto «null»
   tipNode.hidden = false; tipTarget = target;
   const r = target.getBoundingClientRect(), [cx, top] = toStage(r.left + r.width / 2, r.top), [, bottom] = toStage(r.left + r.width / 2, r.bottom);
   const w = tipNode.offsetWidth, hh = tipNode.offsetHeight; let x = Math.round(cx - w / 2), y = Math.round(top - hh - 8); if (y < 4) y = Math.round(bottom + 8);
@@ -204,6 +205,12 @@ export function attachTip(el, getContent) {
   el.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') hideTip(); });
   el.addEventListener('focus', () => showTip(el, getContent())); el.addEventListener('blur', hideTip);
   el.addEventListener('click', () => { if (lastPtr === 'touch' && tipTarget === el) hideTip(); else showTip(el, getContent()); });
+}
+// Habilidad (regla) del rival: etiqueta con descripción al pasar el ratón, tocar o enfocar
+export function ruleTag(r, weak = false) {
+  const el = h('span', { class: 'tag ' + (weak ? 'good' : 'red') + ' ruletag', tabindex: '0', 'data-rule': r, 'aria-label': t(`rule.${r}.name`) + ': ' + t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + (weak ? ' · ' + t('boss.weakened') : ''));
+  attachTip(el, () => ({ title: t(`rule.${r}.name`), tag: weak ? t('boss.weakened') : t('rule.label'), body: t(`rule.${r}.desc`) + (weak ? ' ' + t('rule.weak_note') : ''), cls: weak ? 'r-uncommon' : 'r-rare' }));
+  return el;
 }
 // Recordatorio no diegético de dónde está la guía (lo ven la primera vez, no lo dice ningún personaje)
 export const guideTip = () => h('div', { class: 'sys-tip', role: 'note' }, ico('help'), t('ui.tip_guide'));

@@ -4,7 +4,6 @@ duel.if_lose|Galtzen baduzu:
 table.interest_up|Interesa: helburua {n}
 deck.title|Sorta
 deck.count|{n} karta · {sp} berezi
-deck.left|Ateratzeko: {n}/{total}
 deck.hint|Jarri sagua (edo ukitu) karta baten gainean zer egiten duen ikusteko.
 deck.sort|Ordenatu:
 deck.sort.suit|Palua
@@ -12,8 +11,6 @@ deck.sort.rank|Balioa
 deck.sort.special|Bereziak
 deck.sort.recent|Berrienak
 deck.only_special|Bereziak soilik
-deck.view.full|Sorta osoa
-deck.view.left|Ateratzeko
 deck.empty|Ez dago erakusteko kartarik.
 table.sort_hint|Ordenatu zure eskua balioaren edo paluaren arabera
 rarity.common|Arrunta

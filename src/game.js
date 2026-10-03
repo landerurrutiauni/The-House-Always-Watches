@@ -519,7 +519,7 @@ export function duelShoot(at, o = {}) {   // o.silent: la interfaz reproduce los
 export function duelListen() {
   const D = G.D; if (!D || D.over || D.turn !== 'p') return null;
   const p = gs.player; if (p.sanity <= S.LISTEN_COST) { sfx('deny'); return null; }
-  addSanity(-S.LISTEN_COST); sfx('whisper');
+  addSanity(-S.LISTEN_COST);   // el sonido lo pone la pantalla del duelo, según lo que se oiga (cargada / vacía)
   const r = S.listen(D, duelListenReliability()); MIS.track('listen');
   return r;
 }

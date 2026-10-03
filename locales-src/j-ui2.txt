@@ -4,7 +4,6 @@ duel.if_lose|Si pierdes:|If you lose:|Si tu perds :|Bei Niederlage:
 table.interest_up|Interés: objetivo {n}|Interest: target {n}|Intérêt : objectif {n}|Zinsen: Ziel {n}
 deck.title|Mazo|Deck|Paquet|Stapel
 deck.count|{n} cartas · {sp} especiales|{n} cards · {sp} special|{n} cartes · {sp} spéciales|{n} Karten · {sp} besondere
-deck.left|Por robar: {n} de {total}|To draw: {n} of {total}|À piocher : {n} sur {total}|Zu ziehen: {n} von {total}
 deck.hint|Pasa el ratón (o toca) una carta para ver qué hace.|Hover (or tap) a card to see what it does.|Survole (ou touche) une carte pour voir son effet.|Fahre über eine Karte (oder tippe sie an), um ihre Wirkung zu sehen.
 deck.sort|Ordenar:|Sort:|Trier :|Sortieren:
 deck.sort.suit|Palo|Suit|Couleur|Farbe
@@ -12,8 +11,6 @@ deck.sort.rank|Valor|Rank|Valeur|Wert
 deck.sort.special|Especiales|Special|Spéciales|Besondere
 deck.sort.recent|Recientes|Newest|Récentes|Neueste
 deck.only_special|Solo especiales|Special only|Spéciales seulement|Nur besondere
-deck.view.full|Mazo completo|Full deck|Paquet complet|Ganzer Stapel
-deck.view.left|Por robar|To draw|À piocher|Zu ziehen
 deck.empty|No hay cartas que mostrar.|No cards to show.|Aucune carte à afficher.|Keine Karten zum Anzeigen.
 table.sort_hint|Ordena tu mano por valor o por palo|Sort your hand by rank or suit|Trie ta main par valeur ou par couleur|Sortiere deine Hand nach Wert oder Farbe
 rarity.common|Común|Common|Commun|Gewöhnlich

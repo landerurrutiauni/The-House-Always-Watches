@@ -547,3 +547,11 @@ p>.tag,li>.tag,b+.tag,h3>.tag,.say>.tag{margin-left:.45em}
 .deck-grid .card{cursor:default}
 .deck-grid .card.is-sp{outline:2px solid #b08a3a;outline-offset:1px}
 .deck-info{min-height:2.6em;text-align:center;font-size:.9em;padding:4px 8px;border-top:1px solid var(--c3);color:var(--t3)}
+
+/* ---------- Descripciones de recursos y habilidades de rivales; escuchar en el duelo ---------- */
+.stat,.ruletag,.shieldchip{cursor:help}
+.stat:focus-visible,.ruletag:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tip-pop.res-health{border-color:#c0504a}.tip-pop.res-sanity{border-color:#8f8fd4}.tip-pop.res-money{border-color:#b08a3a}.tip-pop.res-debt{border-color:#a05a8a}.tip-pop.res-lives{border-color:#e0b050}
+.tip-pop .tp-title{font-size:1.02em}
+.heard.is-loaded{border-left:3px solid #ff6a4a;padding-left:.5em}
+.heard.is-empty{border-left:3px solid #7fa0b8;padding-left:.5em}
