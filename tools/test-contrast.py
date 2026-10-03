@@ -38,6 +38,19 @@ CHECK = r"""(opts) => {
     if (!okBorder && !okFill && !el.matches('.stat, .tag')) { const key = 'borde|' + sel(el); if (!seen.has(key)) { seen.add(key); out.push({ kind: 'borde', sel: sel(el), text: '', fg: [], bg: [], ratio: 0, need: 3 }); } }
   }
   return out; }"""
+
+LEGAL_CHECK = r"""() => {
+  const parse = c => { const m = String(c).match(/rgba?\(([^)]+)\)/); if (!m) return { r: 0, g: 0, b: 0, a: 0 }; const p = m[1].split(/[ ,\/]+/).filter(Boolean).map(parseFloat); return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; };
+  const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  const lum = c => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+  const over = (t, b) => ({ r: t.r * t.a + b.r * (1 - t.a), g: t.g * t.a + b.g * (1 - t.a), b: t.b * t.a + b.b * (1 - t.a), a: 1 });
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const bgOf = el => { const layers = []; for (let e = el; e && e.nodeType === 1; e = e.parentElement) { const bg = parse(getComputedStyle(e).backgroundColor); if (bg.a > 0) layers.push(bg); if (bg.a >= 1) break; } let c = { r: 0, g: 0, b: 0, a: 1 }; for (const l of layers.reverse()) c = over(l, c); return c; };
+  const out = [];
+  for (const el of document.querySelectorAll('body *')) { const t = [...el.childNodes].filter(x => x.nodeType === 3 && x.textContent.trim()).map(x => x.textContent.trim()).join(' '); if (!t) continue;
+    const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('script, style, noscript')) continue; const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
+    const bg = bgOf(el), fg = over(parse(cs.color), bg), rr = ratio(fg, bg); if (rr < 7) out.push({ kind: 'texto', sel: el.tagName.toLowerCase() + '.' + el.className, text: t.slice(0, 36), fg: [Math.round(fg.r), Math.round(fg.g), Math.round(fg.b)], bg: [Math.round(bg.r), Math.round(bg.g), Math.round(bg.b)], ratio: Math.round(rr * 100) / 100, need: 7 }); }
+  return out; }"""
 PREP = """() => { const T = window.__HOUSE_TEST, G = T.G, st = T.st; st.settings.reduceEffects = true; st.settings.textSpeed = 'instant'; G.newGame(); G.introDone(); const m = st.gs.meta; m.tutorial.round = true; m.tutorial.duel = true; m.stats.anomalies = 1; m.hints = { map: 1, event: 1, merchant: 1, rest: 1, boss: 1, shield: 1, guide: 1 }; m.runsFinished = 4; m.wingsCleared = ['salon', 'pasillo', 'sotano']; for (const id of ['girl', 'chair', 'child', 'merchant', 'woman', 'drowned', 'archivist', 'nun', 'cook', 'nurse', 'puppet', 'pianist', 'prompter', 'usher', 'watcher', 'concierge']) T.FX.discoverCharacter(id); T.ACH.unlockEgg('real'); T.ACH.unlockEgg('ojos'); }"""
 SET_HC = """async (on) => { const T = window.__HOUSE_TEST; T.st.settings.contrast = !!on; const { fx } = await import('/src/fx.js'); fx.applyDisplay(); }"""
 bad_all = []
@@ -91,6 +104,15 @@ with sync_playwright() as p:
         step('ajustes', "() => { window.__HOUSE_TEST.G.toMenu(); setTimeout(() => document.querySelector('#view [data-act=\"settings\"]').click(), 60); }", '.modal')
         step('guía', "() => { window.__HOUSE_TEST.G.toMenu(); setTimeout(() => document.querySelector('#view [data-act=\"howto\"]').click(), 60); }", '.howto-modal', lambda: pg.evaluate("() => { const d = document.querySelector('.howto-modal details'); if (d) d.open = true; }"))
         print(f'[{lang}] {n} pantallas medidas · errores JS: {errs[:2]}', flush=True); ctx.close()
+    # página «Privacidad y aviso» (otra página, mismo ajuste de alto contraste guardado en localStorage)
+    LEGAL = URL.rsplit('/', 1)[0] + '/legal/privacy.html'
+    for lang in LANGS:
+        ctx = b.new_context(viewport={'width': 1280, 'height': 720}, locale=LOC[lang])
+        ctx.add_init_script("localStorage.setItem('thaw.settings.v1', JSON.stringify({ lang: '%s', contrast: %s }));" % (lang, 'true' if HC else 'false'))
+        pg = ctx.new_page(); pg.goto(LEGAL); pg.wait_for_selector('main h1, main h2', timeout=8000); pg.wait_for_timeout(400)
+        v = pg.evaluate(LEGAL_CHECK)
+        for x in v: x['screen'] = 'privacidad'; x['lang'] = lang; bad_all.append(x)
+        print(f'  {"ok  " if not v else "MAL "} [{lang}] {"privacidad":22s} {len(v)} fallos' + ('' if not v else '  p. ej. ' + json.dumps(v[0], ensure_ascii=False)[:200]), flush=True); ctx.close()
     b.close()
 by = {}
 for x in bad_all: by.setdefault((x.get('kind'), x.get('sel')), []).append(x)
