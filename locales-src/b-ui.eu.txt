@@ -1,0 +1,321 @@
+ui.continue|JARRAITU
+ui.back|ATZERA
+ui.close|ITXI
+ui.confirm|BAIEZTATU
+ui.cancel|UTZI
+ui.skip|SALTATU
+ui.tap|Ukitu jarraitzeko
+ui.new|BERRIA
+ui.accept|ONARTU
+ui.reject|BAZTERTU
+ui.hidden|AUKERA EZKUTUA
+ui.swipe_hint|Irristatu ← edo → · A / D teklak
+ui.memory_new|Oroitzapena: {name}
+ui.res.health|Osasuna
+ui.res.sanity|Zentzutasuna
+ui.res.money|Dirua
+ui.res.debt|Zorra
+ui.res.shield|Ezkutua
+ui.out.card|Karta: {name}
+ui.out.item|Objektua: {name}
+ui.out.tool|Tresna: {name}
+ui.out.tool_full|Tresnarentzako lekurik ez: erdi prezioan saltzen duzu
+ui.out.level|{name} mailaz igotzen da
+ui.out.mod|{card}: {mod}
+ui.out.remove|Galtzen duzu: {name}
+ui.out.know|Ezagutza: {name}
+ui.out.know_old|Jakina zenuen: {name}
+ui.out.gamble_won|Etxeak irribarre egiten du: apustua irabazi duzu.
+ui.out.gamble_lost|Oraingoan etxeak irabazten du.
+ui.out.boss|{name}k partida batera erronka egiten dizu.
+ui.redo.espejo_roto|Berregin Ispilu hautsiarekin (−5 Zentzutasun)
+ui.redo.ficha_negra|Desegin Fitxa beltzarekin (+50 Zor)
+menu.tagline|Etxeak beti begiratzen du.
+menu.new|PARTIDA BERRIA
+menu.continue|JARRAITU
+menu.reset|AURRERAPENA BERRABIARAZI
+menu.settings|EZARPENAK
+menu.secret|???
+menu.cookies|Cookieak
+menu.legal.privacy|Pribatutasuna eta oharra
+menu.version|v{v}
+menu.deaths|{n} heriotza
+menu.confirm_new.title|Partida berria
+menu.confirm_new.text|Uneko jaitsiera utziko duzu. Oroitzapenak, ezagutza eta amaierak gordetzen dituzu.
+menu.confirm_reset.title|Aurrerapena berrabiarazi
+menu.confirm_reset.text|Honek aurrerapen GUZTIA ezabatuko du: heriotzak, oroitzapenak, ezagutza eta amaierak.
+menu.confirm_reset.text2|Ziur? Ezin da desegin.
+wings.title|Aukeratu non esnatu
+wings.boss|Zaindaria: {name}
+wings.cleared|osatua
+wings.locked|Itxita. Etxeak oraindik ez zaitu pasatzen uzten.
+map.title|{n}/{total} gela
+map.pick|Aukeratu zure hurrengo gela.
+map.enter|SARTU
+map.opp|Arerioa: {name}
+map.shotgun|Eskopeta-dueloa. Zurea den zerbait apustu egiten duzu.
+map.info.event|Zerbait zain duzu. Ez dakizu zer.
+map.info.merchant|Saldu behar ez liratekeen gauzen saltzaile bat.
+map.info.rest|Arnasa berreskuratzeko txoko bat.
+map.info.secret|Beste inork ikusten ez duen hezurrezko ate bat.
+map.visited|bisitatua
+map.locked|irispidetik kanpo
+node.game|Karta-mahaia
+node.event|Gertaera
+node.merchant|Saltzailea
+node.rest|Atsedena
+node.shotgun|Eskopeta
+node.secret|Hezurrezko atea
+node.boss|Zaindaria
+table.play|JOKATU
+table.discard|BAZTERTU
+table.stash|POLTSIKOA
+table.unstash|ATERA
+table.salt|ERABILI GATZA
+table.help|GIDA
+table.score|Puntuak
+table.plays|Jokaldiak
+table.discards|Baztertzeak
+table.pocket|Poltsikoa
+table.deck|Sorta: {n}
+table.peek|Hurrengo kartak
+table.chips|FITXAK
+table.mult|MULT
+table.preview_none|Aukeratu 1etik 5era karta jokaldia ikusteko.
+table.enough|Honekin helburura iristen zara!
+table.tap_info|Ukitu karta bat zer egiten duen ikusteko.
+table.hand_label|Zure eskua
+table.hidden_card|Karta ezkutua
+table.hidden_desc|Lainoak ezkutatzen du: itsututa jokatu dezakezu.
+table.no_rule|Arau berezirik ez.
+table.odds|Garaipenaren probabilitate estimatua: %{p}
+table.boss|ZAINDARIA
+table.final|AZKEN ESKUA
+table.glass_broke|Kristalezko karta bat hautsi da.
+help.title|Gida azkarra
+help.goal|Heldu puntuen HELBURURA jokaldirik gabe gelditu aurretik. Lortzen ez baduzu, etxeak kobratzen du.
+help.score|Jokaldi bakoitzak FITXAK × MULT puntuatzen ditu. Eskuak (bikotea, hirukotea, eskala…) oinarria ematen du; karta eta konbinazio bakoitzak gehiago gehitzen du. Begiratu beti kostua jokatu aurretik. Karta bakoitzak fitxak gehitzen ditu bere balioaren arabera: As 11, figurak (J, Q, K) 10 eta gainerakoak beren zenbakia.
+help.hands|Eskuak (fitxak × mult)
+help.suits|Paluak
+help.combos|Konbinazio bereziak
+help.stakes_title|Apustuak
+help.stakes|Apustuak jokaldia biderkatzen du, baina Osasuna, Zentzutasuna, Dirua edo Zorra kostatzen du. Arau batzuek debekatu egiten dituzte.
+help.tips_title|Aholkuak
+help.tips|Baztertu karta txarrak, gorde bat Poltsikoan jokaldi perfektuarako eta zaindu Zentzutasuna: jaisten bada, pantaila distortsionatzen da eta, 0ra iristen bada, erori egiten zara (+25 Zentzutasun, −20 Osasun).
+duel.title|ESKOPETA
+duel.final|AZKEN BALA
+duel.setup.sub|Zer jartzen duzu mahai gainean?
+duel.setup.note|Irabazten baduzu: +10 Diru gehiago. Galtzen baduzu: −12 Osasun apustuaz gain. Inork ez zaitu behartzen iragartzen dutena sinestera.
+duel.stake.money.name|{n} Diru
+duel.stake.money.win|Irabazten baduzu: +25 Diru
+duel.stake.money.lose|Galtzen baduzu: −{n} Diru
+duel.stake.sanity.name|{n} Zentzutasun
+duel.stake.sanity.win|Irabazten baduzu: +8 Zentzutasun
+duel.stake.sanity.lose|Galtzen baduzu: −{n} Zentzutasun
+duel.stake.debt.name|{n} Zor
+duel.stake.debt.win|Irabazten baduzu: −60 Zor
+duel.stake.debt.lose|Galtzen baduzu: +{n} Zor
+duel.stake.card.name|Zure sortako karta bat
+duel.marks_you|Zure markak
+duel.marks_foe|Arerioaren markak
+duel.announce|{name}k iragartzen du: 6 ganberatik {n} kargatuta daude.
+duel.announce_note|Gezurretan ari daiteke.
+duel.chambers|Ganberak
+duel.turn_you|Zure txanda
+duel.turn_foe|Arerioaren txanda…
+duel.shoot_foe|ARERIOARI TIRO EGIN
+duel.shoot_table|MAHAIA PROBOKATU
+duel.listen|ENTZUN (−{c} Zentzutasun)
+duel.heard_loaded|Bala bat entzuten duzula uste duzu…
+duel.heard_empty|Hutsa entzuten duzula uste duzu…
+duel.truth|Lekukoa: benetako {n} bala zeuden.
+duel.truth.lied|Gezurra esan zizuten.
+duel.truth.honest|Egia esaten zuen.
+duel.ev.p_shot_hit|Tiro egiten duzu: {name}k marka bat galtzen du.
+duel.ev.p_shot_click|Klik. Ganbera hutsik zegoen.
+duel.ev.p_table_safe|Mahaia isiltzen da. Txandari eusten diozu.
+duel.ev.p_table_backfire|Mahaiak bala itzultzen dizu: marka bat galtzen duzu.
+duel.ev.f_shot_hit|{name}k tiro egiten du: marka bat galtzen duzu.
+duel.ev.f_shot_click|{name}k tiro egiten du. Klik.
+duel.ev.f_table_safe|{name}k Mahaia probokatzen du. Ezer ez.
+duel.ev.f_table_backfire|Mahaia {name}ren aurka itzultzen da: marka bat galtzen du.
+duel.ev.skipped|{name}k bere txanda ahazten du.
+duel.ev.reload|Eskopeta berrkargatzen da.
+duel.contract.lied|Kontratuak hozka egiten du: {name}k marka bat galtzen du.
+duel.contract.honest|Ez zuen gezurrik esaten: Zorra 20 igotzen da.
+duel.tool.memory|Arerioak bere hurrengo txanda ahaztuko du.
+result.win|TXANDA IRABAZIA
+result.lose|TXANDA GALDUA
+result.duel_win|DUELUA IRABAZIA
+result.duel_lose|DUELUA GALDUA
+result.score|{score} / {target} puntu
+reward.title|Aukeratu sari bat
+reward.boss_title|Zaindaria erortzen da. Aukeratu objektu bat.
+reward.level|Mailaz igo: {hand}
+reward.level_desc|{chips} fitxa × {mult} mult izatera pasatzen da.
+reward.mod|Markatu karta bat: {mod}
+reward.skip|EZ AUKERATU (+{n} Diru)
+shop.line|«Dena du prezioa. Dagoeneko ez duzunak ere bai.»
+shop.buy|EROSI · {price}
+shop.take|ONARTU
+shop.sold|SALDUA
+shop.leave|IRTEN
+shop.heal.name|Bendak
+shop.heal.desc|35 Osasun berreskuratzen dituzu.
+shop.level.name|Ikasgaia
+shop.level.desc|Ausazko esku baten maila igotzen du.
+shop.remove.name|Garbiketa
+shop.remove.desc|Zure sortako ausazko oinarrizko karta bat ezabatzen du.
+shop.loan.name|Mailegua
+shop.loan.desc|{amount} Diru jasotzen dituzu eta +{debt} Zor.
+rest.title|Gelditzeko leku bat
+rest.sub|Etxea geldirik dagoela dirudi. Dirudi bakarrik.
+rest.heal.name|Lo egin
+rest.heal.desc|35 Osasun berreskuratzen dituzu.
+rest.calm.name|Arnasa hartu
+rest.calm.desc|25 Zentzutasun berreskuratzen dituzu.
+rest.pay.name|Zorra ordaindu
+rest.pay.desc|{n} Diru ordaintzen dituzu eta {n} Zor murrizten duzu.
+rest.study.name|Kartak aztertu
+rest.study.desc|−8 Zentzutasun. Esku baten maila igotzen du.
+rest.skip|ATSEDENIK GABE JARRAITU
+rest.done.heal|Amesik egin gabe lo egiten duzu. {n} Osasun berreskuratzen dituzu.
+rest.done.calm|Arnasa sakon hartzen duzu. {n} Zentzutasun berreskuratzen dituzu.
+rest.done.pay|{n} ordaintzen duzu. Zorra jaisten da, baina ez da desagertzen.
+rest.done.study|Kartek begirada itzultzen dizuten arte aztertzen duzu. {hand} mailaz igotzen da.
+boss.title|ZAINDARIA
+boss.rules|Partida honen arauak
+boss.weakened|ahulduta
+boss.no_rules|Arau berezirik gabe
+boss.fight|PARTIDA JOKATU
+finale.stage1|AZKEN ESKUA
+finale.stage2|AZKEN BALA
+door.title|Atea
+door.hint|Amaiera bakoitzak zerbait desberdina eskatzen du. Aukeratu kontuz.
+door.open|Eskuragarri
+door.seen|Amaiera ikusia
+door.req.deuda|Beti eskuragarri.
+door.req.puerta|Eskatzen du: Hezur-giltza.
+door.req.crupier|Eskatzen du: Krupierrari buruzko 3 pista.
+door.req.partida|Eskatzen du: «Jokalariak» eta 5 pertsonaia ezagutu izana.
+door.req.espectador|Eskatzen du: «Norbaitek begiratzen du» eta «Zure islada».
+door.req.verdad|Eskatzen du: 5 amaiera ikusiak eta «Ate guztiak berdinak dira».
+ending.n|{n} / {total} AMAIERA
+ending.first|AMAIERA BERRIA
+ending.memories|Irabazitako oroitzapenak
+ending.to_menu|MENURA ITZULI
+ending.true_hint|Bost amaiera ikusi dituzu. Ate bat gehiago geratzen da.
+death.title|HIL ZARA
+death.sub|Partida ez da amaitu.
+death.debt|UNEKO ZORRA
+death.memories|GORDETAKO OROITZAPENAK
+death.knowledge|EZAGUTZA
+death.deaths|Heriotzak {n}
+death.none|Oraindik bat ere ez. Jarraitu kontuz hiltzen.
+death.retry|MAHAIRA ITZULI
+archive.title|???
+archive.endings|Amaierak
+archive.chars|Pertsonaiak
+archive.memories|Oroitzapenak
+archive.knowledge|Ezagutza
+archive.stats|Estatistikak
+archive.unknown|???
+archive.stat.deaths|Heriotzak
+archive.stat.runs|Amaitutako jaitsierak
+archive.stat.roundsWon|Irabazitako txandak
+archive.stat.roundsLost|Galdutako txandak
+archive.stat.duelsWon|Irabazitako dueluak
+archive.stat.duelsLost|Galdutako dueluak
+archive.stat.anomalies|Anomaliak
+hud.health|Osasuna
+hud.sanity|Zentzutasuna
+hud.money|Dirua
+hud.debt|Zorra
+hud.lives|Kandelak
+hud.items|Objektuak
+hud.tools|Tresnak
+hud.deck|Sorta
+hud.inventory|Inbentarioa
+hud.levels|Esku-mailak
+hud.settings|Ezarpenak
+hud.no_items|Oraindik ezer ez.
+settings.title|Ezarpenak
+settings.language|Hizkuntza
+settings.audio|Audioa
+settings.music|Musika
+settings.sfx|Efektuak
+settings.ambient|Giroa
+settings.mute_music|Musika mututu
+settings.mute_sfx|Efektuak mututu
+settings.reduce_intense|Soinu biziak murriztu
+settings.display|Pantaila eta irisgarritasuna
+settings.text_size|Testuaren tamaina
+settings.quality|Kalitate grafikoa
+settings.q.high|Altua
+settings.q.medium|Ertaina
+settings.q.low|Baxua
+settings.contrast|Kontraste altua
+settings.reduce_effects|Efektuak murriztu (keinurik eta astinaldirik gabe)
+settings.vibration|Bibrazioa
+settings.privacy|Pribatutasuna
+settings.cookies|Cookie hobespenak
+whisper.1|BEGIRATZEN ARI ZAIZKIZU
+whisper.2|EZ ZEN KARTA HORI
+whisper.3|KONTATU BERRIRO
+whisper.4|HEMEN EGON ZARA LEHEN
+whisper.5|ETXEAK BADAKI ZURE IZENA
+whisper.6|EZ BEGIRATU ATZERA
+whisper.7|ATE GUZTIAK BERDINAK DIRA
+whisper.8|ZEIN BANATZEN ARI DA?
+cookies.title|Cookieak eta biltegiratzea
+cookies.text|Tokiko biltegiratze beharrezkoa erabiltzen dugu zure partida eta ezarpenak gordetzeko. Aukerako zerbitzuak zure baimenarekin bakarrik kargatzen dira. Nahi duzunean alda dezakezu.
+cookies.more|Informazio gehiago
+cookies.accept|GUZTIAK ONARTU
+cookies.reject|AUKERAKOAK BAZTERTU
+cookies.config|KONFIGURATU
+cookies.save|AUKERA GORDE
+cookies.always|beti aktibo
+cookies.necessary.name|Beharrezkoak
+cookies.necessary.desc|Zure partida, hizkuntza eta ezarpenak zure gailuan gordetzen dituzte. Ezin dira desaktibatu.
+cookies.analytics.name|Analitika
+cookies.analytics.desc|Jokoaren erabilera neurtzen dute hobetzeko. Lehenespenez desaktibatuta.
+debug.title|Arazketa
+ui.fullscreen|PANTAILA OSOA
+ui.fullscreen_exit|PANTAILA OSOTIK IRTEN
+settings.fullscreen|Pantaila osoa
+menu.howto|NOLA JOKATZEN DEN
+hud.howto|Nola jokatzen den
+howto.title|Nola jokatzen den
+howto.cards|ESKUAK ETA PALUAK IKUSI
+howto.s1.h|Helburua
+howto.s1.t|Etxean zehar jaisten zara, gelaz gela. Solairu bakoitzean zure bidea aukeratzen duzu mapan: karta-mahaiak jokatzen dituzu, gertaeretan erabakitzen duzu eta, batzuetan, zerbait apustu egiten duzu eskopeta-dueloan. Hegal bakoitza Zaindari batekin amaitzen da; ondoren Krupierra, haren azken eskua eta Atea iristen dira.\nHiltzea ez da amaiera: oroitzapenak eta ezagutza gordetzen dituzu, eta berriro jaisten zara.
+howto.s2.h|Mapa
+howto.s2.t|Gela bakoitza nodo bat da. Ukitu bat zer den ikusteko eta ukitu berriro (edo sakatu SARTU) sartzeko. Zure gelarekin konektatuta dauden gelatara bakarrik joan zaitezke.\nKarta-mahaiak, gertaerak, Saltzailea, atsedenak, eskopeta (zerbait apustu egiten duzun dueloa), hezurrezko ate sekretu bat eta Zaindaria daude.
+howto.s3.h|Zure baliabideak
+howto.s3.t|• Osasuna: 0ra iristen bada, hil egiten zara. Kandela gehigarri batek behin altxatzen zaitu, Osasunaren %40rekin.\n• Zentzutasuna: kartekin, apustuekin eta gertaerekin jaisten da. Gutxirekin, pantaila distortsionatzen da eta xuxurlak agertzen dira; 0ra iristen bada, erori egiten zara: 25 Zentzutasun berreskuratzen dituzu eta 20 Osasun galtzen dituzu.\n• Dirua: dendan erosteko eta zorra ordaintzeko balio du.\n• Zorra: mailegu eta apustuekin igotzen da, eta gela bakoitzaren ondoren %1,4ko interesa gehitzen zaio. Zor askorekin, Etxeak mahaien helburua %5 igotzen du 200tik gorako 100 bakoitzeko (%25era arte).\n• Ezkutua: kartek Osasunean duten kostua xurgatzen du.
+howto.s4.h|Karta-mahaiak
+howto.s4.t|Aukeratu zure eskuko 1etik 5era karta eta jokatu: eskuak (bikotea, hirukotea, eskala…) fitxak × biderkatzailea ematen du, eta karta eta konbinazio bakoitzak gehiago gehitzen du. Heldu helburura jokaldirik gabe gelditu aurretik; bestela, Osasunarekin, Zentzutasunarekin eta Zorrarekin ordaintzen duzu.\nBaztertu dezakezu, karta bat Poltsikoan gorde edo apustu egin (jokaldia biderkatzen du, baina kostatzen du). Arerio bakoitzak bere araua dakar, mahaian ikusgai. Begiratu beti kostua jokatu aurretik.
+howto.s5.h|Gertaerak
+howto.s5.t|Bi aukerako erabakiak dira: BAZTERTU (← edo A) edo ONARTU (→ edo D); mugikorrean, irristatu. Batzuetan hirugarren aukera ezkutu bat agertzen da (H), dakizunaren edo daramazunaren arabera. Zure erabakiak aldatzen duena amaieran erakusten da, eta tresna batzuek berregiteko aukera ematen dute.
+howto.s6.h|Eskopeta-dueloa
+howto.s6.t|Zurea den zerbait apustu egiten duzu (Dirua, Zentzutasuna, Zorra edo karta bat). Eskopetak 6 ganbera ditu, batzuk kargatuta. Arerioak zenbat bala dauden iragartzen du… eta gezurretan ari daiteke.\nZure txandan arerioari tiro egin diezaiokezu (ganbera kargatuta badago, marka bat galtzen du; ez bada, txanda pasatzen da), Mahaia probokatu (hutsik badago txandari eusten diozu; ez bada, marka bat galtzen duzu) edo entzun (Zentzutasuna kostatzen du eta ez du beti asmatzen). Besteari markarik gabe uzten duenak irabazten du.
+howto.s7.h|Denda eta atsedena
+howto.s7.t|Saltzaileak objektuak, tresnak eta kartak saltzen ditu Diruaren truke, eta maileguak ere ematen ditu: maileguek Zorra gehitzen dute.\nAtseden batean gauza bakarra aukeratzen duzu: lo egin (Osasuna), arnasa hartu (Zentzutasuna), zorra ordaindu edo esku bat aztertu maila igotzeko.
+howto.s8.h|Hil eta gogoratu
+howto.s8.t|Hiltzean UNEKO ZORRA ikusten duzu (zati bat hurrengo jaitsierara garraiatzen da) eta GORDETAKO OROITZAPENAK: gauza batzuk eginez irabazten diren abantaila iraunkorrak. Aurkitzen duzuna ezagutza gisa gordetzen da eta aukera ezkutuak eta ateak irekitzen ditu.\nBadira 6 amaiera; Ateak gauza desberdinak eskatzen ditu bakoitzerako.
+hint.map|Ukitu gela bat zer den ikusteko eta ukitu berriro sartzeko.
+hint.event|Hemen bi aukeraren artean erabakitzen duzu: BAZTERTU (← edo A) edo ONARTU (→ edo D). Aldatzen dena —Osasuna, Zentzutasuna, Dirua edo Zorra— ondoren ikusiko duzu. Osasuna 0 denean hil egiten zara, Zentzutasun gutxirekin etxea distortsionatu egiten da eta Zorra interesekin hazten da.
+hint.merchant|Hemen dena Diruarekin erosten da. Eta maileguak ere ematen dira: maileguek Zorra gehitzen dute, eta Zorra interesekin hazten da gela bakoitzaren ondoren.
+hint.rest|Arnasaldi bat: aukeratu gauza bakarra. Lo egiteak Osasuna berreskuratzen du, arnasa hartzeak Zentzutasuna, ordaintzeak Zorra jaisten du eta aztertzeak esku baten maila igotzen du.
+hint.boss|Hegal bakoitzak Zaindari bat du, partida aldatzen duten arau propioekin. Irakurri jokatu aurretik: garaitzeak amaierara hurbiltzen zaitu.
+rank.1|Asa
+rank.11|Jota
+rank.12|Erregina
+rank.13|Errege
+shield.tip|EZKUTUA: zure karten Osasun-kostua xurgatzen du galdu aurretik. Giltzek ematen dute.
+shield.gain|+{n} Ezkutu
+shield.all|Ezkutuak {n} xurgatzen ditu
+shield.part|Ezkutuak {a} xurgatu · {n} galdu
+shield.absorbed|Ezkutuak {n} xurgatzen ditu
+howto.s9.h|Ezkutua
+howto.s9.t|Karta batzuek Osasuna kostatzen dute puntuatzean (Odola, Gosea…). EZKUTUA lehenengo gastatzen da: puntu bakoitzak Osasun-puntu bat xurgatzen du.\n• Giltzek eta karta berezi eta objektu batzuek ematen dute.\n• Zure jokaldien ondoan ikusten da eta txanda osoan irauten du.\n• Ez ditu apustuak ezta arerioen efektuak geldiarazten.

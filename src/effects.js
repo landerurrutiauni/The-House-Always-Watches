@@ -37,7 +37,7 @@ export function checkReq(req) { if (!req || !req.length) return true; return Arr
 // ---------------- Efectos ----------------
 const fxRng = () => rngFor(gs.run ? gs.run.seed : 1, 'fx', gs.run ? (gs.run.step = (gs.run.step || 0) + 1) : 0);
 
-export function addToDeck(id) { const c = makeCard(id); gs.deck.push(c); return c; }
+export function addToDeck(id) { const c = makeCard(id); gs.deck.push(c); bus.emit('stats', {}); return c; }   // 'stats' refresca el HUD (el contador del botón de mazo)
 export function addTool(id) {
   if (gs.tools.length >= MAX_TOOLS) { addMoney(Math.floor(TOOLS[id].price / 2)); return false; }
   gs.tools.push(id); return true;
@@ -46,6 +46,11 @@ export function addJoker(id) {
   if (!JOKERS[id] || gs.jokers.includes(id)) return false;
   if (gs.jokers.length >= MAX_JOKERS) { addMoney(jokerSellPrice(id)); return false; }   // sin hueco: se vende por la mitad
   gs.jokers.push(id); onJokers(); return true;
+}
+// Reordena los comodines (actúan de izquierda a derecha: sumar antes de multiplicar no da lo mismo que después)
+export function moveJoker(from, to) {
+  const a = gs.jokers; if (!Number.isInteger(from) || !Number.isInteger(to) || from === to || from < 0 || to < 0 || from >= a.length || to >= a.length) return false;
+  const [j] = a.splice(from, 1); a.splice(to, 0, j); return true;
 }
 export function sellJoker(index) {
   const id = gs.jokers[index]; if (!id) return 0;

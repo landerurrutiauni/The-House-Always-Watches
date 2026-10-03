@@ -3,12 +3,14 @@ import * as G from '../game.js';
 import * as C from '../combat.js';
 import { gs, settings } from '../state.js';
 import { t, cardName } from '../i18n.js';
-import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc, jokerEl } from '../ui.js';
+import { h, btn, act, ico, sigil, cardEl, cardDesc, resChip, modal, handStats, HAND_ORDER, HANDS, announce, typewriter, fill, sc, jokerEl, guideTip } from '../ui.js';
 import { MAX_JOKERS } from '../jokers.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
 import { audioManager as audio } from '../audio.js';
 import { fx } from '../fx.js';
 import { SPECIALS, SUITS } from '../cards.js';
+import { sortCards } from '../sorting.js';
+import { saveSettings } from '../save.js';
 
 const STAKE_ORDER = ['none', 'blood', 'sanity', 'debt', 'money'];
 let UI = null; // estado de la pantalla actual
@@ -31,7 +33,7 @@ function shieldLines(sh) {
   if (!sh) return [];
   const out = [];
   if (sh.gain > 0) out.push(t('shield.gain', { n: sh.gain }));
-  if (sh.cost > 0) out.push(sh.absorbed >= sh.cost ? t('shield.all', { n: sh.cost }) : sh.absorbed > 0 ? t('shield.part', { a: sh.absorbed, n: sh.lost }) : t('shield.none', { n: sh.cost }));
+  if (sh.cost > 0 && sh.absorbed > 0) out.push(sh.absorbed >= sh.cost ? t('shield.all', { n: sh.cost }) : t('shield.part', { a: sh.absorbed, n: sh.lost }));   // si no hay escudo no se dice nada: el chip de Salud ya muestra la pérdida
   return out;
 }
 function handsPanel() {
@@ -41,7 +43,7 @@ function handsPanel() {
 }
 act.tb_hands = () => modal(handsPanel(), { title: t('table.hands_title') });
 
-const fmtMult = (mult, xmult) => mult + (xmult !== 1 ? '×' + (Math.round(xmult * 100) / 100) : '');
+const fmtMult = (mult, xmult) => (Math.round(mult * 100) / 100) + (xmult !== 1 ? '×' + (Math.round(xmult * 100) / 100) : '');
 const pulse = (el, k = 1) => { if (!el) return; el.style.setProperty('--k', String(k)); el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse'); };
 // Fuerza de la jugada: 0 normal · 1 buena · 2 grande · 3 devastadora (según multiplicador final y peso sobre el objetivo)
 export function playTier(res, R) { const pw = res.mult * res.xmult, ratio = res.total / Math.max(1, R.target); return (ratio >= 0.6 || pw >= 60) ? 3 : (ratio >= 0.3 || pw >= 30) ? 2 : pw >= 14 ? 1 : 0; }
@@ -64,7 +66,7 @@ function tableScreen(v) {
       ...(ruleDescs.length ? ruleDescs.map(([r, weak]) => h('span', { class: 'tag ' + (weak ? 'good' : 'red'), title: t(`rule.${r}.desc`) }, t(`rule.${r}.name`) + (weak ? ' · ' + t('boss.weakened') : ''))) : [h('span', { class: 'muted', style: 'font-size:.8em' }, t('table.no_rule'))])),
     descs.length ? h('div', { class: 'muted ruledesc' }, descs.join(' · ')) : null,
     scorebar,
-    h('div', { class: 'counts' }, h('span', null, ico('cards'), ' ' + t('table.plays') + ' ', h('b', null, R.playsLeft)), h('span', null, ico('x'), ' ' + t('table.discards') + ' ', h('b', null, R.discardsLeft)), shieldChip, h('span', { class: 'muted' }, t('table.deck', { n: R.drawPile.length })),
+    h('div', { class: 'counts' }, h('span', null, ico('cards'), ' ' + t('table.plays') + ' ', h('b', null, R.playsLeft)), h('span', null, ico('x'), ' ' + t('table.discards') + ' ', h('b', null, R.discardsLeft)), shieldChip, h('button', { type: 'button', class: 'deckbtn', 'data-act': 'deck_round', title: t('deck.view.left') }, t('table.deck', { n: R.drawPile.length })),
       v.odds != null && !v.tutorial ? h('span', { class: 'muted' }, t('table.odds', { p: Math.round(v.odds * 100) })) : null)));
   main.append(opp);
   if (v.hintKey) main.append(h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(v.hintKey)));
@@ -78,12 +80,16 @@ function tableScreen(v) {
   const ticker = h('div', { class: 'ticker', 'aria-live': 'off' });
   const costs = h('div', { class: 'preview-costs' });
   const peek = h('div', { class: 'peek' });
-  const felt = h('div', { class: 'panel felt' }, played, ticker, costs, peek);
+  const felt = h('div', { class: 'panel felt' }, played, ticker, costs, peek, (v.tutorial || G.guideActive()) ? guideTip() : null);
   main.append(felt);
   const info = h('div', { class: 'cardinfo', 'aria-live': 'polite' });
   const pocket = h('div', { class: 'pocketbar' });
   const hand = h('div', { class: 'hand', role: 'group', 'aria-label': t('table.hand_label') });
-  main.append(h('div', { class: 'infobar' }, info, pocket, btn(t('table.hands_btn'), 'tb_hands', null, 'ghost small hands-btn')));
+  const sortBox = h('span', { class: 'sortbtns', role: 'group', 'aria-label': t('table.sort_hint'), title: t('table.sort_hint') });
+  const drawSort = () => sortBox.replaceChildren(h('span', { class: 'muted' }, t('deck.sort')), ...['rank', 'suit'].map(k => h('button', { type: 'button', class: 'btn small' + (settings.handSort === k ? ' on' : ' ghost'), 'aria-pressed': settings.handSort === k ? 'true' : 'false', 'data-act': 'tb_sort', 'data-arg': k }, t('deck.sort.' + k))));
+  drawSort();
+  act.tb_sort = k => { settings.handSort = settings.handSort === k ? null : k; saveSettings(); drawHand(); drawSort(); };
+  main.append(h('div', { class: 'infobar' }, info, pocket, sortBox, btn(t('table.hands_btn'), 'tb_hands', null, 'ghost small hands-btn')));
   // ---- controles ----
   const playB = btn(t('table.play'), 'tb_play', null, 'primary play', { 'data-primary': '1' });
   const discB = btn(t('table.discard'), 'tb_discard', null, '');
@@ -107,7 +113,7 @@ function tableScreen(v) {
         for (const c of res.combos) costs.append(h('span', { class: 'tag new' }, t(`combo.${c}.name`)));
         for (const s of res.steps) if (s.j && !costs.querySelector('[data-j="' + s.j + '"]')) costs.append(h('span', { class: 'tag gold', 'data-j': s.j, title: t(`joker.${s.j}.name`) }, '★ ' + t(`joker.${s.j}.name`)));
         const d = res.delta; for (const k of ['health', 'sanity', 'debt', 'money']) if (d[k]) costs.append(resChip(k, d[k]));
-        const sl = shieldLines(res.shield); if (sl.length) costs.append(h('div', { class: 'shieldnote' }, ico('shield'), ' ' + sl.join(' ')));
+        const sl = shieldLines(res.shield); if (sl.length) costs.append(h('div', { class: 'shieldnote' }, ico('shield'), ' ' + sl.join(' · ')));
         if (res.notes.length) for (const n of res.notes) costs.append(h('span', { class: 'tag red', title: t(`rule.${n}.desc`) }, t(`rule.${n}.name`)));
         if (res.total + R.score >= R.target) costs.append(h('span', { class: 'tag good' }, t('table.enough')));
       }
@@ -124,7 +130,7 @@ function tableScreen(v) {
   }
   function drawHand() {
     hand.style.setProperty('--n', String(Math.max(5, R.hand.length)));
-    hand.replaceChildren(...R.hand.map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid), hidden: R.hidden.has(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }));
+    hand.replaceChildren(...(settings.handSort ? sortCards(R.hand, settings.handSort) : R.hand).map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid), hidden: R.hidden.has(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }));
     fill(pocket, h('span', null, ico('pocket'), ' ' + t('table.pocket') + ' ' + R.pocket.length + '/' + R.mods.pocket), ...R.pocket.map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }), R.pocket.length ? h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'tb_unstash' }, t('table.unstash')) : null);
     peek.replaceChildren(); if (R.peekN > 0) { peek.append(h('span', null, ico('eye'), ' ' + t('table.peek'))); R.drawPile.slice(-R.peekN).reverse().forEach(c => peek.append(cardEl(c, { static: true, noname: true }))); }
     info.replaceChildren(st.info ? h('span', null, h('b', null, st.info.name), ' — ', st.info.desc) : h('span', { class: 'muted' }, t('table.tap_info')));
@@ -152,7 +158,7 @@ function tableScreen(v) {
     played.replaceChildren(...cards.map(c => cardEl(c, { static: true, noname: false }))); costs.replaceChildren(); ticker.replaceChildren(); markHand(res.hand);
     const chipsB = h('span', { class: 'box chips' }, '0'), multB = h('span', { class: 'box mult' }, '0'), totB = h('span', { class: 'box total' }, '');
     const handTag = h('span', { class: 'tag' }, t('hand.' + res.hand)); ticker.append(handTag, chipsB, '×', multB, '=', totB);
-    const shieldNote = shieldLines(res.shield); if (shieldNote.length) costs.append(h('div', { class: 'shieldnote' }, ico('shield'), ' ' + shieldNote.join(' ')));
+    const shieldNote = shieldLines(res.shield); if (shieldNote.length) costs.append(h('div', { class: 'shieldnote' }, ico('shield'), ' ' + shieldNote.join(' · ')));
     const skip = () => { st.skip = true; }; felt.addEventListener('click', skip, { once: true });
     const dly = res.steps.length > 14 ? 50 : 95; let n = 0;
     for (const s of res.steps) {
@@ -177,6 +183,7 @@ function tableScreen(v) {
     if (tier >= 3) fx.shake();
     else if (R.score >= R.target) { fx.banner(t('fxbanner.target'), 2); audio.playSFX('level_up', { vol: 0.5 }); }
     setShield(R.shield);
+    if (res.interest) { fx.float(scorebar, t('table.interest_up', { n: res.interest.to }), 'neg'); announce(t('table.interest_up', { n: res.interest.to })); }   // el objetivo solo sube si NO llegaste
     if (res.shield && res.shield.absorbed > 0) { fx.banner(t('shield.absorbed', { n: res.shield.absorbed }), 1); fx.float(shieldChip, '−' + res.shield.absorbed, 'neg'); announce(t('shield.absorbed', { n: res.shield.absorbed })); audio.playSFX('chip', { vol: 0.5 }); }
     if ((res.broken || []).length) { audio.playSFX('glitch'); announce(t('table.glass_broke')); }
     if (res.delta.health < 0) { fx.flash(); fx.shake(); fx.vibrate(50); }

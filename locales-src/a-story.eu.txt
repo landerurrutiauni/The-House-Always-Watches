@@ -1,0 +1,126 @@
+wing.salon.name|Aretoa
+wing.salon.desc|Mahaiak, fitxak eta irribarreak. Hemen hasten da zorra.
+wing.pasillo.name|Pasabidea
+wing.pasillo.desc|Zenbakidun ateak, ispiluak eta inoiz hutsik ez dagoen aulki bat.
+wing.sotano.name|Sotoa
+wing.sotano.desc|Bustitzen ez duen ura. Joaten ez diren aztarnak.
+boss.girl.a|«Jolasten dugu ez zarela errepikatzen. Nik dena nabaritzen dut ikusten ez dudan begiarekin.»
+boss.girl.w|«Irabazi nauzu eta ez didazu gezurrik esan. Zer arraroa. Hartu nahi duzuna.»
+boss.girl.l|«Berriz gauza bera, berriz gauza bera. Aspertzen nauzu.»
+boss.chair.a|«Eseri. Hemen odola hoztu egiten da eta zure kartek ez dute berorik ematen.»
+boss.chair.w|«Zutitzen naiz. Hainbeste denbora eserita eman dut, ez naizela gogoratzen nola egiten den.»
+boss.chair.l|«Aulkiak beti irabazten du. Berari buruz dakidan gauza bakarra da.»
+boss.drowned.a|«Hartu arnasa ahal duzun bitartean. Jokatzen duzun karta bakoitzak pixka bat hondoratuko zaitu.»
+boss.drowned.w|«Ordaindu nuen. Edo hala uste nuen. Igo; hemen behean ez da ezer gelditzen.»
+boss.drowned.l|«Edan, edan. Ura besterik ez da. Zor bat besterik ez da.»
+boss.child.a|«Gogoratzen zara nitaz? Nik zutaz bai. Ez itxi begiak… ah, itxita dituzu dagoeneko.»
+boss.child.w|«Irabazi nauzu. Nik nahi nuen irabaztea. Orain hazi egin behar duzu.»
+boss.child.l|«Berriz. Beti galtzen duzu hemen. Beti itzultzen zara.»
+boss.dealer.a|«Azken eskua. Apusturik eta tranparik gabe. Dena agerian.»
+boss.dealer.w|«Ondo jokatu duzu. Une batez, ni izango nintzela ez zutitzen zena pentsatu nuen.»
+boss.dealer.l|«Beti izan zen nire mahaia. Zutitu; berriro hasiko gara.»
+mem.m01.name|Lehen kolpea
+mem.m01.text|Behin hiltzeak dirua eramaten irakatsi zizun. +10 Diru hasieran.
+mem.m02.name|Ordezko eskuak
+mem.m02.text|Zalantzarik gabe baztertzen ikasi duzu. +1 baztertze txanda bakoitzeko.
+mem.m03.name|Orbainak
+mem.m03.text|Gorputzak gogoratzen du. +10 gehienezko Osasun.
+mem.m04.name|Neskaren txanpona
+mem.m04.text|1. mailako Bikotearekin hasten zara.
+mem.m05.name|Aulkiaren gatza
+mem.m05.text|Gatz batekin hasten zara.
+mem.m06.name|Airea uraren azpian
+mem.m06.text|3 Zentzutasun berreskuratzen dituzu txanda bat irabaztean.
+mem.m07.name|Haur bezala jolastu
+mem.m07.text|+1 jokaldi txanda bakoitzeko.
+mem.m08.name|Bala okerra
+mem.m08.text|Lekuko batekin hasten zara.
+mem.m09.name|Belarri fina
+mem.m09.text|Dueloetan entzutea %85ean fidagarria da.
+mem.m10.name|Kontu garbiak
+mem.m10.text|Zorraren interesa erdira murrizten da.
+mem.m11.name|13. gelako hezurra
+mem.m11.text|Hezur Leun batekin hasten zara sortan.
+mem.m12.name|Ikusitako amaiera
+mem.m12.text|Nola amaitzen den jakiteak lasaitasun apur bat ematen du. +5 Diru hasieran.
+know.k_moon.name|Leihoko ilargia
+know.k_moon.text|Leihoko ilargia foku bat da. Haren hotzik gabe, Aulkiko Gizonak bere araua galtzen du.
+know.k_dealer_deck.name|Krupierraren karta-sorta
+know.k_dealer_deck.text|Krupierrak beti hondotik banatzen du. Haren sortak ez du erregerik.
+know.k_girl_lies.name|Neskak gezurretan dioena
+know.k_girl_lies.text|Begi josiko neska gezurretan ari da egia esaten duenean. Haren «errepikapenik ez» arauak ez zaitu lotzen jada.
+know.k_reflection.name|Zure islada
+know.k_reflection.text|Ispiluan ez zara zu lehenengo mugitzen dena.
+know.k_players.name|Jokalariak
+know.k_players.text|Hemen daudenek guztiek lehenago jolastu zuten. Guztiek.
+know.k_dealer_no_name.name|Krupierrak ez du izenik
+know.k_dealer_no_name.text|Inork ez du gogoratzen nola deitzen den Krupierra. Berak ere ez.
+know.k_child_self.name|Haurra zu zara
+know.k_child_self.text|Urtebetetze soinekoa zeraman haurra zu izan zinen. Haren «begi itsuak» arauak ez zaitu itsutzen jada.
+know.k_chair_founder.name|Sortzailea
+know.k_chair_founder.text|Aulkiko Gizonak etxea sortu zuen eta eserita geratu zen.
+know.k_drowned_paid.name|Itotakoak ordaindu zuen
+know.k_drowned_paid.text|Itotakoak bere zorra urarekin ordaindu zuen. Haren «itotzea» arauak ez zaitu hondoratzen jada.
+know.k_door_same.name|Ate guztiak berdinak dira
+know.k_door_same.text|Ate guztiek gela berera daramate. Hori jakin behar da egia ikusteko.
+know.k_watcher.name|Norbaitek begiratzen du
+know.k_watcher.text|Norbait dago partida etxetik kanpotik begiratzen.
+know.k_dealer_ledger.name|Krupierraren liburua
+know.k_dealer_ledger.text|Bere kontu-liburuan lerro bakoitza partida bat da. Azkena falta da.
+know.k_room13.name|13. gela
+know.k_room13.text|Plano batean ere agertzen ez den gela bat dago.
+know.clue|Krupierraren ingurako pista
+ending.deuda.title|Zorra
+ending.deuda.text|Azken eskua jokatu eta irabazten duzu. Etxeak garaipena bere liburuan idazten du eta fitxa beltz bat itzultzen dizu. «Partida bat zor duzu», dio. Zutitzen zara. Atea itxita jarraitzen du, baina badakizu kontatzen.
+ending.deuda.epi|Etxeak beti irabazten du. Baina gaur gehiago luzatu da.
+ending.puerta.title|Atea
+ending.puerta.text|Hezur-giltzak zarata egin gabe biratzen du. Atearen atzean pasabide bat dago eta, amaieran, beste ate berdin bat. Hala ere zeharkatzen duzu. Kanpoan benetako airea dago eta kartel bat: ITXITA, BERRIKUNTZAK DIRELA ETA. Lehen aldiz, inork ez zaitu begiratzen.
+ending.puerta.epi|Atea bere kasa ixten da. Oraingoan, alde zuzenetik.
+ending.crupier.title|Krupierra
+ending.crupier.text|Irribarrea kentzeko eskatzen diozu. Azpian ez dago aurpegirik: zure adinako ispilu bat dago. «Hainbeste denbora duela irabazi nuen, ahaztu egin zait nola irten», dio. Sorta ematen dizu eta zure aulkian esertzen da. Orain banatzen duena zu zara.
+ending.crupier.epi|Norbait lehen aldiz esertzen da zure aurrean. Ahoa mugitu gabe irribarre egiten duzu.
+ending.partida.title|Partida
+ending.partida.text|Izenez deitzen diezu, banan-banan: neska, aulkiko gizona, itotakoa, artxibozaina, haurra. Bakoitza bere mahaitik zutitzen da. Inork ez zuen gogoratzen jokalari izan zenik. Kartak batera uzten dituzte erortzen. Partida amaitzen da, jarraitu nahi duen inor ez dagoelako.
+ending.partida.epi|Jokalaririk gabe, etxea argiak dituen gela bat besterik ez da.
+ending.espectador.title|Ikuslea
+ending.espectador.text|Gelatik kanpora begiratzen duzu, inork begiratu behar ez lukeen tokira. Beirateen atzean pantaila batek argitutako aurpegi bat dago. Zu zara, edo zu jolasten ikusten zaituen norbait. Segundo batez elkar behatzen duzue. Gero etxeak oihala jaisten du.
+ending.espectador.epi|Begiratzen duenak ere partidan dago.
+ending.verdad.title|Egia
+ending.verdad.text|Amaiera guztiak ikusi dituzu. Badakizu ate guztiak berdinak direla eta begiratzen duena zu zarela. Kontu-liburua ixten duzu eta azken lerroa idazten duzu. Etxea itzaltzen da. Ez dago partida gehiagorik: jolastu zuena eta pantailaren beste aldeko isiltasuna besterik ez da geratzen.
+ending.verdad.epi|Eskerrik asko jolasteagatik. Dagoeneko begiratzeari utz diezaiokezu.
+intro.1|Esna zaude?
+intro.2|Azkenean.
+intro.3|Partida bat amaitu behar dugu.
+intro.4|Zein partida?
+intro.5|Aurrekoa.
+intro.6|Eseri. Hemen nola jokatzen den erakutsiko dizut.
+tut.r1|Ukitu kartak aukeratzeko (5era arte) eta sakatu JOKATU. Bikoteek gehiago puntuatzen dute: probatu bi 8ak.
+tut.r2|Palu bakoitzak bere efektua du. Begiek fitxak ematen dituzte eta sortako kartak agerian uzten dituzte. Hiru Begik BEGIRADA osatzen dute.
+tut.r3|Odolak biderkatzailea ematen du, baina Osasuna kostatzen du. Begiratu beti jokaldi batek zer kostatzen duen egin aurretik.
+tut.r4|Karta txarrak BAZTERTU ditzakezu edo bat POLTSIKOAN gorde. Apustuak jokaldia biderkatzen du… baina etxeak kobratzen du.
+tut.r5|Heldu helburura jokaldiak amaitu aurretik. Lortzen ez baduzu, ordaindu egiten duzu.
+tut.done|«Ondo. Etxeak badaki nola jokatzen duzun.»
+tut.retry|«Berriz. Hemen galtzeak ez du ezer kostatzen… oraindik.»
+tut.d0|Eskopeta: sei ganbera, batzuk kargatuta. Arerioak zenbat bala dauden iragartzen du… eta gezurretan ari daiteke.
+tut.d1|Tiro egin arerioari ganbera kargatuta dagoela uste baduzu. Entzuteak Zentzutasuna kostatzen du eta ez du beti asmatzen.
+tut.d2|Mahaia probokatzea segurua da ganbera hutsik badago: txanda mantentzen duzu. Kargatuta badago, marka bat galtzen duzu.
+duel.anomaly|«Hori ez zen espero nuen bala.»
+duel.win|«Etxeak ordaintzen du.»
+duel.lose|«Etxeak kobratzen du.»
+dlg.final.1|Azken mahaira iritsi zara. Beti iristen dira hona arte.
+dlg.final.2|Esku bat gehiago. Nik banatzen dut. Inork ez du ezer apustu egiten: dena ikusten da.
+dlg.final.3|Irabazten baduzu, atearen berri emango dizut. Galtzen baduzu, berriro hasiko zara. Berdin-berdina da, egia esan.
+dlg.final.4|Ondo. Azken bala geratzen da. Gauza bat gehiago eta joaten uzten zaitut.
+dlg.final.5|Sei ganbera. Lau marka bakoitzak. Oraingoan inork ez du begiratzen… etxeak izan ezik.
+dlg.final.won|«Eskua irabazi duzu. Etxeak isiltzen da.»
+dlg.final.lost|«Azken eskua galdu duzu. Etxeak interesekin kobratzen du.»
+dlg.final.duel_won|«Partida amaitu da. Atea bakarrik geratzen da.»
+dlg.final.duel_lost|«Azken bala nirea izan zen. Berriz ere.»
+log.round_won|Txanda irabazita.
+log.round_lost|Txanda galdu duzu. Etxeak kobratzen du.
+fx.abandoned|Gela erdian utzi zenuen. Etxeak zerbait kobratu zuen.
+fx.interest|Zorraren interesa: +{n}
+fx.collapse|Zure burua apurtzen da: Osasuna galtzen duzu eta Zentzutasun apur bat berreskuratzen duzu.
+fx.revive_candle|Kandela laburrak berriro pizten zaitu.
+fx.revive_life|Bizitza gehigarri batek heriotzatik erauzten zaitu.
+tut.r6|Oinarriak ezagutzen dituzu jada: jarraitu zure erritmoan. Arerioek eta gelek arau berriak ekarriko dituzte.

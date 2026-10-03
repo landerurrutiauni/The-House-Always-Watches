@@ -25,7 +25,7 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 
 ## Ayuda y tutorial
 
-- **Tutorial integrado en la historia.** La primera mesa de cartas que pisas es un tutorial guiado por el Crupier: mano preparada, objetivo bajo y perder no cuesta nada (puedes repetir). Da 5 pistas según juegas (elegir cartas, palos y combinaciones, costes, descartes/Bolsillo/apuestas, objetivo). Los primeros duelos de la escopeta traen 3 pistas más.
+- **Tutorial integrado en la historia.** La primera mesa de cartas que pisas es un tutorial guiado por el Crupier: mano preparada, objetivo bajo y perder no cuesta nada (puedes repetir). Da 5 pistas según juegas (elegir cartas, palos y combinaciones, costes, descartes/Bolsillo/apuestas, objetivo). Los primeros duelos de la escopeta traen 3 pistas más. **La guía no la menciona ningún personaje**: un indicador del interfaz («Guía del juego: botón ? de arriba») aparece en el primer mapa y en la primera mesa, y los botones «?» y «? GUÍA» laten, hasta que abres la guía una vez.
 - **Pantalla «Cómo se juega».** Botón **CÓMO SE JUEGA** en el menú, icono **?** en la barra superior durante la partida y la tecla `?`. Explica el objetivo, el mapa, los recursos (Salud, Cordura, Dinero, Deuda, Escudo), las mesas de cartas, los sucesos, el duelo, la tienda y los descansos, y qué pasa al morir. Son secciones plegables; desde ahí se abre también la guía de manos y palos.
 - **Guía de cartas.** Botón **? GUÍA** en cada mesa: objetivo, puntuación, tabla de manos con tus niveles, palos, combinaciones y apuestas.
 - **Pistas de una sola vez.** La primera vez que aparece un mapa, un suceso, una tienda, un descanso o un Guardián, el Crupier añade una pista corta. Se marcan como vistas cuando se muestran de verdad y se guardan en el perfil: no vuelven al morir ni con NUEVA PARTIDA; REINICIAR PROGRESO las restablece.
@@ -52,24 +52,26 @@ Para regenerar el archivo único tras tocar el código: `npm install` (una vez, 
 ## Qué contiene
 
 - **Baraja completa de 52 cartas** (A, 2–10, J, Q, K en 4 palos: Sangre, Ojo, Diente, Llave). Valor en fichas: As 11, figuras 10, el resto su número. Escaleras A-2-3-4-5 y 10-J-Q-K-A. **11 manos**: carta alta, pareja, doble pareja, trío, escalera, color, full, póker, escalera de color, **escalera real** (10-J-Q-K-A del mismo palo; es una mano propia en todo —puntuación, niveles, panel, guía, comodines, misiones—, vale 120×10 y se celebra con su propio banner) y **repóker** (cinco iguales, posible con comodines de valor). Además, 6 combinaciones propias, 15 cartas especiales (5 malditas), modificadores de carta y apuestas (Salud, Cordura, Dinero o Deuda).
-- **Comodines** (19, estilo Balatro): hasta 5 a la vez, de rareza común / poco común / rara; se compran en la tienda, salen de recompensas y eventos, y se venden por la mitad. Cada comodín se enciende en la mesa cuando puntúa.
+- **Comodines** (19, estilo Balatro): hasta 5 a la vez, de rareza común / poco común / rara; se compran en la tienda, salen de recompensas y eventos, y se venden por la mitad. Cada comodín se enciende en la mesa cuando puntúa. **Al pasar el ratón (o tocar) se ve al instante qué hace.** Actúan **de izquierda a derecha** y el orden importa de verdad (cada ×Mult multiplica la Mult acumulada hasta ese punto, así que un +Mult antes de un ×Mult rinde más): en el **mapa**, al elegir sala, se ordenan arrastrándolos o con las flechas ◀ ▶, y el orden se guarda. En la mesa no se reordenan.
 - **Panel de manos** a la izquierda de la mesa, siempre visible: nivel y fichas × multiplicador de cada mano; la que vas a formar se resalta.
+- **Mazo a la vista, como en Balatro**: botón de mazo (con el número de cartas) en la barra superior, disponible en el mapa, las recompensas y la tienda, y «Mazo: N» en la mesa. Muestra todas tus cartas (con sus especiales resaltadas) y, en una ronda, solo las que quedan por robar; se ordena por palo, valor, especiales o recientes, con filtro «solo especiales», y se ajusta para que quepa sin deslizar aunque el mazo crezca. La mano de la mesa se ordena con los botones **Valor** y **Palo**.
 - **Puntuación con animación**: banners de combo (si coinciden varios se apilan en columna y no se pisan), multiplicadores que se «encienden» según crecen y jugadas devastadoras con destello y sacudida (todo se apaga con *Reducir efectos*).
-- **Escudo explicado**: indicador permanente en la mesa (icono + valor, con explicación al pasar el ratón o tocarlo), una línea en la vista previa de cada jugada («Tus cartas cuestan 1 de Salud y no tienes ESCUDO: los pierdes», «Las Llaves te dan +4 de ESCUDO»), aviso al absorber y sección propia en la guía.
+- **Escudo explicado y corto**: indicador permanente en la mesa (icono + valor, con explicación al pasar el ratón o tocarlo) y una frase breve y centrada en la vista previa («+4 Escudo», «Escudo absorbe 3»); si no tienes escudo no se dice nada, el chip de Salud ya muestra la pérdida. Sección propia, de cuatro líneas, en la guía.
+- **Interés del Crupier** (y de los rivales con la regla Interés): primero se suma la jugada y **solo si no llegas** al objetivo este sube un 8 % (se avisa con «Interés: objetivo N»). Si la vista previa dice «¡Con esto llegas!», llegas de verdad.
 - Recursos: Dinero, Cordura, Deuda, Salud, Vidas y un Destino invisible. La Cordura baja distorsiona la pantalla en 4 niveles.
 - **8 alas** (Salón, Pasillo, Sótano, Capilla, Cocinas, Enfermería, **Teatro** y **Sala de Vigilancia**), cada una con su guardián, fondo, rivales y eventos propios. Las seis últimas se abren al progresar (descensos terminados / guardianes derrotados; la pantalla de alas indica cuánto falta). **Cada descenso tiene 16 salas** y el mapa se lee de izquierda a derecha hasta el guardián. Nodo secreto, tienda, descansos, **57 eventos** (3 secretos) con cadenas de historia por personaje, 10 reglas de oponente, 12 objetos y 5 herramientas.
 - **17 personajes** con biografía en el Archivo (se revela al coincidir con ellos) y **8 jugadores anónimos** con aspecto, nombre y voz propios (ya no comparten sprite). Sus historias se cruzan: lo que descubres de unos cambia lo que dicen otros, y 22 piezas de conocimiento debilitan a algunos guardianes.
 - **Misiones por ala** (3 en cada una, 24 en total): premios pequeños —recursos, una carta, una mejora, un nivel de mano o, raramente, un comodín—. Se ven y se siguen desde el botón **MISIONES** del mapa y se reinician en cada descenso.
 - **Secretos**: el juego esconde logros que no se explican aquí. El Archivo anota los que has encontrado y da una pista de los que faltan.
-- **Duelo de la escopeta ficticia**: 6 cámaras, anuncio que puede mentir, tentar a la Mesa o escuchar. Cada turno se **narra paso a paso** (quién apunta, qué cámara, BANG o CLIC, marcas que cambian, recarga y a quién le toca) con el cargador y las marcas actualizándose a la vez que cada frase. Es una mecánica abstracta de «marcas»; no hay violencia explícita.
+- **Duelo de la escopeta ficticia**: 6 cámaras, anuncio que puede mentir, tentar a la Mesa o escuchar. Cada turno se **narra paso a paso** (quién apunta, qué cámara, BANG o CLIC, marcas que cambian, recarga y a quién le toca) con el cargador y las marcas actualizándose a la vez que cada frase. La apuesta «una carta de tu mazo» **enseña antes de elegir qué carta concreta pierdes y cuál ganas** (con su arte), y se cumple exactamente esa. Es una mecánica abstracta de «marcas»; no hay violencia explícita.
 - 17 personajes, 8 guardianes de ala más el Crupier, 6 finales (5 + el final verdadero), La Puerta, 12 recuerdos permanentes y 22 piezas de conocimiento.
 - **Escenario fijo**: el juego se dibuja en un escenario de 1280×720 que se escala entero a la ventana, así que la disposición y los saltos de línea son siempre los mismos, con cualquier tamaño de ventana o pantalla completa. Los diálogos, los sucesos, los guardianes y el duelo (narración del turno + historial compacto de todos los disparos) caben sin deslizar; el Archivo se reparte en pestañas. En un móvil en vertical aparece un aviso para girar el dispositivo (o jugar con el escenario girado 90°).
-- **Guía anunciada**: la introducción, la primera pista del mapa y el tutorial avisan de la guía («?» arriba, «? GUÍA» en la mesa, tecla `?`) y resaltan los botones mientras dura el tutorial.
+- **Volver al inicio** desde Ajustes, en cualquier momento de la partida: en el mapa avisa de que se guarda el progreso; en mitad de una sala avisa de que esa sala se dará por abandonada.
 - **Voces**: cada personaje «balbucea» al hablar (sintetizado con Web Audio, sin archivos de audio), también con *Reducir efectos* (ráfaga corta). Ajustes: volumen de voces (suena una muestra al moverlo), silenciarlas y velocidad del texto (normal / rápida / instantánea).
 - Morir no es Game Over: pantalla DEUDA ACTUAL / RECUERDOS CONSERVADOS y nuevo descenso con meta-progresión.
 - Intro «¿Estás despierto?», tutorial, pantalla «Cómo se juega» y pistas de una sola vez.
 - Música dinámica por capas y efectos de sonido sintetizados con Web Audio.
-- Idiomas es / en / fr / de al 100 % (1094 claves × 4) con cambio en caliente.
+- **Cinco idiomas al 100 %** (1249 claves × 5): español, inglés, francés, alemán y **euskera**, con cambio en caliente y detección del idioma del navegador. El secreto «La casa habla todos los idiomas» pide usar los cinco.
 
 ## Estructura
 
@@ -80,13 +82,14 @@ src/                    lógica (state, cards, combat, jokers, shotgun, map, con
                         y capa web (sprites, audio, music, sfx, fx, fullscreen, ui, cookies, privacy, debug, main,
                         screens/: menu, run, table, duel, howto)
 locales-src/*.txt       textos fuente: clave|es|en|fr|de
+locales-src/*.eu.txt    euskera, aparte: clave|euskera (una línea por clave; el texto no puede llevar «|»)
 locales/*.json          generado por tools/build-locales.mjs (no editar a mano)
 legal/                  página «Privacidad y aviso» (única página legal)
 dist/                   generado: archivo único + página de privacidad autónoma
 tools/                  construcción y pruebas
 ```
 
-Los textos se editan en `locales-src/` y se regeneran con `npm run i18n` (también comprueba que no falte ninguna clave ni variable `{x}` en ningún idioma).
+Los textos se editan en `locales-src/` y se regeneran con `npm run i18n` (también comprueba que no falte ninguna clave ni variable `{x}` en ninguno de los cinco idiomas).
 
 ## Comandos
 
@@ -94,12 +97,12 @@ Los textos se editan en `locales-src/` y se regeneran con `npm run i18n` (tambi�
 |---|---|
 | `npm run serve` | Servidor local en el puerto 8080 |
 | `npm run build` | Regenera `locales/` y `dist/` (archivo único + página de privacidad) |
-| `npm run i18n` | Fusiona textos y comprueba paridad es/en/fr/de |
+| `npm run i18n` | Fusiona textos y comprueba paridad es/en/fr/de/eu |
 | `npm run check` | i18n + tests de lógica, comodines, alas/personajes/secretos/misiones/dificultad y ayuda + partidas simuladas sin interfaz |
 | `npm run test:wings` | Partidas completas del bot en cada una de las 8 alas |
 | `npm run test:ui` | Bot que juega con clics reales en Chromium (necesita `npm run serve`, `pip install playwright` y `playwright install chromium`) |
 | `npm run test:extras` | Mesa y panel de manos, comodines, duelo narrado con historial sin scroll, voces y ajustes, 8 alas, misiones, secretos y archivo por pestañas, en Chromium |
-| `npm run test:more` | Escenario fijo (misma disposición en 5 tamaños de ventana, aviso y giro en móvil vertical), mapa de 16 salas, banners apilados, escudo, escalera real, sprites únicos, guía anunciada y voces con medida de señal de audio, en Chromium |
+| `npm run test:more` | Mazo (visor, orden y mano), comodines (descripción y orden en el mapa), interés, apuesta de carta, volver al inicio, indicador de guía, escenario fijo (misma disposición en 5 tamaños de ventana, aviso y giro en móvil vertical), mapa de 16 salas, banners apilados, escudo, escalera real, sprites únicos, guía anunciada y voces con medida de señal de audio, en Chromium |
 | `npm run test:features` | Sin terceros ni cookies, consentimiento opcional, persistencia, audio, accesibilidad, idiomas, pantalla completa, ayuda y pistas, y depuración en Chromium (necesita el servidor) |
 | `npm run test:single` | Prueba el archivo único abierto como `file://` |
 | `npm run balance` | Simulación de equilibrio con un bot voraz (`-- 500 --boss=cook --jokers` para probar un guardián y/o con comodines) |
@@ -121,7 +124,7 @@ Sin tocar los módulos, define `window.HOUSE_CONFIG` **antes** de cargar el jueg
 
 ## Privacidad y aviso
 
-`legal/privacy.html` es una única página corta, en es/en/fr/de, que describe lo que el juego hace hoy: qué guarda en tu navegador, que no usa servicios de terceros ni cookies, que el alojamiento (GitHub Pages) puede registrar visitas por su cuenta, y el aviso de contenido (ficción de terror, dinero ficticio, efectos de parpadeo). **No incluye datos de contacto ni de titular.** Son afirmaciones sobre el comportamiento del juego, que las pruebas comprueban; **no las ha revisado ningún profesional**. Si cambias algo (analítica, anuncios, cuentas, formularios) o cambias de alojamiento, actualiza `locales-src/c-legal.txt`.
+`legal/privacy.html` es una única página corta, en es/en/fr/de/eu, que describe lo que el juego hace hoy: qué guarda en tu navegador, que no usa servicios de terceros ni cookies, que el alojamiento (GitHub Pages) puede registrar visitas por su cuenta, y el aviso de contenido (ficción de terror, dinero ficticio, efectos de parpadeo). **No incluye datos de contacto ni de titular.** Son afirmaciones sobre el comportamiento del juego, que las pruebas comprueban; **no las ha revisado ningún profesional**. Si cambias algo (analítica, anuncios, cuentas, formularios) o cambias de alojamiento, actualiza `locales-src/c-legal.txt`.
 
 ## Modo depuración (oculto)
 
@@ -135,19 +138,19 @@ Ajustes: volumen de música / efectos / ambiente / voces, silenciar, reducir son
 
 Todo en Chromium (Playwright) y en Node:
 
-- 56 tests de lógica, 26 de comodines, 33 de alas / personajes / historia / secretos / misiones / dificultad, 31 de ayuda y pistas, y partidas simuladas sin interfaz con varias semillas y en cada una de las 8 alas (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
-- Un bot que juega con clics reales (modo normal y aleatorio con teclas y clics al azar), en 1280×720, 1920×1080, 390×844 (aceptando el aviso de girar), 360×640, 844×390 y 820×1180, en los 4 idiomas, en las 8 alas, sobre la versión modular y sobre el archivo único abierto como `file://`.
-- Un auditor que abre 79 pantallas (alas, mapa, mesa, duelo, 8 guardianes, tienda, descanso, Archivo por pestañas, ajustes, guía y los 57 eventos) en los 4 idiomas y en 5 tamaños de ventana y comprueba que nada obliga a deslizar, queda recortado ni se sale del escenario.
-- 70 comprobaciones en navegador de la ampliación anterior (mesa, comodines, duelo narrado con historial, voces y ajustes, alas, misiones, secretos, archivo), 35 de la última (escenario fijo, 16 salas, banners, escudo, escalera real, sprites, guía, voces con medida de señal real) y 77 de funciones transversales (sin terceros ni cookies, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente, pantalla completa, ayuda y pistas, depuración), 14 sobre el archivo único y una simulación de GitHub Pages bajo subruta.
+- 56 tests de lógica, 27 de comodines (incluido que el orden importa), 42 de alas / personajes / historia / secretos / misiones / dificultad / interés / apuesta de carta / orden de cartas y comodines / euskera, 34 de ayuda y pistas (en los 5 idiomas), y partidas simuladas sin interfaz con varias semillas y en cada una de las 8 alas (llegan a 5 de los 6 finales; el final verdadero solo está cubierto por el test de lógica y por una comprobación forzando el estado, nunca jugado de principio a fin).
+- Un bot que juega con clics reales (modo normal y aleatorio con teclas y clics al azar), en 1280×720, 1920×1080, 390×844 (aceptando el aviso de girar), 360×640, 844×390 y 820×1180, en los 5 idiomas, en las 8 alas y hasta la última mano, sobre la versión modular y sobre el archivo único abierto como `file://`.
+- Un auditor que abre 83 pantallas (alas, mapa, mapa con 5 comodines, indicador de guía, mesa, visor de mazo, duelo, 8 guardianes, tienda, descanso, Archivo por pestañas, ajustes, guía y los 57 eventos) en los 5 idiomas y en varios tamaños de ventana y comprueba que nada obliga a deslizar, queda recortado ni se sale del escenario.
+- En navegador (Chromium): 70 comprobaciones de la ampliación de alas y personajes (mesa, comodines, duelo narrado con historial, voces y ajustes, alas, misiones, secretos, archivo), 65 de las últimas tandas (escenario fijo, 16 salas, banners, escudo corto y centrado, escalera real, sprites, guía fuera de la voz del Crupier, voces con medida de señal real, interés, apuesta de carta, visor de mazo y orden de la mano, comodines con descripción y orden, volver al inicio) y 80 de funciones transversales (sin terceros ni cookies, consentimiento opcional, persistencia, audio con medida de señal real a la salida, accesibilidad, cambio de idioma en caliente incluido el euskera y su detección automática, pantalla completa, ayuda y pistas, depuración), 14 sobre el archivo único y una simulación de GitHub Pages bajo subruta.
 
 ## Límites y lo que no se ha probado
 
-- **Ningún humano ha jugado ni escuchado el juego**, ni se ha probado el tutorial y las pistas con una persona nueva. El equilibrio solo se ha ajustado contra un bot voraz (en simulación gana entre ~37 y ~50 % contra cada guardián de ala sin comodines y ~81–88 % con ellos, con descensos de 16 salas); la dificultad real, el ritmo de un descenso tan largo, la música, las voces (medidas con un analizador de audio, no escuchadas) y la duración de la narración del duelo no se han validado con personas.
+- **Ningún humano ha jugado ni escuchado el juego**, ni se ha probado el tutorial y las pistas con una persona nueva. El equilibrio solo se ha ajustado contra un bot voraz (en simulación gana entre ~37 y ~51 % contra cada guardián de ala sin comodines y ~80–86 % con ellos, con descensos de 16 salas y el orden de comodines ya significativo); la dificultad real, el ritmo de un descenso tan largo, la música, las voces (medidas con un analizador de audio, no escuchadas) y la duración de la narración del duelo no se han validado con personas.
 - **El escenario fijo escala todo, incluido el texto**: en pantallas pequeñas (un móvil apaisado, una ventana muy pequeña) el texto se ve más pequeño; en un móvil en vertical hay que girar el dispositivo o jugar con el escenario girado. No hay un diseño distinto para vertical.
-- Los textos nuevos en inglés, francés y alemán (historia, 4 personajes, 2 alas, misiones) no los ha revisado un hablante nativo.
+- **Euskera**: la traducción completa (1249 textos) la hizo el propio autor del código, no un traductor ni un hablante nativo: puede haber erratas, giros poco naturales o términos de juego discutibles (p. ej. «palu» para los palos, «mult» sin traducir). El inglés, el francés y el alemán nuevos de las últimas ampliaciones tampoco los ha revisado un nativo.
 - Tras el tutorial no hay curva de aprendizaje: las reglas de los rivales salen al azar desde la primera sala; con las filas sube sobre todo el objetivo de puntos.
 - **Solo Chromium.** No se ha probado en Firefox ni Safari ni en dispositivos móviles reales (solo emulación táctil); la pantalla completa tampoco.
 - El audio (incluidas las voces) se verificó midiendo señal y eventos en un navegador sin pantalla, no escuchándolo.
 - Los secretos con teclado (código de teclas) no se pueden activar en un móvil sin teclado; los demás funcionan con toques. Los secretos y las misiones se probaron con partidas simuladas y clics automáticos, no jugándolos.
-- La historia nueva (Capilla, Cocinas, Enfermería, cinco personajes y sus cadenas) no ha sido leída ni revisada por nadie más que su autor; los textos en inglés, francés y alemán no han pasado por un hablante nativo.
+- La historia nueva (Capilla, Cocinas, Enfermería, Teatro, Sala de Vigilancia, nueve personajes y sus cadenas) no ha sido leída ni revisada por nadie más que su autor.
 - No hay licencia definida (por defecto, todos los derechos reservados): añade la que quieras.

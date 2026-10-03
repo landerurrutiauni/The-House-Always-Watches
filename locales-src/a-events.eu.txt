@@ -1,0 +1,186 @@
+event.first_chip.title|Fitxa beltza
+event.first_chip.text|Fitxa beltz bat zure oinetaraino errodatzen da. Krupierrak irribarre egiten du ahoa mugitu gabe: «Zurea da. Beti izan zen zurea.»
+event.first_chip.a|Fitxa onartu
+event.first_chip.b|Errodatzen utzi
+event.first_chip.ra|Dirudiena baino gehiago pisatzen du. Zerbait, ikusten ez duzun liburu batean, oraintxe idatzi da.
+event.first_chip.rb|Fitxa iluntasunean galtzen da. Krupierrak baiezkoa egiten du buruarekin, espero balu bezala.
+event.mirror_hall.title|Ispiluen pasabidea
+event.mirror_hall.text|Ispilu bakoitzak zure keinua segundo bateko atzerapenarekin itzultzen dizu. Azkenak ez zaitu jarraitzen: begiratu egiten dizu.
+event.mirror_hall.a|Beira ukitu
+event.mirror_hall.b|Begirada aldendu
+event.mirror_hall.ra|Epela da, esku bat bezala. Zure islada zu baino segundo erdi lehenago irribarre egiten du.
+event.mirror_hall.rb|Irteerarainoko pausoak zenbatzen dituzu. Inork ez zaitu jarraitzen. Inork ez, bat izan ezik.
+event.mirror_hall.h|Zure izena esan
+event.mirror_hall.rh|Islada baiezkoa egiten du buruarekin. Lehen aldiz, alde hartako norbait zure alde jolasten ari dela sentitzen duzu.
+event.wet_footprints.title|Aztarna bustiak
+event.wet_footprints.text|Oin hutsezko aztarna bustiek alfonbra zeharkatzen dute eta ate baten azpian galtzen dira. Norbait oraintxe pasa da.
+event.wet_footprints.a|Jarraitu
+event.wet_footprints.b|Ez ikusiarena egin
+event.wet_footprints.ra|Atearen atzean mahai huts bat dago eta fitxa heze pusketa bat. Inork ez ditu aldarrikatzen.
+event.wet_footprints.rb|Nahiago duzu ez jakitea. Lurra, aldiz, zure atzean bustitzen jarraitzen du.
+event.debt_collector.title|Kobratzailea
+event.debt_collector.text|Traje grisezko gizon batek zain zaitu ordainagiri batekin. «Zure zorra, jauna. Zure sinadura darama.» Ez zara gogoratzen sinatu duzunik.
+event.debt_collector.a|Zati bat ordaindu
+event.debt_collector.b|Ordaintzeari uko egin
+event.debt_collector.ra|Billeteak birritan kontatzen ditu eta zerbait idazten du. «Plazer bat.»
+event.debt_collector.rb|«Interesekin idatziko dut.» Zaratarik egin gabe joaten da. Hotza geratzen da.
+event.cracked_clock.title|Geldituriko erlojua
+event.cracked_clock.text|Horma-erloju batek beti 3:33 markatzen du. Asko begiratzen badiozu, segundero-orratzak dar-dar egiten du, zerbait eskatzen balu bezala.
+event.cracked_clock.a|Soka eman
+event.cracked_clock.b|Horrela utzi
+event.cracked_clock.ra|Zerbait kraskatzen da barruan. Erlojua eskuan geratzen zaizu, geldituta, eta ez dakizu jada zer ordu den.
+event.cracked_clock.rb|Seguruago da hemen denborari ez ukitzea. Txanpon batzuk aurkitzen dituzu pendulupean.
+event.dice_pit.title|Dadoen zuloa
+event.dice_pit.text|Hezurrezko dadoak dituen hare-zulo bat. Gorputzik gabeko ahots batek galdetzen du: «Aurpegia ala gurutzea?». Dadoek ez dute aurpegirik. Ezta gurutzerik ere.
+event.dice_pit.a|Dadoak bota
+event.dice_pit.b|Alde egin
+event.dice_pit.ra|Dadoak errodatu eta gelditzen dira. Ahotsak bazekien emaitza.
+event.dice_pit.rb|Ahotsak mihia txaskatzen du. «Beste batean.» Behean barrez entzuten duzu.
+event.confession_booth.title|Aitorlekua
+event.confession_booth.text|Bi mahaien artean aitorleku bat. Beste aldean norbaitek poliki arnasa hartzen du eta zu lehenengo hitz egiten duzun zain dago.
+event.confession_booth.a|Aitortu
+event.confession_booth.b|Alde egin
+event.confession_booth.ra|Gehiegi hitz egiten duzu. Arinago irteten zara... eta liburu batean, zerbaitek pixka bat gehiago pisatzen du.
+event.confession_booth.rb|Aldentzean, zure ahotsa entzuten duzu beste aldean aitortzen.
+event.confession_booth.h|Liburuaz galdetu
+event.confession_booth.rh|«Zati bat ezaba daiteke», xuxurlatzen du. «Baina nahi izan behar da.» Zorra askatzen da.
+event.old_photograph.title|Argazkia
+event.old_photograph.text|Horman talde-argazki bat dago: mahai honen inguruko jokalariak, garai guztietakoak. Azken lerroan, zure aurpegia.
+event.old_photograph.a|Jaitsi
+event.old_photograph.b|Bere lekuan utzi
+event.old_photograph.ra|Atzean izenak daude. Asko. Bat ere ez da errepikatzen... zurea izan ezik.
+event.old_photograph.rb|Utzi egiten duzu. Behatuta sentitzen zara oraindik, baina nolabaiteko adeitasunez. Ia.
+event.blood_vending.title|Karta-makina
+event.blood_vending.text|Makina batek kartak ematen ditu hatzean zulo bat eginda. Kartel batek dio: «Itzulketarik ez».
+event.blood_vending.a|Odolez ordaindu
+event.blood_vending.b|Aurrera egin
+event.blood_vending.ra|Makinak durrundatzen du, pozik, eta karta epel bat tutik botatzen du.
+event.blood_vending.rb|Makina hasperen batekin itzaltzen da. Une batez etsita zegoela ematen zuen.
+event.signed_receipt.title|Sinatutako ordainagiria
+event.signed_receipt.text|Tolestutako ordainagiri bat erortzen da zure poltsikotik. Zure letra du, ulertzen ez duzun kopuru bat eta bihartaren data.
+event.signed_receipt.a|Osorik irakurri
+event.signed_receipt.b|Hautsi
+event.signed_receipt.ra|Partiden zerrenda bat da. Denak galduak. Denak zureak.
+event.signed_receipt.rb|Zatitan hausten duzu. Ukabila ixtean, berriro osorik dago zure poltsikoan, baina arinago.
+event.moon_window.title|Leihoa
+event.moon_window.text|Hormarik gabeko leiho batek ilargi erraldoi bat erakusten du. Kasinoaren gainerakoan eguna da.
+event.moon_window.a|Ireki
+event.moon_window.b|Itxi
+event.moon_window.ra|Airea argizariaren usainekoa da. Lehen ez zenekien zerbait dakizu: Aulkiko Gizonak ezin du argi hau jasan.
+event.moon_window.rb|Poliki ixten duzu. Beiraren beste aldean zerbaitek bi aldiz jotzen du, adeitasunez.
+event.phone_call.title|Telefonoa
+event.phone_call.text|Bakelitazko telefono bat jotzen da mahaiaren erdian. Zuretzat da. Beti da zuretzat, bigarren aldiaz geroztik.
+event.phone_call.a|Erantzun
+event.phone_call.b|Entzun gabe esegi
+event.phone_call.ra|Arnasa bat eta, azpian, urruneko txalo-marmar bat. «Hor jarraitzen duzu?», dio gelan ez dagoen norbaitek. «Gu bai.»
+event.phone_call.rb|Telefonoa isiltzen da ukitu orduko. Esegitzean, hasperen kolektibo bat entzuten da.
+event.dealer_tea.title|Krupierraren tea
+event.dealer_tea.text|Krupierrak tea zerbitzatzen du bi katilu berdinetan. «Atseden apur bat hartu. Etxeak gonbidatzen du.» Lurrunak zifra bat marrazten du.
+event.dealer_tea.a|Edan
+event.dealer_tea.b|Katilua baztertu
+event.dealer_tea.ra|Beroa da, gozoa eta gehiegi ezaguna. Katiluaren barruan, grabatuta, zure izena. Hala ere hobeto zaude.
+event.dealer_tea.rb|Katilua kentzen du iraindu gabe. «Nahi duzunean.» Biok dakizue ez dela adeitasuna.
+event.dealer_question.title|Galdera bat
+event.dealer_question.text|«Gogoratzen zara nola iritsi zinen?», galdetzen du Krupierrak, begiratu gabe nahasten. «Lehen eskuaren aurretik.»
+event.dealer_question.a|«Bai, gogoratzen dut»
+event.dealer_question.b|«Ez dut gogoratzen»
+event.dealer_question.ra|Zerbait idazten du. «Zer bitxia. Inork ez du gogoratzen.» Ispilu bati gezurra esan berri bazenio bezala begiratzen dizu.
+event.dealer_question.rb|«Nik ere ez», onartzen du, eta lehen aldiz sorta gelditzen da. Izena galdetzen diozu. Isiltzen da. Ez du.
+event.dealer_question.h|Sortaz galdetu
+event.dealer_question.rh|«Berrogeita hamabi karta», dio, harritu gabe. «Lau palu, hamahiru bakoitzak, Asetik Erregera. Eta bat falta dena.» Irribarre egiten du.
+event.dealer_offer.title|Eskaintza
+event.dealer_offer.text|Krupierrak kontratu bat irristatzen du mahaian zehar. «Sinadura bat eta zor hori desagertzen da.» Letra txikia mugitzen da.
+event.dealer_offer.a|Sinatu
+event.dealer_offer.b|Uko egin
+event.dealer_offer.ra|Tinta beroa dago. Papera bere kasa tolesten da zure berokiaren barruan. Arin sentitzen zara, eta zelatatua.
+event.dealer_offer.rb|Kontratua jasotzen du tematu gabe. «Eskaintza iraungitzen da.» Txanpon batzuk uzten dizkizu eragozpenengatik. Okerrago da horrela.
+event.girl_1.title|Begi Josiko Neska
+event.girl_1.text|Begi bat hari gorriz josita duen neska batek txanpon bat biratzen du. «Aurpegia ala gurutzea. Zuk aukeratu. Nik begiratzen dut.»
+event.girl_1.a|Aurpegia ala gurutzea jokatu
+event.girl_1.b|Uko egin
+event.girl_1.ra|Txanponak denbora gehiegi biratzen du. Erortzen da, edo ez; neskak dagoeneko begirada aldendu du.
+event.girl_1.rb|«Zer aspergarria», dio, eta txanpona gordetzen du. Begi onarekin jarraitzen zaitu galtzen zaren arte.
+event.girl_2.title|Neskak dioena
+event.girl_2.text|«Abisatzen dizut: Etxeak ez du gezurrik esaten», dio begi josiko neskak. Lurrera begira esaten du. Gezurretan esaten den esaldi mota da.
+event.girl_2.a|Sinetsi
+event.girl_2.b|Zalantzan jarri
+event.girl_2.ra|Eskerrak ematen dizkiozu. Haren aholkua eta dirua onartzen dituzu; biak faltsuak dira, baina baliagarriak.
+event.girl_2.rb|Aho okerrarekin irribarre egiten du. «Argia.» Haren keinua ikasten duzu: gezurretan ari da lurrera begiratzen duenean.
+event.girl_3.title|Hari gorria
+event.girl_3.text|Neskak kristalezko begi bat eskaintzen du ahurrean. «Honek gehiago ikusten du. Gehiago kostatzen du ere.» Hari gorria pixka bat askatu da.
+event.girl_3.a|Begia onartu
+event.girl_3.b|Baztertu
+event.girl_3.ra|Jartzen duzu eta gehiago ikusten duzu: kartak, gela, gelaren atzean zerbait. Neskak haria gordetzen du.
+event.girl_3.rb|«Berriz orduan.» Eskua ixten du, eta begia, begi bat bazen, desagertzen da.
+event.chair_bet.title|Aulkia
+event.chair_bet.text|Aulkiko Gizona ez da zutitzen, eta agian ezin du. «Aulkia apustu egiten dut», dio ahots higatuarekin. «Zure pazientziaren kontra.»
+event.chair_bet.a|Apustua onartu
+event.chair_bet.b|Baztertu
+event.chair_bet.ra|Dadoak botatzen ditu begiratu gabe. Errodatzen eta gelditzen entzuten dituzu entzuteari uzten diozunean bertan.
+event.chair_bet.rb|«Ulertzen dut», xuxurlatzen du. «Nik ere nahiago nuke ez zutitzea.»
+event.chair_secret.title|Sortzailea
+event.chair_secret.text|«Etxe hau jokalari nekatu batek sortu zuen», dio Aulkiko Gizonak. «Besteen zain geratu zena.» Aulkiak karraskatzen du.
+event.chair_secret.a|Entzun
+event.chair_secret.b|Eten
+event.chair_secret.ra|Orduak ematen ditu hitz egiten, edo segundoak. Amaieran ulertzen duzu zeinena den aulki hori eta zergatik gordetzen duen.
+event.chair_secret.rb|Isiltzen da. Etxe osoak arnasa eusten duela dirudi aldentzen zaren arte.
+event.child_1.title|Haurra
+event.child_1.text|Urtebetetze soineko bat daraman haur batek mahukatik tira egiten dizu. «Berriro galdu duzu?», galdetzen du. Ez da galdera bat.
+event.child_1.a|«Bai»
+event.child_1.b|«Ez»
+event.child_1.ra|Baiezkoa egiten du, pozik. «Nik ere.» Metal zaporeko goxoki bat ematen dizu.
+event.child_1.rb|«Gezurtia», dio sumindu gabe. Gertutik, haren aurpegia inoiz ikusi ez zenuen haurtzaroko zure argazki baten antzekoa da.
+event.child_2.title|Marrazkia
+event.child_2.text|Haurrak ate bat marrazten du klariona gorriz eta gainean zenbaki bat idazten du: 13. «Pasabidean dago. Zein den badakizu bakarrik irekitzen da.»
+event.child_2.a|Marrazkia gorde
+event.child_2.b|Utzi
+event.child_2.ra|Papera tolesten duzu. Pisatzen du. Etxeko nonbait, pasabide bat biratu da ate berri bat kokatzeko.
+event.child_2.rb|Sorbaldak altxatzen ditu eta atea gurutzatzen du. Pixka batera, klarionak bere kabuz marrazten du berriro.
+event.woman_dress.title|Gorriz Jantzitako Emakumea
+event.woman_dress.text|Soineko gorri ilun bat daraman emakume batek karta bat luzatzen du aurpegia behera. «Dena lau aldiz gehiago», dio. «Zorrak barne.»
+event.woman_dress.a|Karta hartu
+event.woman_dress.b|Baztertu
+event.woman_dress.ra|Karta berotzen da. Biratzean, asko negar egin duen eta damutzen ez den norbait ikusten duzu.
+event.woman_dress.rb|Karta gordetzen du tematu gabe. Badakizu berriro eskainiko dizula.
+event.drowned_pier.title|Kai lehorra
+event.drowned_pier.text|Urik gabeko egurrezko kai bat. Behean, hezurretaraino busti den gizon batek lurra kolpatzen du ukabilekin, oso poliki.
+event.drowned_pier.a|Eskua luzatu
+event.drowned_pier.b|Aldendu
+event.drowned_pier.ra|Heldu egiten dizu. Pisatzen du, izoztuta dago, eta bere ordainketa xuxurlatzen du: norbaitek hondoratu zuen zurea zen zor bat zela eta. Gatz-ukitu bat uzten dizu.
+event.drowned_pier.rb|Kolpeek zure atzean jarraitzen dute, beti distantzia berera.
+event.archive_ledger.title|Artxibozaina
+event.archive_ledger.text|Betaurreko lodiak dituen emakume batek tinta tanta egiten duten kontu-liburuak artxibatzen ditu. «Izen guztiak hemen daude», dio. «Eta ate guztiak berdinak dira.»
+event.archive_ledger.a|Liburua irakurri
+event.archive_ledger.b|Itxi
+event.archive_ledger.ra|Zifra-zutabeak partidak dira. Guztiak ate berean amaitzen dira. Ulertzen duzu ez daudela hainbeste ate.
+event.archive_ledger.rb|«Erabaki jakintsua», dio berak. «Nahiz eta ez duen ezer aldatzen.» Txanpon batzuk ematen dizkizu zure zuhurtziagatik.
+event.merchant_memory.title|Oroitzapen bat salgai
+event.merchant_memory.text|Saltzaileak oroitzapenak saltzen ditu potoetan. «Honek zure lehen kasinoaren usaina du. Beste honek, zure azken eskuarena.»
+event.merchant_memory.a|Poto bat erosi
+event.merchant_memory.b|Baztertu
+event.merchant_memory.ra|Tapa kentzen diozu eta, bat-batean, esku zehatz bat hobeto jokatzen dakizu. Ez dakizu zergatik.
+event.merchant_memory.rb|«Nahi duzunean.» Pixka bat mintzen da. Inoiz bizkarra ematen ez duen saltzaile bakarra da.
+event.room_13.title|13. gela
+event.room_13.text|Pasabidearen hondoan ez zegoen ate bat dago: 13. Atzean, haur bat oso poliki nahasten duenaren soinua.
+event.room_13.a|Sartu
+event.room_13.b|Atea itxi
+event.room_13.ra|Barruan, Haurra kartak eskuetan dituela zain dago. «Berriro galdu duzu?»
+event.room_13.rb|Ixten duzu. Atea hormaren barruan disolbatzen da inoiz egon ez balitz bezala.
+event.secret_bone_door.title|Hezurrezko atea
+event.secret_bone_door.text|Hezur txiki eta leunduz egindako ate bat. Sarraila du. Eta zure giltza du, oraindik ikusi ez baduzu ere.
+event.secret_bone_door.a|Ireki
+event.secret_bone_door.b|Gela arakatu
+event.secret_bone_door.ra|Hezur-giltza betidanik zegoen zure poltsikoan. Atzean irteerarik gabeko gela bat dago eta benetako airearen usaina duen aire bat.
+event.secret_bone_door.rb|Txanpon batzuk aurkitzen dituzu atearen ondoan. Atea zain dago.
+event.secret_watcher.title|Begiratzen duena
+event.secret_watcher.text|Atirik gabeko gela bat sabaian begi bat margotuta. Inork ez zuen margotu. Zuk parpadeatzen duzunean parpadeatzen du.
+event.secret_watcher.a|Begirada itzuli
+event.secret_watcher.b|Begirada jaitsi
+event.secret_watcher.ra|Begiratzen dizu. Zuk begiratzen diozu. Eta une batez norbaitek beste batek begiratzen zaituztela sentitzen duzu biok, gelatik kanpotik.
+event.secret_watcher.rb|Begirada jaisten duzu. Sabaiko begia lasaituta dagoela dirudi, begiratzeko beldurra izango balu bezala.
+event.secret_stage.title|Oholtza hutsa
+event.secret_stage.text|Kasino bateko oholtza bat, eserleku hutsekin. Bakoitzak izen bat duen plaka bat darama. Batek zurea. Beste batek, Krupierrarena: hutsik dago.
+event.secret_stage.a|Zure eserlekuan eseri
+event.secret_stage.b|Zutik geratu
+event.secret_stage.ra|Zure eserlekutik mahai bat, sorta bat eta aulki huts bat ikusten dituzu. Ulertzen duzu ez zarela hemen jolasten duen bakarra. Ezta begiratzen duen bakarra ere.
+event.secret_stage.rb|Nahiago duzu zutik jarraitu. Atsedenaldi labur bat, eta aire arinago pixka bat.

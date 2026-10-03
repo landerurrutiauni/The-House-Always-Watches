@@ -27,7 +27,10 @@ export function openSettings() {
   const langBox = h('div', { class: 'seg', role: 'group' }); const drawLang = () => langBox.replaceChildren(...CONFIG.LANGS.map(l => h('button', { type: 'button', class: 'btn' + (getLang() === l ? ' on' : ''), 'aria-pressed': getLang() === l ? 'true' : 'false', lang: l, onclick: async () => { await setLang(l); saveSettings(); } }, CONFIG.LANG_NAMES[l])));
   drawLang();
   const fsRow = () => { const b = fsButton('text', ''); return b ? h('div', { class: 'set-row' }, h('label', null, t('settings.fullscreen')), b) : null; };
+  const inGame = (() => { const v = G.getView(); return !!v && v.type !== 'menu'; })();
+  const homeSec = inGame ? h('div', { class: 'set-sec' }, h('h3', null, t('settings.game')), h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', 'data-act': 'to_menu', onclick: () => confirmModal(t('settings.to_menu'), t(G.leaveSafe() ? 'settings.to_menu_safe' : 'settings.to_menu_warn'), () => { closeTopModal(); G.leaveToMenu(); }) }, t('settings.to_menu')))) : null;
   const body = h('div', null,
+    homeSec,
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.language')), langBox),
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.audio')), slider('music', t('settings.music')), slider('sfx', t('settings.sfx')), slider('ambient', t('settings.ambient')), slider('voice', t('settings.voices')), tog('muteMusic', t('settings.mute_music')), tog('muteSfx', t('settings.mute_sfx')), tog('muteVoices', t('settings.mute_voices')), tog('reduceIntense', t('settings.reduce_intense'))),
     h('div', { class: 'set-sec' }, h('h3', null, t('settings.display')),

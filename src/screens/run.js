@@ -2,7 +2,7 @@
 import * as G from '../game.js';
 import { gs, settings } from '../state.js';
 import { t } from '../i18n.js';
-import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc, jokerEl, jokerDesc, modal } from '../ui.js';
+import { h, btn, act, ico, sigil, typewriter, cardEl, outcomeEl, resChip, nameOf, announce, handStats, sc, jokerEl, jokerDesc, modal, guideTip } from '../ui.js';
 import { rewardText, list as missionList } from '../missions.js';
 import { WING_INFO } from '../content.js';
 import { characterEl, iconURL, PAL } from '../sprites.js';
@@ -27,6 +27,30 @@ function nodeInfo(n) {
   else if (k === 'boss') box.append(h('div', null, t('map.opp', { name: t('char.' + n.opp.id) })), h('div', { class: 'rules' }, ...ruleList(G.bossRules(n.opp.id), G.bossWeakened(n.opp.id))));
   else box.append(h('div', { class: 'muted' }, t('map.info.' + k)));
   return box;
+}
+// Comodines en el mapa: descripción al pasar el ratón y ORDEN a elegir (arrastrar o ◀ ▶). Actúan de izquierda a derecha, así que el orden cambia el resultado.
+function jokerRow() {
+  if (!gs.jokers.length) return null;
+  const row = h('div', { class: 'jokerbar map-jokers', role: 'group', 'aria-label': t('map.jokers_label') });
+  const wrap = h('div', { class: 'map-jokers-wrap' }, h('div', { class: 'jk-label' }, gs.jokers.length > 1 ? t('map.jokers_hint') : t('map.jokers_label')), row);
+  let dragFrom = -1;
+  const move = (a, b, dir) => { if (!G.reorderJokers(a, b)) return; draw(); const nb = row.querySelector('.jslot[data-i="' + b + '"] .jmove button:' + (dir < 0 ? 'first-child' : 'last-child')); const ok = nb && !nb.disabled ? nb : row.querySelector('.jslot[data-i="' + b + '"] .jmove button:not(:disabled)'); if (ok) ok.focus(); };
+  const arrow = (i, d, ch) => h('button', { type: 'button', class: 'btn tiny ghost', disabled: i + d < 0 || i + d >= gs.jokers.length, 'aria-label': t(d < 0 ? 'map.joker_left' : 'map.joker_right', { name: t(`joker.${gs.jokers[i]}.name`) }), 'data-dir': String(d), onclick: () => move(i, i + d, d) }, ch);
+  function draw() {
+    const multi = gs.jokers.length > 1;
+    row.replaceChildren(...gs.jokers.map((id, i) => {
+      const el = h('div', { class: 'jslot', draggable: multi ? 'true' : 'false', 'data-i': String(i) }, h('span', { class: 'jidx', 'aria-hidden': 'true' }, String(i + 1)), jokerEl(id, { static: true }), multi ? h('span', { class: 'jmove' }, arrow(i, -1, '◀'), arrow(i, 1, '▶')) : null);
+      if (multi) {
+        el.addEventListener('dragstart', e => { dragFrom = i; el.classList.add('drag'); try { e.dataTransfer.setData('text/plain', String(i)); e.dataTransfer.effectAllowed = 'move'; } catch (err) { /* sin dataTransfer */ } });
+        el.addEventListener('dragend', () => { dragFrom = -1; row.querySelectorAll('.jslot').forEach(x => x.classList.remove('drag', 'over')); });
+        el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
+        el.addEventListener('dragleave', () => el.classList.remove('over'));
+        el.addEventListener('drop', e => { e.preventDefault(); const from = dragFrom >= 0 ? dragFrom : +(e.dataTransfer && e.dataTransfer.getData('text/plain')); if (G.reorderJokers(from, i)) draw(); });
+      }
+      return el;
+    }));
+  }
+  draw(); return wrap;
 }
 function mapScreen(v) {
   mapSel = null;
@@ -56,7 +80,7 @@ function mapScreen(v) {
   act.map_missions = () => { const miss = missionList(); const b = document.querySelector('[data-act="map_missions"]'); if (b) b.textContent = missLabel(); modal(h('div', { class: 'miss-list' }, ...miss.map(m => h('div', { class: 'miss' + (m.done ? ' done' : ''), 'data-mission': m.id },
     h('b', null, (m.done ? '✓ ' : '') + t('mission.' + m.id)), h('span', { class: 'miss-n' }, t('mission.progress', { n: m.n, m: m.need })), h('div', { class: 'muted' }, t('mission.reward_label', { r: rewardText(m.reward) })))), h('p', { class: 'muted', style: 'font-size:.85em' }, t('mission.note'))), { title: t('mission.title', { wing: t(`wing.${v.wing}.name`) }) }); };
   const missBtn = (v.missions || []).length ? h('button', { type: 'button', class: 'btn ghost', 'data-act': 'map_missions' }, missLabel()) : null;
-  return h('section', { class: 'scr mapscr' }, h('p', { class: 'muted center', style: 'margin:2px' }, t('map.title', { n: Math.max(0, v.row) + 1, total: N }) + ' · ' + t(`wing.${v.wing}.name`)), box, info, h('div', { class: 'row center' }, missBtn, enter));
+  return h('section', { class: 'scr mapscr' }, h('p', { class: 'muted center', style: 'margin:2px' }, t('map.title', { n: Math.max(0, v.row) + 1, total: N }) + ' · ' + t(`wing.${v.wing}.name`)), jokerRow(), box, info, h('div', { class: 'row center' }, missBtn, enter), G.guideActive() ? guideTip() : null);
 }
 
 // ---------------- Eventos ----------------

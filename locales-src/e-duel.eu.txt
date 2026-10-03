@@ -1,0 +1,37 @@
+duel.you|Zu
+duel.n.p_aim_foe|{name}ri apuntatzen diozu eta katua sakatzen duzu…
+duel.n.p_aim_table|Mahaia probokatzen duzu: kanoia mahai-oihalaren gainean pausatzen duzu…
+duel.n.f_aim_p|{name}k apuntatzen dizu eta katua sakatzen du…
+duel.n.f_aim_table|{name}k Mahaia probokatzen du…
+duel.n.loaded|BANG! {k}. ganbera KARGATUTA zegoen.
+duel.n.empty|Klik… {k}. ganbera HUTSIK zegoen.
+duel.n.f_loses|{name}k marka bat galtzen du. {n} geratzen zaizkio.
+duel.n.p_loses|Marka bat galtzen duzu. {n} geratzen zaizkizu.
+duel.n.backfire_p|Mahaiak bala itzultzen dizu.
+duel.n.backfire_f|Mahaiak bala itzultzen dio {name}ri.
+duel.n.safe_p|Mahaia isilik dago: txandari eusten diozu.
+duel.n.safe_f|Mahaia isilik dago: {name}k txandari eusten dio.
+duel.n.pass_f|Txanda {name}ri pasatzen zaio.
+duel.n.pass_p|Txanda zuregana itzultzen da.
+duel.n.skipped|{name}k bere txanda ahazten du.
+duel.n.reload|Eskopeta berrkargatzen da: sei ganbera berri. {name}k {n} bala iragartzen ditu.
+duel.n.skip_hint|Ukitu pantaila azkartzeko.
+duel.cap.bang|BANG!
+duel.cap.click|KLIK…
+duel.cap.safe|SEGURUA
+duel.cap.back|ERREBOTEA!
+settings.voices|Ahotsak (marmarra)
+settings.mute_voices|Ahotsak mututu
+settings.text_speed|Testuaren abiadura
+settings.ts.normal|Normala
+settings.ts.fast|Azkarra
+settings.ts.instant|Berehalakoa
+duel.n.turn_of|{name}ren txanda
+duel.h.title|Tiroen historia
+duel.h.p_foe|Zu → Arerioa
+duel.h.p_table|Zu → Mahaia
+duel.h.f_p|Arerioa → Zu
+duel.h.f_table|Arerioa → Mahaia
+duel.h.cham|gan. {k}
+duel.h.skip|{name}k txanda galtzen du
+duel.cap.skip|—

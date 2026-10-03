@@ -120,13 +120,13 @@ with sync_playwright() as p:
     ctx, pg = boot(b)
     pg.evaluate("() => { window.__HOUSE_TEST.G.newGame(); }")
     iv = pg.evaluate("() => { const T = window.__HOUSE_TEST, v = T.G.getView(); return { lines: v.lines, last: T.t(v.lines[v.lines.length - 1]) }; }")
-    check('G1 la introducción termina avisando de que existe la GUÍA (botón «?» o tecla ?)', iv['lines'][-1] == 'intro.7' and 'GUÍA' in iv['last'] and '?' in iv['last'], iv)
+    check('G1 la introducción (voz del Crupier) YA NO menciona la guía: 6 líneas y la última es «Siéntate…»', iv['lines'][-1] == 'intro.6' and len(iv['lines']) == 6 and 'guía' not in iv['last'].lower(), iv)
     pg.evaluate("() => { const T = window.__HOUSE_TEST; T.G.introDone(); }"); pg.wait_for_selector('.mapscr'); pg.wait_for_timeout(400)
     mh = pg.evaluate("""() => { const T = window.__HOUSE_TEST, v = T.G.getView(); return { type: v.type, hint: v.hintKey || null, text: v.hintKey ? T.t(v.hintKey) : '', pulse: !!document.querySelector('#hud [data-act="howto"].pulse') }; }""")
-    check('G2 el primer mapa recuerda la GUÍA («?» de arriba) y el botón «?» late para llamar la atención', mh['type'] == 'map' and mh['hint'] == 'hint.map' and '?' in mh['text'] and mh['pulse'], mh)
+    check('G2 el primer mapa: la pista del Crupier no nombra la guía, pero el botón «?» late y hay un indicador del interfaz', mh['type'] == 'map' and mh['hint'] == 'hint.map' and 'guía' not in mh['text'].lower() and mh['pulse'] and pg.locator('.mapscr .sys-tip').count() == 1, mh)
     pg.evaluate("() => { const T = window.__HOUSE_TEST; T.G.chooseNode('r0c0'); }"); pg.wait_for_selector('.tbl'); pg.wait_for_timeout(400)
     tv = pg.evaluate("""() => { const T = window.__HOUSE_TEST, v = T.G.getView(); return { type: v.type, hint: v.hintKey || null, tut: !!v.tutorial, text: v.hintKey ? T.t(v.hintKey) : '', btn: !!document.querySelector('[data-act="help"].pulse') }; }""")
-    check('G3 la primera mesa (tutorial) dice dónde está la GUÍA y resalta el botón «? GUÍA»', tv['type'] == 'round' and tv['tut'] and 'GUÍA' in tv['text'] and tv['btn'], tv)
+    check('G3 la primera mesa (tutorial): la pista no nombra la guía, el botón «? GUÍA» late y el indicador del interfaz aparece en la mesa', tv['type'] == 'round' and tv['tut'] and 'guía' not in tv['text'].lower() and tv['btn'] and pg.locator('.felt .sys-tip').count() == 1, tv)
     pg.click('[data-act="help"]'); pg.wait_for_selector('.modal')
     check('G4 pulsar «? GUÍA» abre la guía de la mesa con las 11 manos', pg.locator('.modal .help-grid dt').count() >= 11, pg.locator('.modal .help-grid dt').count())
     pg.keyboard.press('Escape'); pg.wait_for_timeout(150)
@@ -210,12 +210,12 @@ with sync_playwright() as p:
     check('S4 esperar sin tocar nada en el menú desbloquea «Paciencia»', pg.evaluate("() => window.__HOUSE_TEST.ACH.hasEgg('paciencia')"))
     # idiomas: cambiar a los 4 desde Ajustes
     pg.evaluate("() => { window.__HOUSE_TEST.G.toMenu(); }"); pg.wait_for_selector('[data-act="settings"]'); 
-    for lang in ['en', 'fr', 'de', 'es']:
+    for lang in ['en', 'fr', 'de', 'eu', 'es']:
         pg.evaluate("() => { document.querySelector('[data-act=\"settings\"]').click(); }"); pg.wait_for_selector('.modal')
-        pg.evaluate("(l) => { const s = document.querySelector('.modal .seg-lang, .modal [data-lang=\"' + l + '\"]'); if (s) s.click(); else { const b = [...document.querySelectorAll('.modal button')].find(x => x.dataset.lang === l || x.textContent.trim().toLowerCase().startsWith({ en: 'english', fr: 'fran', de: 'deutsch', es: 'espa' }[l])); if (b) b.click(); } }", lang)
+        pg.evaluate("(l) => { const s = document.querySelector('.modal .seg-lang, .modal [data-lang=\"' + l + '\"]'); if (s) s.click(); else { const b = [...document.querySelectorAll('.modal button')].find(x => x.dataset.lang === l || x.textContent.trim().toLowerCase().startsWith({ en: 'english', fr: 'fran', de: 'deutsch', eu: 'euskara', es: 'espa' }[l])); if (b) b.click(); } }", lang)
         pg.wait_for_timeout(250); pg.keyboard.press('Escape'); pg.wait_for_timeout(120)
     langs = pg.evaluate("() => window.__HOUSE_TEST.st.settings.langsSeen")
-    check('S6 usar los cuatro idiomas desbloquea «La casa habla todos los idiomas»', pg.evaluate("() => window.__HOUSE_TEST.ACH.hasEgg('poliglota')"), langs)
+    check('S6 usar los cinco idiomas (con el euskera) desbloquea «La casa habla todos los idiomas»', pg.evaluate("() => window.__HOUSE_TEST.ACH.hasEgg('poliglota')"), langs)
     check('S7 sin errores JS en los secretos', not pg.errs, pg.errs[:2])
     shot(pg, 'menu_eggs'); ctx.close()
 

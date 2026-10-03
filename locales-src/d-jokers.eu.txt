@@ -1,0 +1,55 @@
+ui.joker|KOMODINA
+ui.jokers|Komodinak
+ui.sell|SALDU (+{n})
+ui.slots|{n}/{max} toki
+ui.out.joker|Komodina: {name}
+ui.out.joker_full|Komodinarentzako lekurik ez: erdi prezioan saltzen duzu
+hud.jokers|Komodinak
+shop.joker.full|LEKURIK EZ
+reward.joker|Komodina: {name}
+table.hands_title|ESKUAK
+table.hands_btn|ESKUAK
+table.hands_hint|Esku bakoitzaren hobekuntzak
+table.jokers_empty|Toki librea
+fxbanner.good|JOKALDI ONA!
+fxbanner.big|JOKALDI HANDIA!
+fxbanner.huge|SUNTSITZAILEA!
+fxbanner.target|HELBURUA LORTUTA!
+joker.bufon.name|Pailazo Mutua
+joker.bufon.desc|+4 mult.
+joker.sonrisa.name|Irribarre Finkoa
+joker.sonrisa.desc|+30 fitxa jokaldiak bikote bat edo hobea badu.
+joker.sanguijuela.name|Odol-xurgatzailea
+joker.sanguijuela.desc|+2 mult puntuatzen duen Odol-karta bakoitzeko.
+joker.ojo_nuca.name|Garondoko Begia
+joker.ojo_nuca.desc|+12 fitxa puntuatzen duen Begi-karta bakoitzeko.
+joker.colmillo_dorado.name|Letagin Urrezkoa
+joker.colmillo_dorado.desc|+10 fitxa puntuatzen duen Hortz-karta bakoitzeko.
+joker.llavero_roto.name|Giltza-sorta Hautsia
+joker.llavero_roto.desc|+8 fitxa eta +1 Ezkutu puntuatzen duen Giltza bakoitzeko.
+joker.ultima_oportunidad.name|Azken Aukera
+joker.ultima_oportunidad.desc|+10 mult txandako zure azken jokaldian.
+joker.trapero.name|Trapuzaina
+joker.trapero.desc|+1 mult 40 Zor bakoitzeko (gehienez +10).
+joker.peaje.name|Txalupariaren Bidesaria
+joker.peaje.desc|2 Diru irabazten dituzu puntuatzen duen karta bakoitzeko.
+joker.vela_viuda.name|Alargunaren Kandela
+joker.vela_viuda.desc|×1,5 zure Zentzutasuna 40 baino txikiagoa bada.
+joker.gemelos.name|Bikiak
+joker.gemelos.desc|×1,5 jokaldia Bikote bikoitza edo Full bada.
+joker.escalera_sin_fin.name|Amaierarik Gabeko Eskala
+joker.escalera_sin_fin.desc|+40 fitxa eta +4 mult jokaldia Eskala, Kolore-eskala edo Eskala erreala bada.
+joker.monja_ciega.name|Moja Itsua
+joker.monja_ciega.desc|×1,25 puntuatzen duen figura (J, Q, K) bakoitzeko.
+joker.as_manga.name|Mahukako Asa
+joker.as_manga.desc|×1,5 puntuatzen duen As bakoitzeko.
+joker.casa_gana.name|Etxeak Beti Irabazten du
+joker.casa_gana.desc|×1,4 jokaldian apustu egiten baduzu.
+joker.abaco.name|Abako Herdoilduta
+joker.abaco.desc|+1 mult iraunkorra jaitsiera honetan irabazitako txanda bakoitzeko.
+joker.corona_podrida.name|Koroa Ustela
+joker.corona_podrida.desc|×2 jokaldia Kolorea, Full, Pokerra, Kolore-eskala, Eskala erreala edo Repokerra bada.
+joker.sombrero.name|Krupierraren Kapela
+joker.sombrero.desc|×1,3 zure jokaldi guztietan, baina jokaldi bakoitzak 2 Zentzutasun kostatzen ditu.
+joker.ultimo_aliento.name|Azken Arnasa
+joker.ultimo_aliento.desc|×3 zure Osasuna %30etik behera badago.

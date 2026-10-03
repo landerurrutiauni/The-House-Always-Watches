@@ -58,7 +58,7 @@ t('perfil antiguo (sin hints): no rompe y las pistas pueden volver a salir', typ
 G.markHint('hint.map'); t('perfil antiguo: markHint funciona', gs.meta.hints.map === true);
 
 // ---- textos de la ayuda en los 4 idiomas ----
-for (const lang of ['es', 'en', 'fr', 'de']) {
+for (const lang of ['es', 'en', 'fr', 'de', 'eu']) {
   const L = JSON.parse(fs.readFileSync(new URL(`../locales/${lang}.json`, import.meta.url), 'utf8'));
   const need = ['menu.howto', 'hud.howto', 'howto.title', 'howto.cards', ...['map', 'event', 'merchant', 'rest', 'boss'].map(k => 'hint.' + k), ...Array.from({ length: 8 }, (_, i) => [`howto.s${i + 1}.h`, `howto.s${i + 1}.t`]).flat()];
   const miss = need.filter(k => !L[k] || !String(L[k]).trim());

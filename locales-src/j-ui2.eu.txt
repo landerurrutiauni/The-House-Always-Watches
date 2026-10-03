@@ -1,0 +1,29 @@
+ui.tip_guide|Jokoaren gida: goiko «?» botoia (edo ? tekla)
+duel.if_win|Irabazten baduzu:
+duel.if_lose|Galtzen baduzu:
+table.interest_up|Interesa: helburua {n}
+deck.title|Sorta
+deck.count|{n} karta · {sp} berezi
+deck.left|Ateratzeko: {n}/{total}
+deck.hint|Jarri sagua (edo ukitu) karta baten gainean zer egiten duen ikusteko.
+deck.sort|Ordenatu:
+deck.sort.suit|Palua
+deck.sort.rank|Balioa
+deck.sort.special|Bereziak
+deck.sort.recent|Berrienak
+deck.only_special|Bereziak soilik
+deck.view.full|Sorta osoa
+deck.view.left|Ateratzeko
+deck.empty|Ez dago erakusteko kartarik.
+table.sort_hint|Ordenatu zure eskua balioaren edo paluaren arabera
+rarity.common|Arrunta
+rarity.uncommon|Ez hain arrunta
+rarity.rare|Urria
+map.jokers_label|Komodinak
+map.jokers_hint|Komodinak ezkerretik eskuinera jokatzen dute. Arrastatu edo erabili ◀ ▶ ordenatzeko.
+map.joker_left|Eraman {name} ezkerrera
+map.joker_right|Eraman {name} eskuinera
+settings.game|Partida
+settings.to_menu|Hasierara itzuli
+settings.to_menu_safe|Zure aurrerapena gordetzen da eta hasierako pantailara itzultzen zara. Handik partida berrartu ahal izango duzu.
+settings.to_menu_warn|Gela baten erdian zaude: abandonatutzat joko da. Amaitutako azken gelara arteko aurrerapena gordetzen da.

@@ -8,7 +8,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const dist = path.join(root, 'dist');
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
-const LANGS = ['es', 'en', 'fr', 'de'];
+const LANGS = ['es', 'en', 'fr', 'de', 'eu'];
 const GAME_FILE = 'the-house-always-watches.html';
 
 // Evita que contenido incrustado cierre la etiqueta <script> o abra un comentario HTML.

@@ -71,7 +71,7 @@ export function defaultSettings() {
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   return {
     lang: null, music: 0.7, sfx: 0.9, ambient: 0.6,
-    muteMusic: false, muteSfx: false, reduceIntense: false, voice: 0.7, muteVoices: false, textSpeed: 'normal',
+    muteMusic: false, muteSfx: false, reduceIntense: false, voice: 0.7, muteVoices: false, textSpeed: 'normal', deckSort: 'suit', handSort: null,
     textSize: 1, contrast: false, reduceEffects: reduce,
     quality: coarse ? 'medium' : 'high', vibration: true, eggs: [], langsSeen: []
   };

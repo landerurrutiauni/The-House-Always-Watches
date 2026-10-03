@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const LANGS = ['es', 'en', 'fr', 'de'];
+const LANGS = ['es', 'en', 'fr', 'de', 'eu'];
 const L = Object.fromEntries(LANGS.map(l => [l, JSON.parse(fs.readFileSync(path.join(root, 'locales', l + '.json'), 'utf8'))]));
 let errors = 0, warns = 0;
 const err = m => { console.error('✗ ' + m); errors++; };

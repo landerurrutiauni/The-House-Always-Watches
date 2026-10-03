@@ -501,3 +501,49 @@ p>.tag,li>.tag,b+.tag,h3>.tag,.say>.tag{margin-left:.45em}
 .arc-pager{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:8px}
 .archive .arc-cell{font-size:.82em;line-height:1.3}
 .archive .arc-char{font-size:.82em;line-height:1.3}
+
+/* ---------- Pistas del interfaz (no diegéticas), escudo corto y centrado, apuesta con carta concreta ---------- */
+.felt{position:relative}
+.sys-tip{display:flex;align-items:center;justify-content:center;gap:.5em;text-align:center;font-size:.8em;color:var(--gold);letter-spacing:.02em;padding:2px 10px;margin:2px auto 0;border:1px dashed #b08a3a88;background:#0007;max-width:fit-content}
+.felt .sys-tip{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap}
+.mapscr .sys-tip{margin:4px auto 2px}
+.preview-costs{justify-content:center;align-items:center}
+.shieldnote{display:flex;align-items:center;justify-content:center;gap:.4em;text-align:center;width:100%;flex:1 1 100%}
+.stakecard{display:flex;align-items:center;gap:.5em;margin-top:2px;line-height:1.1}
+.stakecard b{text-transform:none;letter-spacing:0;color:var(--t4)}
+.minicard{--cw:30px;display:inline-block;flex:none}
+.minicard .card{pointer-events:none}
+
+/* ---------- Descripción instantánea, comodines ordenables, visor de mazo, orden de mano ---------- */
+.tip-pop{position:absolute;z-index:200;max-width:300px;padding:6px 10px;background:#0d0a09f2;border:2px solid var(--t2);color:var(--t3);font-size:.85em;line-height:1.25;pointer-events:none;box-shadow:0 4px 0 #000a}
+.tip-pop[hidden]{display:none}
+.tip-pop .tp-title{display:block;color:var(--t4);letter-spacing:.04em}
+.tip-pop .tp-tag{display:inline-block;font-size:.78em;opacity:.8;margin-bottom:3px}
+.tip-pop.r-uncommon{border-color:#6a9fd4}.tip-pop.r-rare{border-color:#b08a3a}
+.map-jokers-wrap{display:flex;align-items:center;justify-content:center;gap:14px;padding:2px 0 4px}
+.map-jokers-wrap .jk-label{font-size:.78em;color:var(--t1);max-width:330px;text-align:right;line-height:1.15}
+.map-jokers{gap:8px;align-items:flex-start}
+.jslot{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:2px;border:2px solid transparent}
+.jslot[draggable="true"]{cursor:grab}
+.jslot.over{border-color:var(--gold);background:#b08a3a22}
+.jslot.drag{opacity:.45}
+.jslot .joker{width:42px}
+.jidx{position:absolute;left:0;top:0;font-size:.7em;background:#000c;color:var(--t3);padding:0 4px;z-index:2}
+.jmove{display:flex;gap:3px}
+.btn.tiny{padding:0 7px;min-height:20px;font-size:.72em;letter-spacing:0}
+.deckbtn{background:none;border:0;padding:0;color:var(--t1);cursor:pointer;font:inherit;text-decoration:underline dotted}
+.deckbtn:hover,.deckbtn:focus-visible{color:var(--t4)}
+.sortbtns{display:flex;align-items:center;gap:4px;margin:0 6px}
+.sortbtns .btn{padding:0 8px;min-height:24px;font-size:.78em}
+.hud-deck{display:inline-flex;align-items:center;gap:4px}
+.deck-modal{width:1000px;max-width:100%}
+.deckview{display:flex;flex-direction:column;gap:8px}
+.deck-head{text-align:center;font-weight:bold;letter-spacing:.06em}
+.deck-ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center}
+.deck-ctl .btn.small{padding:0 10px;min-height:26px;font-size:.8em}
+.deck-lbl{color:var(--t1);font-size:.85em}
+.deck-sep{width:14px}
+.deck-grid{display:grid;grid-template-columns:repeat(13,var(--cw,50px));gap:4px;justify-content:center;min-height:160px;align-content:start}
+.deck-grid .card{cursor:default}
+.deck-grid .card.is-sp{outline:2px solid #b08a3a;outline-offset:1px}
+.deck-info{min-height:2.6em;text-align:center;font-size:.9em;padding:4px 8px;border-top:1px solid var(--c3);color:var(--t3)}

@@ -2,7 +2,7 @@
    Script clásico, sin dependencias: funciona también con file://. Todo se inserta como texto (nunca como HTML). */
 (function () {
   'use strict';
-  var LANGS = ['es', 'en', 'fr', 'de'], NAMES = { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch' }, SETTINGS_KEY = 'thaw.settings.v1';
+  var LANGS = ['es', 'en', 'fr', 'de', 'eu'], NAMES = { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch', eu: 'Euskara' }, SETTINGS_KEY = 'thaw.settings.v1';
   var body = document.body, page = body.getAttribute('data-page') || 'privacy', GAME = body.getAttribute('data-game') || '../index.html';
   var cache = {};
 

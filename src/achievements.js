@@ -3,7 +3,7 @@
 import { gs, settings, bus } from './state.js';
 
 export const EGGS = ['ojos', 'konami', 'paciencia', 'poliglota', 'real', 'ases', 'limite', 'mesa3', 'cinco', 'arrepentido', 'colapso', 'jackpot'];
-export const LANGS = ['es', 'en', 'fr', 'de'];
+export const LANGS = ['es', 'en', 'fr', 'de', 'eu'];
 
 export const eggsFound = () => [...new Set([...(gs.meta && gs.meta.eggs ? gs.meta.eggs : []), ...(settings.eggs || [])])].filter(id => EGGS.includes(id));
 export const hasEgg = id => eggsFound().includes(id);

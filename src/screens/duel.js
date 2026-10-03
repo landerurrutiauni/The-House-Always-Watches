@@ -2,22 +2,29 @@
 import * as G from '../game.js';
 import * as S from '../shotgun.js';
 import { gs, settings } from '../state.js';
-import { t } from '../i18n.js';
-import { h, btn, act, ico, sigil, resChip, announce, sc, typewriter, textSpeedMul } from '../ui.js';
+import { t, cardName } from '../i18n.js';
+import { h, btn, act, ico, sigil, resChip, announce, sc, typewriter, textSpeedMul, cardEl } from '../ui.js';
 import { characterEl, PAL } from '../sprites.js';
 import { audioManager as audio } from '../audio.js';
 import { fx } from '../fx.js';
 import { TOOLS } from '../content.js';
+import { SPECIALS } from '../cards.js';
 
 const oppName = (id, look) => (id === 'final' ? t('char.dealer') : String(id).startsWith('gambler') ? t('opp.' + (id === 'gambler' ? (look || 'gambler_a') : id)) : t('char.' + id));
 const foeChar = (id, look) => (id === 'final' ? 'dealer' : id === 'gambler' ? (look || 'gambler_a') : id);
 let lastD = null, busy = false;
 
+// Fila «Si ganas / Si pierdes: [carta] nombre» (la carta concreta, no una promesa abstracta)
+const miniCard = c => ({ uid: '', id: c.id, suit: c.suit, rank: c.rank, sp: !!c.sp, mods: c.mods || [], grow: c.grow || 0 });
+const stakeCardRow = (cls, label, c) => h('span', { class: cls + ' stakecard', 'data-card': c.id }, label, h('span', { class: 'minicard' }, cardEl(miniCard(c), { static: true, noname: true })), h('b', null, cardName(c)));
 function setupScreen(v) {
   const opts = v.stakes.map(s => {
-    const n = s.value;
+    const n = s.value, concrete = s.type === 'card' && s.lose && s.winId && SPECIALS[s.winId];
+    const lines = concrete
+      ? [stakeCardRow('good', t('duel.if_win'), { id: s.winId, suit: SPECIALS[s.winId].suit, rank: SPECIALS[s.winId].rank, sp: true }), stakeCardRow('red', t('duel.if_lose'), s.lose)]
+      : [h('span', { class: 'good' }, t(`duel.stake.${s.type}.win`)), h('span', { class: 'red' }, t(`duel.stake.${s.type}.lose`, { n }))];
     return h('button', { type: 'button', class: 'btn', style: 'flex-direction:column;align-items:flex-start;text-transform:none;text-align:left', 'data-act': 'duel_stake', 'data-arg': s.type, disabled: !s.ok },
-      h('b', { style: 'text-transform:uppercase;letter-spacing:.08em' }, t(`duel.stake.${s.type}.name`, { n })), h('span', { class: 'good' }, t(`duel.stake.${s.type}.win`)), h('span', { class: 'red' }, t(`duel.stake.${s.type}.lose`, { n })));
+      h('b', { style: 'text-transform:uppercase;letter-spacing:.08em' }, t(`duel.stake.${s.type}.name`, { n })), ...lines);
   });
   return h('section', { class: 'scr resscr duelsetup' }, characterEl(foeChar(v.foe, v.look), { scale: sc(4, 2) }), h('h2', { class: 'bigtitle' }, t('duel.title')), h('p', { class: 'muted', style: 'margin:0' }, oppName(v.foe, v.look)),
     v.hintKey ? h('div', { class: 'panel hint' }, h('small', null, t('char.dealer')), t(v.hintKey)) : null,

@@ -1,0 +1,102 @@
+opp.gambler_d|Hatz luzeko tranpatia
+opp.gambler_e|Belo beltzeko alarguna
+opp.gambler_f|Purua itzalita duen jokalaria
+opp.gambler_g|Izengabeko kontularia
+opp.gambler_h|Barre egiten ez duen pailazoa
+char.prompter|Apuntatzailea
+char.usher|Eserleku-gidaria
+char.watcher|Zelataria
+char.concierge|Atezaina
+bio.prompter|Eszenatokiaren azpiko maskorrean bizi da eta guztiei beren testua xuxurlatzen die. Txotxongiloak errepikatzen duen gidoia idatzi zuen… edo hala uste du, ez baitu gogoratzen idatzi zuen ala kopiatu besterik ez zuen.
+bio.usher|Eserleku bakoitza eta noren den ezagutzen du. Gonbidatuak beren eserlekuraino lagundu eta ez du inoiz inor joaten ikusi; 13a zuretzat gordetzen du.
+bio.watcher|Pantaila guztiak batera begiratzen ditu eta bakoitzean ikusitakoa gogoratzen du. Gela bakar bat dago inolako kamerak erakusten ez duena. Erizainak afaria eramaten dio; berak ez du inoiz begirada altxatzen.
+bio.concierge|Etxeko giltza guztiak gordetzen ditu eta ateak irekitzeagatik kobratzen du. Irteera ezagutzen du eta ez du presarik kontatzeko: hura ere geratu zen.
+bio.puppet|Ordaindu zionaren ahotsarekin hitz egiten du. Krupierraren gidoia hitzez hitz errepikatzen du… eta batzuetan, bat lehenago: Apuntatzaileak xuxurlatzen dio maskorretik.
+wing.teatro.name|Antzokia
+wing.teatro.desc|Oihala altxatuta, inorez beteriko eserlekuak eta hasten edo amaitzen ez den emanaldi bat.
+wing.vigilancia.name|Zaintza-gela
+wing.vigilancia.desc|Mila pantaila, bat gela bakoitzeko. Guztiek zu erakusten zaituzte.
+boss.prompter.a|«Zure lekuan zaude. Ez begiratu maskorrari; esan zure esaldia eta gainerakoa bere kabuz etorriko da. Eta ez errepikatu: publikoa aspertzen da.»
+boss.prompter.w|«Emanaldia amaitu da. Inprobisatu zenuen, eta hori ez zegoen idatzita. Orduan… nork xuxurlatu zizun?»
+boss.prompter.l|«Paperetik kanpo, haur. Errepikatu eszena hasieratik; nik esango dizut noiz.»
+boss.watcher.a|«Hogeita hiru pantailatan ikusten zaitut. Ez saiatu kartak ezkutatzen ezta jokaldiak errepikatzen: dena gogoratzen dut.»
+boss.watcher.w|«Puntu itsu bat… Ene. Ez nekien existitzen zenik. Kamera hau itzaltzen dut; pasa inork ikusi aurretik ez nuela begiratu.»
+boss.watcher.l|«Grabatuta. Zure porrota artxiboan dago dagoeneko, ordua eta guzti. Hasi berriro; hori ere grabatuko dut.»
+know.k_prompter_box.name|Apuntatzailearen maskorra
+know.k_prompter_box.text|Maskorrak ez du hondorik: Apuntatzaileak jada esan duzunaren gainean idazten du. Badakizu nondik xuxurlatzen duen, eta haren Oroimenak ez zaitu jada zigortzen jokaldiak errepikatzeagatik.
+know.k_usher_seat.name|13. eserlekua
+know.k_usher_seat.text|Gelako eserleku bakoitza joan ez zen norbaitek ordaindu zuen. 13a zurea da, eta beroa dago.
+know.k_watcher_blind.name|Puntu itsua
+know.k_watcher_blind.text|Inolako kamerak erakusten ez duen gela bat dago, eta Zelatariak ez zekien. Badakizu nora begiratu, eta haren Zaintzak ez dizu jada eskuak lotzen.
+know.k_concierge_keys.name|Atezainaren giltza-sorta
+know.k_concierge_keys.text|Atezainak etxeko ate guztietarako giltza du bat izan ezik: irteerarena. Hori beste norbaitek gordetzen du.
+event.prompter_1.title|Maskorra
+event.prompter_1.text|Eszenatokiaren azpian, maskorraren forma duen txabola bat. Barruan, betaurreko fineko gizon batek zure esaldia xuxurlatzen dizu pentsatu aurretik: «Esan “gabon”, gero eztul egin». Apuntatzailea da.
+event.prompter_1.a|Haren xuxurla jarraitu
+event.prompter_1.b|Belarriak estali
+event.prompter_1.ra|“Gabon” esaten duzu eta eztul egiten duzu. Ez dagoen publikoak txalo egiten du. Norbaitek txanpon batzuk uzten ditu maskorrean; Apuntatzaileak zuregana bultzatzen ditu begiratu gabe.
+event.prompter_1.rb|Isiltasunak ondo egiten dizu. Berak hasperen egiten du haria galdu duen batek bezala eta esaldi bat marmar egiten du hutsera. Une batez, inork ez dizu esaten zer esan.
+event.prompter_1.h|Txotxongiloaz galdetu
+event.prompter_1.rh|«Txotxongiloa? Nik xuxurlatzen diot, hemendik. Baina maskorrak ez du hondorik: ez dakit nondik datorren nire testua ere.» Barrura begiratzen duzu: egia da, iluntasun gehiago besterik ez dago.
+event.prompter_2.title|Hirugarren ekitaldia
+event.prompter_2.text|Apuntatzaileak koadernatutako gidoia erakusten dizu. Zure izena orrialde guztietan agertzen da. Azkenean, letra txikiagoa bihurtu eta desagertzen da: «Hemen publikoak inprobisatzen du», dio.
+event.prompter_2.a|Azken lerroa irakurri
+event.prompter_2.b|Orrialdea atera
+event.prompter_2.ra|Begiak estutzen dituzu irakurri arte: «Krupierrak ere paper bat du hemen». Ulertzen duzu etxeko guztiek paper bat betetzen dutela… eta norbaitek banatzen dituela.
+event.prompter_2.rb|Orrialdea auts hotz bezala desegiten da zure eskuan. Apuntatzaileak ez du protestatzen: «Noizbait atera behar zen». Hobeto arnasten duzu.
+event.usher_1.title|Zure eserlekua
+event.usher_1.text|Mandatari-txapela duen emakume batek zure oinetakoei lanpara bat zuzentzen die. «Hemendik, mesedez. Hamahirugarren ilara, hamahirugarren eserlekua. Zure zain geunden.» Eserlekua beroa dago.
+event.usher_1.a|Eseri
+event.usher_1.b|Zutik geratu
+event.usher_1.ra|Belusean hondoratzen zara. Gogoratzen ez zenuen bezala atseden hartzen duzu. Emanaldia hasten da eta inor ez da oholtzara ateratzen… baina irteeran sarrera kobratzen dute.
+event.usher_1.rb|«Nahi duzun bezala.» Berak izpia itzaltzen du eta zure ondoan geratzen da, mugitu gabe. Txanpon bat erortzen da lurrera; ez dakizu nork utzi zuen.
+event.usher_2.title|Argi-izpia
+event.usher_2.text|Eserleku-gidariak ilarak zeharkatzen ditu bere lanpararekin. Eserleku bakoitzean, berokia tolestuta, kapela, makila. «Inor ez da joaten», xuxurlatzen du. «Beren gauzak uzten dituzte eta geratzen dira. Begiratu hamahirugarrenari.»
+event.usher_2.a|Izpia jarraitu
+event.usher_2.b|Lanpara itzali
+event.usher_2.ra|Hamahirugarrenean zure neurriko berokia dago eta zure inizialak dituen kapela. Beste izen guztiak marratuta daude. Zurea, ez. Ikusia sentitzen zara, eta ez berak bakarrik.
+event.usher_2.rb|Iluntasuna erabatekoa da. Berak ahopean barre egiten du. «Hori bai dela emanaldia.» Eserlekuen artean ahaztutako txanponak ukitzen dituzu eta presaz irteten zara.
+event.theatre_seats.title|Patioa
+event.theatre_seats.text|Aretoa berokiz eta kapelaz beteta dago eserlekuen gainean, barruan inor gabe. Sartzean, berokiak guztiak batera zuregana biratzen dira. Txalo bat entzuten da, bakarra, mantsoa.
+event.theatre_seats.a|Agurra egin
+event.theatre_seats.b|Isilik irten
+event.theatre_seats.ra|Makurtzen zara. Txaloak biderkatzen dira, belarriak ixten dituzten arte ozen bihurtzen dira… eta bat-batean gelditzen dira. Oholtzan zuretzako zerbait dago: zinta batekin loturiko txanpon-poltsa bat.
+event.theatre_seats.rb|Puntetan irteten zara. Berokiak ez dira mugitzen. Atea ixten duzunean bakarrik, atzean etsipenezko hasperen bat entzuten duzu, mila ahotatik.
+event.watcher_1.title|Monitoreak
+event.watcher_1.text|Pantaila berde eta urdinez egindako horma bat: Aretoa, Pasabidea, Kapera, Sukaldeak… Batean, zure bizkarra. Txapela duen gizon batek ez du begirada kentzen: «Eseri. Ez hitz egin. Nik apuntatuko dut».
+event.watcher_1.a|Zure pantaila begiratu
+event.watcher_1.b|Kanala aldatu
+event.watcher_1.ra|Zeure burua ikusten duzu, goitik, zain. Ikusten duzu ezpainak mugitzen dituzula esaldi honetan bertan. Zelatariak zerbait apuntatzen du eta txanpon batzuk irristatzen dizkizu: «Eragozpenagatik».
+event.watcher_1.rb|Botoi bat sakatzen duzu eta irudia gela huts batera jauzi egiten du, gero beste batera, gero zenbakirik gabeko gela batera. Zelatariak lehen aldiz begiratzen dizu: «Hori ez luke irten behar».
+event.watcher_1.h|Zelataria nork zelatatzen duen galdetu
+event.watcher_1.rh|Ez du erantzuten. Baina haren begirada segundo batez horma-izkina batera jaisten da, inolako pantailak igeltsua estaltzen ez duen tokira. «Hutsune bat dago hor», aitortzen du ahots oso baxuan. «Ez dakit zer dagoen barruan. Inork ez du ikusten.»
+event.watcher_2.title|Puntu itsua
+event.watcher_2.text|Zelatariak sabaiko izkina bat erakusten dizu. «Kamera hori hormara begira dago. Beti. Norbaitek orain dela urte asko biratu zuen». Azpian, pantailarik gabeko horma-karratu bat, hautsik gabe, itzalik gabe.
+event.watcher_2.a|Puntu itsura hurbildu
+event.watcher_2.b|Aurpegia estali
+event.watcher_2.ra|Segundo batzuetan, inork ez zaitu ikusten. Ia minik ematen duen isiltasuna da. Ikasten duzu non hasten eta non amaitzen den, eta hemendik etxea ez dirudiela hain zaintzailea.
+event.watcher_2.rb|Eskuak aurpegian dituzula eusten duzu. Pantaila batek dir-dir egiten du eta zu jarraitzeari uzten dio. Zelatariak ezer ikusi ez duela egiten du. Pixka bat arinago sentitzen zara.
+event.concierge_1.title|Harrera
+event.concierge_1.text|Ile zuriko gizon batek giltza-sorta erraldoi batekin kanpaitxo bati kolpatzen dio. «Ongi etorri, Gonbidatu. Gau baterako gela: hogei. Hemen lo egiteagatik, irteteagatik eta sartzeagatik kobratzen dugu.»
+event.concierge_1.a|Gela ordaindu
+event.concierge_1.b|Irteeraz galdetu
+event.concierge_1.ra|Gelak izpilikuaren eta paper zaharraren usaina du. Urteetan lo egin ez bezala lo egiten duzu. Hurrengo goizean Atezainak buruaz agurtzen zaitu: «Itzuli nahi duzunean; inor ez da inoiz joaten».
+event.concierge_1.rb|Hortzak erakutsi gabe irribarre egiten du eta giltza-sorta astintzen du. «Ate bakoitzerako giltza dut. Bat izan ezik.» Horman amu huts bati begira geratzen da. «Hori beste norbaitek du.»
+event.concierge_2.title|Giltza nagusia
+event.concierge_2.text|Atezaina mostradorean lo geratu da. Giltza nagusia lepotik zintzilik dago zinta mehe batekin. Harrerako txirrina zain dago, bere eskua ia ukitzen.
+event.concierge_2.a|Zinta moztu
+event.concierge_2.b|Dagoen lekuan utzi
+event.concierge_2.ra|Giltza zure eskuan hozten da eta sortan ez zegoen karta bihurtzen da. Atezaina ez da esnatzen, baina bere irribarrea okertzen da, ordaintzeko dauden kontuekin ametsetan balego bezala.
+event.concierge_2.rb|Burua besoen gainean jartzen diozu. Esnatzean, ez du ezer esaten, baina zerbait apuntatzen du zure kontuan: marra bat gutxiago. «Etxearen opari gisa», xuxurlatzen du.
+event.camera_13.title|13. kamera
+event.camera_13.text|Izkina batean, pantaila batek gela huts bat erakusten du eserleku batekin. Eserlekuaren gainean, zure berokia. Beiraren azpian, etiketa bat: «13. kamera — zuzenean».
+event.camera_13.a|Pantaila ukitu
+event.camera_13.b|Entxufetik atera
+event.camera_13.ra|Beira epela dago. Irudian, norbait poliki kamerara biratzen da… eta zure berdina da zehazki. Pantailak txanpon batzuk botatzen ditu bere zirrikitutik.
+event.camera_13.rb|Kablea tiratzen duzu. Irudia itzaltzen da eta, une batez, gela osoak arnasa hartzen du. Beldur bat aurreztu berri duen baten itxura duzu.
+mission.teatro_win3|Irabazi 3 karta-txanda
+mission.teatro_listen|Entzun 2 ganbera dueloetan
+mission.teatro_buy|Erosi zerbait Saltzaileari
+mission.vig_clean|Irabazi txanda bat baztertu gabe
+mission.vig_events|Ebatzi 3 gertaera
+mission.vig_duel|Irabazi eskopeta-dueloa

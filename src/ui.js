@@ -7,6 +7,7 @@ import { HANDS, HAND_ORDER } from './cards.js';
 import { ITEMS, TOOLS } from './content.js';
 import { fx } from './fx.js';
 import { fsSupported, isFullscreen } from './fullscreen.js';
+import { toStage } from './stage.js';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -149,6 +150,7 @@ export function renderHud(hud) {
     st('money', 'coin', 'hud.money', hud.money),
     st('debt', 'ledger', 'hud.debt', hud.debt),
     hud.lives > 0 ? st('lives', 'candle', 'hud.lives', '×' + hud.lives) : null,
+    h('button', { type: 'button', class: 'btn small ghost hud-deck', 'data-act': 'deck', 'aria-label': t('hud.deck') + ': ' + gs.deck.length, title: t('hud.deck') + ': ' + gs.deck.length }, ico('cards'), ' ' + gs.deck.length),
     h('span', { class: 'hud-inv' }, ...hud.tools.map(id => h('span', { class: 'chip tool', title: t(`tool.${id}.name`) + ': ' + t(`tool.${id}.desc`) }, sigil(id, '', PAL.g1))), inv),
     h('button', { type: 'button', class: 'btn small ghost' + (hud.guide ? ' pulse' : ''), 'data-act': 'howto', 'aria-label': t('hud.howto'), title: t('hud.howto') }, ico('help')),
     fsButton('icon', 'small ghost'),
@@ -184,10 +186,32 @@ export function syncFullscreenButtons() {
 }
 
 // ---------- Jokers ----------
+// ---------- Descripción instantánea (comodines…): se ve al pasar el ratón o enfocar, y al tocar en táctil ----------
+let tipNode = null, tipTarget = null, lastPtr = 'mouse';
+export function hideTip() { if (tipNode) tipNode.hidden = true; tipTarget = null; }
+export function showTip(target, c) {
+  const host = document.getElementById('stage') || document.body;
+  if (!tipNode) { tipNode = h('div', { class: 'tip-pop', role: 'tooltip' }); tipNode.hidden = true; host.appendChild(tipNode); document.addEventListener('pointerdown', e => { lastPtr = e.pointerType || 'mouse'; if (tipTarget && !tipTarget.contains(e.target)) hideTip(); }, true); }
+  tipNode.className = 'tip-pop ' + (c.cls || '');
+  tipNode.replaceChildren(h('b', { class: 'tp-title' }, c.title), c.tag ? h('span', { class: 'tp-tag' }, c.tag) : null, h('div', { class: 'tp-body' }, c.body), c.foot ? h('div', { class: 'tp-foot' }, c.foot) : null);
+  tipNode.hidden = false; tipTarget = target;
+  const r = target.getBoundingClientRect(), [cx, top] = toStage(r.left + r.width / 2, r.top), [, bottom] = toStage(r.left + r.width / 2, r.bottom);
+  const w = tipNode.offsetWidth, hh = tipNode.offsetHeight; let x = Math.round(cx - w / 2), y = Math.round(top - hh - 8); if (y < 4) y = Math.round(bottom + 8);
+  tipNode.style.left = Math.max(6, Math.min(1274 - w, x)) + 'px'; tipNode.style.top = Math.max(4, Math.min(716 - hh, y)) + 'px';
+}
+export function attachTip(el, getContent) {
+  el.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') showTip(el, getContent()); });
+  el.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') hideTip(); });
+  el.addEventListener('focus', () => showTip(el, getContent())); el.addEventListener('blur', hideTip);
+  el.addEventListener('click', () => { if (lastPtr === 'touch' && tipTarget === el) hideTip(); else showTip(el, getContent()); });
+}
+// Recordatorio no diegético de dónde está la guía (lo ven la primera vez, no lo dice ningún personaje)
+export const guideTip = () => h('div', { class: 'sys-tip', role: 'note' }, ico('help'), t('ui.tip_guide'));
 export function jokerDesc(id) { let s = t(`joker.${id}.desc`); if (id === 'abaco') s += ' (+' + ((gs.jokerData && gs.jokerData.abaco) || 0) + ')'; return s; }
 export function jokerEl(id, o = {}) {
   const J = JOKERS[id] || { rarity: 'common' }, name = t(`joker.${id}.name`), desc = jokerDesc(id), tag = o.static ? 'div' : 'button';
-  const el = h(tag, { class: 'joker r-' + J.rarity + (o.cls ? ' ' + o.cls : ''), title: name + ' — ' + desc, 'aria-label': name + '. ' + desc, data: { joker: id } }, h('img', { src: jokerURL(id, J.rarity), alt: '', draggable: 'false' }));
-  if (!o.static) el.type = 'button';
+  const el = h(tag, { class: 'joker r-' + J.rarity + (o.cls ? ' ' + o.cls : ''), 'aria-label': name + '. ' + desc, data: { joker: id } }, h('img', { src: jokerURL(id, J.rarity), alt: '', draggable: 'false' }));
+  if (!o.static) el.type = 'button'; else el.tabIndex = 0;
+  attachTip(el, () => ({ title: name, tag: t('rarity.' + J.rarity), body: jokerDesc(id), cls: 'r-' + J.rarity }));
   return el;
 }

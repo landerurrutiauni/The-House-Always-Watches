@@ -1,0 +1,149 @@
+suit.blood|Odola
+suit.eye|Begia
+suit.tooth|Hortza
+suit.key|Giltza
+suit.blood.fx|+1,5 mult karta bakoitzeko. 1 Osasun kostatzen du.
+suit.eye.fx|+6 fitxa eta sortako 1 karta agerian uzten du.
+suit.tooth.fx|+3 fitxa. Puntuatzen duen bakoitzean +1 hazten da.
+suit.key.fx|+4 fitxa eta +2 Ezkutu.
+card.base|{suit}ren {rank}
+card.la_mujer.name|Gorriz Jantzitako Emakumea
+card.la_mujer.desc|Komodin osoa. ×4 puntuatzean. +25 Zor eta −6 Zentzutasun.
+card.el_ahogado.name|Itotakoa
+card.el_ahogado.desc|+40 fitxa (+80 zure Zentzutasuna 40 baino txikiagoa bada). −4 Zentzutasun.
+card.la_septima.name|Zazpigarrena
+card.la_septima.desc|+7 fitxa. ×(1 + 0,5 heriotza bakoitzeko) biderkatzen du, gehienez ×5.
+card.la_deuda.name|Zorra
+card.la_deuda.desc|Fitxak = Zorra ÷ 6 (gehienez 90). +10 Zor.
+card.el_hambre.name|Gosea
+card.el_hambre.desc|+6 mult. 3 Osasun kostatzen ditu.
+card.sangre_pacto.name|Odol-ituna
+card.sangre_pacto.desc|+3 mult. 2 Osasun kostatzen ditu.
+card.ojo_vigia.name|Begi Zelataria
+card.ojo_vigia.desc|+12 fitxa. Sortako 3 karta agerian uzten ditu.
+card.colmillo.name|Letaina
+card.colmillo.desc|+8 fitxa. Puntuatzen duen bakoitzean +2 hazten da (gehienez +40).
+card.llave_maestra.name|Giltza Nagusia
+card.llave_maestra.desc|+10 fitxa eta +4 Ezkutu.
+card.dado_trucado.name|Dado Tranpatua
+card.dado_trucado.desc|+6 fitxa. Palu-komodina.
+card.moneda_gemela.name|Txanpon Bikia
+card.moneda_gemela.desc|+4 fitxa. 4 Diru irabazten dituzu.
+card.carta_doble.name|Karta Bikoitza
+card.carta_doble.desc|Berehala aurretik puntuatzen duen kartaren efektua errepikatzen du.
+card.corazon.name|Bihotza
+card.corazon.desc|+2 mult. 2 Osasun berreskuratzen dituzu.
+card.hueso_liso.name|Hezur Leuna
+card.hueso_liso.desc|+20 fitxa.
+card.sombra.name|Itzala
+card.sombra.desc|+5 fitxa. Balio-komodina. +1 Ezkutu.
+card.cursed|Madarikatua
+mod.edge.name|Ertza
+mod.edge.desc|+10 fitxa puntuatzean.
+mod.red.name|Zigilu gorria
+mod.red.desc|+4 mult puntuatzean.
+mod.gold.name|Urrezkoa
+mod.gold.desc|3 Diru irabazten dituzu puntuatzean.
+mod.glass.name|Kristala
+mod.glass.desc|×2 puntuatzean. %25eko aukera hausteko.
+mod.hex.name|Sorginkeria
+mod.hex.desc|+30 fitxa. −2 Zentzutasun.
+hand.high|Karta altua
+hand.pair|Bikotea
+hand.twopair|Bikote bikoitza
+hand.three|Hirukotea
+hand.straight|Eskala
+hand.flush|Kolorea
+hand.full|Full
+hand.four|Pokerra
+hand.sflush|Kolore-eskala
+hand.royal|Eskala erreala
+hand.five|Repokerra
+combo.mirada.name|BEGIRADA
+combo.mirada.desc|3 Begi edo gehiago: +30 fitxa eta 3 karta agerian uzten dituzu.
+combo.ritual.name|ERRITUA
+combo.ritual.desc|3 Odol edo gehiago: +6 mult. 3 Osasun kostatzen ditu.
+combo.deuda.name|ZORRA
+combo.deuda.desc|3 Hortz edo gehiago: +4 mult (+1 60 Zor bakoitzeko, gehienez +10). +15 Zor.
+combo.puertas.name|ZAZPI ATEAK
+combo.puertas.desc|Batura 7ren multiploa duten 5 karta: +30 fitxa eta +7 mult.
+combo.cerradura.name|SARRAILA
+combo.cerradura.desc|3 Giltza edo gehiago: +20 fitxa eta +4 Ezkutu.
+combo.arcoiris.name|LAU PALUAK
+combo.arcoiris.desc|4 paluak jokaldian: +8 mult eta 5 Diru irabazten dituzu.
+rule.blind_eyes.name|Begi itsuak
+rule.blind_eyes.desc|Begiek ez dute puntuatzen eta ez dute kartarik agerian uzten.
+rule.no_repeat.name|Errepikapenik ez
+rule.no_repeat.desc|Aurreko eskua errepikatzeak erdia puntuatzen du.
+rule.cold_blood.name|Odol hotza
+rule.cold_blood.desc|Odolak ez du multiplikatzailerik ematen.
+rule.drown.name|Itotzea
+rule.drown.desc|Jokaldi bakoitzak 3 Zentzutasun kostatzen du.
+rule.watched.name|Zelatatua
+rule.watched.desc|Apusturik gabe eta poltsikorik gabe.
+rule.interest.name|Interesa
+rule.interest.desc|Helburua %8 igotzen da jokaldi bakoitzarekin.
+rule.remember.name|Oroimena
+rule.remember.desc|Jokatutako edozein esku errepikatzeak ×0,7 puntuatzen du.
+rule.tax.name|Zerga
+rule.tax.desc|Jokaldi bakoitzak 5 Diru kostatzen ditu (edo Zorra gehitzen du).
+rule.mist.name|Lainoa
+rule.mist.desc|Zure eskuko 2 karta ezkutatuta daude.
+rule.greedy.name|Gutizia
+rule.greedy.desc|Helburua +%20. Saria +%50.
+stake.none.name|Apusturik gabe
+stake.none.desc|Segurtasunez jokatzen duzu.
+stake.blood.name|Apustua: Odola
+stake.blood.desc|×1,25. 8 Osasun galtzen dituzu.
+stake.sanity.name|Apustua: Zentzutasuna
+stake.sanity.desc|×1,25. 6 Zentzutasun galtzen dituzu.
+stake.debt.name|Apustua: Zorra
+stake.debt.desc|×1,4. 35 Zor irabazten dituzu.
+stake.money.name|Apustua: Dirua
+stake.money.desc|×1,2. 12 Diru galtzen dituzu.
+item.moneda_mordida.name|Hozkatutako txanpona
+item.moneda_mordida.desc|+5 Diru irabazitako txanda bakoitzeko. Urrezko kartek +2 gehiago ematen dute.
+item.espejo_roto.name|Ispilu hautsia
+item.espejo_roto.desc|+2 mult. −2 Zentzutasunekin hasten zara. Erabaki bat berregin dezakezu partida bakoitzeko (−5 Zentzutasun).
+item.llave_hueso.name|Hezur-giltza
+item.llave_hueso.desc|Hasierako Ezkutua: 4. Ezkutuko atea irekitzen du. Ate-amaiera ahalbidetzen du.
+item.ceniza.name|Errauts
+item.ceniza.desc|+15 fitxa jokaldiko. −1 Zentzutasun gela bakoitza amaitzean.
+item.ficha_negra.name|Fitxa beltza
+item.ficha_negra.desc|Apustuek +0,15 gehiago biderkatzen dute. Erabaki bat desegin dezakezu 50 Zor ordainduta.
+item.ojo_vidrio.name|Beirazko begia
+item.ojo_vidrio.desc|+1 karta eskuan. Lainoak ez zaitu eragiten.
+item.campanilla.name|Kanpaitxoa
+item.campanilla.desc|+1 baztertze txanda bakoitzeko.
+item.guante_crupier.name|Krupierraren eskularrua
+item.guante_crupier.desc|+1 jokaldi txanda bakoitzeko.
+item.reloj_parado.name|Geldituriko erlojua
+item.reloj_parado.desc|Helburuak %8 jaisten dira. Zorra %50 azkarrago hazten da.
+item.diente_leche.name|Esne-hortza
+item.diente_leche.desc|Hortzek +1 gehiago hazten dira jokaldiko.
+item.cuchilla_oxidada.name|Labana herdoilduta
+item.cuchilla_oxidada.desc|Odolak +1 mult gehiago ematen du, baina +1 Osasun gehiago kostatzen du.
+item.libro_cuentas.name|Kontu-liburua
+item.libro_cuentas.desc|Zorraren interesa erdira murrizten da.
+tool.testigo.name|Lekukoa
+tool.testigo.desc|Dueloa: balen benetako kopurua eta gezurretan ari izan zaizun agerian uzten du.
+tool.mala_memoria.name|Oroimen txarra
+tool.mala_memoria.desc|Dueloa: arerioak bere txanda ahazten du.
+tool.contrato.name|Kontratua
+tool.contrato.desc|Dueloa: gezurretan ari izan bazaizkizu, arerioak marka bat galtzen du. Bestela, +20 Zor.
+tool.sal.name|Gatza
+tool.sal.desc|Txanda: aurkariaren araua baliogabetzen du.
+tool.vela_corta.name|Kandela laburra
+tool.vela_corta.desc|Pasiboa: hiltzen bazara, Osasunaren %40rekin pizten zaitu berriro (−10 Zentzutasun).
+char.dealer|Krupierra
+char.girl|Begi Josiko Neska
+char.chair|Aulkiko Gizona
+char.child|Haurra
+char.merchant|Saltzailea
+char.woman|Gorriz Jantzitako Emakumea
+char.drowned|Itotakoa
+char.archivist|Artxibozaina
+opp.gambler_a|Gorbata okerreko jokalaria
+opp.gambler_b|Islarik gabeko jokalaria
+opp.gambler_c|Aurpegirik gabeko jokalaria
+char.unknown|???

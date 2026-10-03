@@ -129,6 +129,15 @@ with sync_playwright() as p:
     check('E5 varios cambios seguidos: sigue habiendo un único modal', pg.evaluate("document.querySelectorAll('.modal-back').length") == 1)
     pg.keyboard.press('Escape'); pg.reload(); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(250)
     check('E6 el idioma elegido persiste (de)', pg.evaluate("document.documentElement.lang") == 'de' and 'NEUES SPIEL' in pg.inner_text('#view'))
+    # euskera: elegirlo en Ajustes, que persista y que el navegador en euskera lo detecte solo
+    pg.click('[data-act="settings"]'); pg.wait_for_selector('.modal'); pg.click('.seg button[lang="eu"]'); pg.wait_for_timeout(250)
+    check('E5b hay 5 idiomas en Ajustes y el euskera se llama «Euskara»', pg.evaluate("document.querySelectorAll('.modal .seg button[lang]').length") == 5 and 'euskara' in pg.inner_text('.modal .seg').lower(), pg.inner_text('.modal .seg'))   # los botones salen en mayúsculas por CSS
+    pg.keyboard.press('Escape'); pg.reload(); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(250)
+    check('E6b el euskera persiste: <html lang="eu"> y el menú dice PARTIDA BERRIA / JARRAITU', pg.evaluate("document.documentElement.lang") == 'eu' and 'PARTIDA BERRIA' in pg.inner_text('#view'), pg.inner_text('#view')[:80])
+    ctx.close()
+    ctx, pg = boot(b, locale='eu-ES'); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(300)
+    check('E6c un navegador en euskera (eu-ES) arranca el juego en euskera sin tocar nada', pg.evaluate("document.documentElement.lang") == 'eu' and 'PARTIDA BERRIA' in pg.inner_text('#view'), pg.evaluate("document.documentElement.lang")); ctx.close()
+    ctx, pg = boot(b)
     check('E7 sin errores JS', not pg.errs, pg.errs); ctx.close()
 
     # ---------- F. Pantalla completa ----------

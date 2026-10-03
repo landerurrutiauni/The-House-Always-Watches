@@ -19,7 +19,7 @@ def main():
     errors, seen = [], {}
     with sync_playwright() as p:
         b = p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
-        ctx = b.new_context(viewport={'width': A.w, 'height': A.h}, has_touch=A.mobile, is_mobile=A.mobile, device_scale_factor=2 if A.mobile else 1, locale={'es': 'es-ES', 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE'}.get(A.lang, 'en-US'))
+        ctx = b.new_context(viewport={'width': A.w, 'height': A.h}, has_touch=A.mobile, is_mobile=A.mobile, device_scale_factor=2 if A.mobile else 1, locale={'es': 'es-ES', 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE', 'eu': 'eu-ES'}.get(A.lang, 'en-US'))
         init = {}
         if A.lang: init['lang'] = A.lang
         if A.fast: init.update(reduceEffects=True, muteMusic=True, muteSfx=True, quality='low')

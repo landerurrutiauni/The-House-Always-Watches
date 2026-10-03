@@ -7,8 +7,8 @@ const base = {
   SAVE_KEY: 'thaw.save.v1',
   SETTINGS_KEY: 'thaw.settings.v1',
   CONSENT_KEY: 'thaw.consent.v1',
-  LANGS: ['es', 'en', 'fr', 'de'],
-  LANG_NAMES: { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch' },
+  LANGS: ['es', 'en', 'fr', 'de', 'eu'],
+  LANG_NAMES: { es: 'Español', en: 'English', fr: 'Français', de: 'Deutsch', eu: 'Euskara' },
   DEFAULT_LANG: 'en',
 
   // ---- Servicios opcionales de terceros ----

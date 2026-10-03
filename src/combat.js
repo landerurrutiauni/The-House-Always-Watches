@@ -123,7 +123,7 @@ export function resolvePlay(R, cards, stakeId = 'none') {
     const J = {
       addChips: v => { chips += v; push('chips', v, -3, { j: id }); },
       addMult: v => { mult += v; push('mult', v, -3, { j: id }); },
-      addX: v => { xmult *= v; push('xmult', v, -3, { j: id }); },
+      addX: v => { mult *= v; push('xmult', v, -3, { j: id }); },   // ×Mult sobre la Mult acumulada hasta este comodín: sumar (+Mult) antes de multiplicar rinde más que después
       cost: (k, v) => { d[k] += v; push('cost', v, -3, { k, j: id }); }
     };
     jk.fx(jokS, J, R.jokerData || {});
@@ -240,7 +240,6 @@ export function play(R, uids, stakeId = 'none') {
   for (const g of res.grow) { const c = gs.deck.find(x => x.uid === g.uid) || cards.find(x => x.uid === g.uid); if (c) c.grow = Math.min(g.cap, c.grow + g.by); }
   res.broken = [];
   for (const u of res.glass) if (R.rng.chance(0.25)) { res.broken.push(u); const k = gs.deck.findIndex(c => c.uid === u); if (k >= 0) gs.deck.splice(k, 1); }
-  if (R.rule.includes('interest')) R.target = Math.round(R.target * 1.08 / 5) * 5;
   // mover cartas
   for (const c of cards) {
     let k = R.hand.findIndex(x => x.uid === c.uid);
@@ -249,8 +248,11 @@ export function play(R, uids, stakeId = 'none') {
   }
   refill(R);
   bus.emit('stats', {});
-  if (R.score >= R.target) R.over = 'win';
-  else if (R.playsLeft <= 0 || gs.player.health <= 0 || (!R.hand.length && !R.pocket.length)) R.over = 'lose';
+  if (R.score >= R.target) R.over = 'win';   // primero se suma la jugada: si llegas, el interés no cuenta
+  else {
+    if (R.rule.includes('interest')) { const from = R.target; R.target = Math.round(R.target * 1.08 / 5) * 5; if (R.target !== from) res.interest = { from, to: R.target }; }   // solo si NO llegas, el objetivo sube
+    if (R.playsLeft <= 0 || gs.player.health <= 0 || (!R.hand.length && !R.pocket.length)) R.over = 'lose';
+  }
   res.over = R.over;
   return res;
 }

@@ -1,0 +1,29 @@
+ui.tip_guide|Guía del juego: botón «?» de arriba (o tecla ?)|Game guide: the “?” button above (or press ?)|Guide du jeu : bouton « ? » en haut (ou touche ?)|Spielanleitung: Knopf „?“ oben (oder Taste ?)
+duel.if_win|Si ganas:|If you win:|Si tu gagnes :|Bei Sieg:
+duel.if_lose|Si pierdes:|If you lose:|Si tu perds :|Bei Niederlage:
+table.interest_up|Interés: objetivo {n}|Interest: target {n}|Intérêt : objectif {n}|Zinsen: Ziel {n}
+deck.title|Mazo|Deck|Paquet|Stapel
+deck.count|{n} cartas · {sp} especiales|{n} cards · {sp} special|{n} cartes · {sp} spéciales|{n} Karten · {sp} besondere
+deck.left|Por robar: {n} de {total}|To draw: {n} of {total}|À piocher : {n} sur {total}|Zu ziehen: {n} von {total}
+deck.hint|Pasa el ratón (o toca) una carta para ver qué hace.|Hover (or tap) a card to see what it does.|Survole (ou touche) une carte pour voir son effet.|Fahre über eine Karte (oder tippe sie an), um ihre Wirkung zu sehen.
+deck.sort|Ordenar:|Sort:|Trier :|Sortieren:
+deck.sort.suit|Palo|Suit|Couleur|Farbe
+deck.sort.rank|Valor|Rank|Valeur|Wert
+deck.sort.special|Especiales|Special|Spéciales|Besondere
+deck.sort.recent|Recientes|Newest|Récentes|Neueste
+deck.only_special|Solo especiales|Special only|Spéciales seulement|Nur besondere
+deck.view.full|Mazo completo|Full deck|Paquet complet|Ganzer Stapel
+deck.view.left|Por robar|To draw|À piocher|Zu ziehen
+deck.empty|No hay cartas que mostrar.|No cards to show.|Aucune carte à afficher.|Keine Karten zum Anzeigen.
+table.sort_hint|Ordena tu mano por valor o por palo|Sort your hand by rank or suit|Trie ta main par valeur ou par couleur|Sortiere deine Hand nach Wert oder Farbe
+rarity.common|Común|Common|Commun|Gewöhnlich
+rarity.uncommon|Poco común|Uncommon|Peu commun|Ungewöhnlich
+rarity.rare|Rara|Rare|Rare|Selten
+map.jokers_label|Comodines|Jokers|Jokers|Joker
+map.jokers_hint|Comodines: actúan de izquierda a derecha. Arrástralos o usa ◀ ▶ para ordenarlos.|Jokers act from left to right. Drag them or use ◀ ▶ to reorder.|Les jokers agissent de gauche à droite. Fais-les glisser ou utilise ◀ ▶ pour les ordonner.|Joker wirken von links nach rechts. Zieh sie oder nutze ◀ ▶, um sie zu ordnen.
+map.joker_left|Mover {name} a la izquierda|Move {name} left|Déplacer {name} à gauche|{name} nach links
+map.joker_right|Mover {name} a la derecha|Move {name} right|Déplacer {name} à droite|{name} nach rechts
+settings.game|Partida|Game|Partie|Spiel
+settings.to_menu|Volver al inicio|Back to the title screen|Retour à l’écran titre|Zurück zum Startbildschirm
+settings.to_menu_safe|Se guarda tu progreso y vuelves a la pantalla de inicio. Podrás retomar la partida desde allí.|Your progress is saved and you return to the title screen. You can resume the game from there.|Ta progression est sauvegardée et tu reviens à l’écran titre. Tu pourras reprendre la partie depuis là.|Dein Fortschritt wird gespeichert und du kehrst zum Startbildschirm zurück. Dort kannst du die Partie fortsetzen.
+settings.to_menu_warn|Estás en mitad de una sala: se dará por abandonada. Se conserva el progreso hasta la última sala terminada.|You are in the middle of a room: it will count as abandoned. Progress up to the last finished room is kept.|Tu es au milieu d’une salle : elle sera considérée comme abandonnée. La progression jusqu’à la dernière salle terminée est conservée.|Du bist mitten in einem Raum: Er gilt als abgebrochen. Der Fortschritt bis zum letzten abgeschlossenen Raum bleibt erhalten.

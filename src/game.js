@@ -60,7 +60,7 @@ export function hud() {
     health: p.health, maxHealth: p.maxHealth, sanity: p.sanity, money: p.money, debt: p.debt, lives: p.lives,
     tier: sanityTier(), tools: gs.tools.slice(), items: gs.inventory.slice(), jokers: gs.jokers.slice(), deck: gs.deck.length,
     run: gs.runNumber, deaths: gs.deaths, wing: gs.run ? gs.run.wing : null, row: currentRow(), levels: Object.assign({}, gs.handLevels),
-    guide: !!(G.R && G.R.tutorial) || (!!gs.run && !(gs.meta.hints && gs.meta.hints.map))   // el botón «?» de la guía late en el tutorial y mientras se ve la primera pista del mapa
+    guide: guideActive()   // el botón «?» de la guía late en el tutorial y mientras se ve la primera pista del mapa
   };
 }
 function currentRow() { const r = gs.run; if (!r || !r.pos || !r.map) return -1; const n = nodeById(r.map, r.pos); return n ? n.row : -1; }
@@ -98,7 +98,7 @@ function freshStart() {
   gs.language = lang;
   G.R = G.D = G.node = G.ev = null;
   saveGame();
-  return setView({ type: 'intro', lines: ['intro.1', 'intro.2', 'intro.3', 'intro.4', 'intro.5', 'intro.6', 'intro.7'], music: 'menu' });
+  return setView({ type: 'intro', lines: ['intro.1', 'intro.2', 'intro.3', 'intro.4', 'intro.5', 'intro.6'], music: 'menu' });
 }
 // REINICIAR PROGRESO: borra todo (la UI pide confirmación).
 export function resetAll() { resetProgress(); ACH.resetEggs(); saveSettings(); G.R = G.D = G.node = G.ev = null; return toMenu(); }
@@ -159,6 +159,8 @@ function pickPrev(node) { return gs.run.pos; }
 // peekHint() solo consulta; la interfaz llama a markHint() cuando la ha mostrado de verdad, y entonces no vuelve a salir
 // (se guarda en la meta del perfil: sobrevive a muertes y a NUEVA PARTIDA; REINICIAR PROGRESO la borra).
 function peekHint(name) { const h = gs.meta.hints; return h && h[name] ? null : 'hint.' + name; }
+// ¿Hay que recordar dónde está la guía? Durante el tutorial y la primera pista del mapa, hasta que se abra la guía una vez (indicador del interfaz, no del Crupier)
+export function guideActive() { return !(gs.meta.hints && gs.meta.hints.guide) && (!!(G.R && G.R.tutorial) || (!!gs.run && !(gs.meta.hints && gs.meta.hints.map))); }
 export function markHint(key) { const name = String(key).replace(/^hint\./, ''); if (!gs.meta.hints) gs.meta.hints = {}; gs.meta.hints[name] = true; }
 
 export function showMap() {
@@ -453,20 +455,30 @@ export function rewardSkip() {
 
 // ---------------- Escopeta ----------------
 export const DUEL_STAKE_DEFS = { money: 20, sanity: 10, debt: 40, card: 1 };
-export function duelStakeOptions() {
+export function duelStakeOptions(node) {
   const p = gs.player;
-  return [
+  const opts = [
     { type: 'money', value: DUEL_STAKE_DEFS.money, ok: p.money >= DUEL_STAKE_DEFS.money },
     { type: 'sanity', value: DUEL_STAKE_DEFS.sanity, ok: p.sanity > DUEL_STAKE_DEFS.sanity + 2 },
     { type: 'debt', value: DUEL_STAKE_DEFS.debt, ok: true },
     { type: 'card', value: 1, ok: gs.deck.length > 30 }
   ];
+  // La apuesta de carta se decide ANTES de elegir: se sabe qué carta de tu mazo pierdes si caes y cuál ganas si vences (semilla fija por sala)
+  const c = opts[3];
+  if (gs.run && gs.deck.length) {
+    const rng = rngFor(gs.run.seed, 'duelcard', (node && node.id) || '?', gs.run.attempt || 0);
+    const pool = gs.deck.filter(x => x.sp).concat(gs.deck.filter(x => !x.sp));
+    const lose = rng.pick(pool.slice(0, Math.max(1, Math.min(pool.length, 8))));
+    c.loseUid = lose.uid; c.lose = { id: lose.id, suit: lose.suit, rank: lose.rank, sp: !!lose.sp, mods: (lose.mods || []).slice(), grow: lose.grow || 0 };
+    c.winId = rng.pick(SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i)));
+  }
+  return opts;
 }
 export function enterDuelSetup(node) {
   const first = gs.meta.stats.anomalies === 0;
   G.duelCtx = { node, foe: node.opp.id, look: node.opp.look || null, kind: 'game', first };
   FX.discoverCharacter(CHARACTERS.includes(node.opp.id) ? node.opp.id : null);
-  return setView({ type: 'duel_setup', foe: node.opp.id, look: node.opp.look || null, nameKey: oppNameKey(node.opp.id === 'gambler' ? (node.opp.look || 'gambler_a') : node.opp.id), stakes: duelStakeOptions(), first, hintKey: first ? 'tut.d0' : null, music: 'roulette', bg: 'casino' });
+  return setView({ type: 'duel_setup', foe: node.opp.id, look: node.opp.look || null, nameKey: oppNameKey(node.opp.id === 'gambler' ? (node.opp.look || 'gambler_a') : node.opp.id), stakes: duelStakeOptions(node), first, hintKey: first ? 'tut.d0' : null, music: 'roulette', bg: 'casino' });
 }
 function duelListenReliability() { return Math.max(S.LISTEN_RELIABILITY, FX.perks().listen || 0); }
 function duelTools() { return gs.tools.filter(id => TOOLS[id] && TOOLS[id].ctx === 'duel'); }
@@ -488,7 +500,7 @@ export function duelStart(type) {
   const opt = G.view.stakes.find(s => s.type === type);
   if (!opt || !opt.ok) { sfx('deny'); return G.view; }
   const run = gs.run;
-  G.D = S.startDuel({ seed: run.seed, key: ctx.node.id + ':' + (run.attempt || 0), foe: ctx.foe, stake: { type: opt.type, value: opt.value }, first: ctx.first, marks: 3 });
+  G.D = S.startDuel({ seed: run.seed, key: ctx.node.id + ':' + (run.attempt || 0), foe: ctx.foe, stake: { type: opt.type, value: opt.value, loseUid: opt.loseUid, winId: opt.winId }, first: ctx.first, marks: 3 });
   sfx('gun_load');
   return duelView();
 }
@@ -543,14 +555,14 @@ export function duelFinish() {
     if (s.type === 'money') deltas.money = addMoney(25);
     else if (s.type === 'sanity') deltas.sanity = addSanity(8);
     else if (s.type === 'debt') deltas.debt = addDebt(-60);
-    else if (s.type === 'card') { const pool = SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i)); deltas.card = rng.pick(pool); FX.addToDeck(deltas.card); }
+    else if (s.type === 'card') { const pool = SPECIAL_IDS.filter(i => !CURSED_IDS.includes(i)); deltas.card = s.winId || rng.pick(pool); FX.addToDeck(deltas.card); }
     deltas.money += addMoney(10);
   } else {
     sfx('hurt');
     if (s.type === 'money') deltas.money = addMoney(-s.value);
     else if (s.type === 'sanity') deltas.sanity = addSanity(-s.value);
     else if (s.type === 'debt') deltas.debt = addDebt(s.value);
-    else if (s.type === 'card') { const pool = gs.deck.filter(c => c.sp).concat(gs.deck.filter(c => !c.sp)); const c = pool[0] ? rng.pick(pool.slice(0, Math.max(1, Math.min(pool.length, 8)))) : null; if (c && gs.deck.length > 30) { gs.deck.splice(gs.deck.indexOf(c), 1); deltas.lostCard = c.id; } }
+    else if (s.type === 'card') { const pool = gs.deck.filter(c => c.sp).concat(gs.deck.filter(c => !c.sp)); const c = (s.loseUid && gs.deck.find(x => x.uid === s.loseUid)) || (pool[0] ? rng.pick(pool.slice(0, Math.max(1, Math.min(pool.length, 8)))) : null); if (c && gs.deck.length > 30) { gs.deck.splice(gs.deck.indexOf(c), 1); deltas.lostCard = c.id; } }
     deltas.health = addHealth(-12);
     if (checkDeath()) return G.view;
   }
@@ -588,6 +600,20 @@ export function buy(i) {
   else { ok = FX.buy(e, sh.rng); if (ok) { e.sold = true; MIS.track('buy', { kind: e.kind }); if (e.kind === 'joker') (sh.bought = sh.bought || []).push(e.id); } }
   sfx(ok ? 'chip' : 'deny');
   return shopView();
+}
+// Ordenar comodines: solo al elegir sala (en el mapa), igual que en Balatro se ordenan entre manos
+export function reorderJokers(from, to) {
+  if (!G.view || G.view.type !== 'map') return false;
+  if (!FX.moveJoker(from, to)) return false;
+  saveGame(); sfx('card_flip'); bus.emit('stats', {}); return true;
+}
+// Volver a la pantalla de inicio desde una partida. En mapa/alas/archivo no se abandona ninguna sala.
+const SAFE_LEAVE = ['map', 'wings', 'archive', 'ending', 'death', 'intro', 'menu'];
+export function leaveSafe() { return !G.view || SAFE_LEAVE.includes(G.view.type); }
+export function leaveToMenu() {
+  if (gs.run && leaveSafe()) saveGame();
+  G.R = G.D = G.node = G.ev = null;
+  return toMenu();
 }
 // Vender un comodín desde el inventario (si lo habías comprado en esta misma tienda, es un secreto)
 export function sellJoker(i) {

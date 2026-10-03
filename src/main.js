@@ -22,6 +22,7 @@ import * as ACH from './achievements.js';
 import * as MIS from './missions.js';
 import * as SHOT from './shotgun.js';
 import * as STATE from './state.js';
+import './deckview.js';
 
 const SCREENS = {}; regMenu(SCREENS); regRun(SCREENS); regTable(SCREENS); regDuel(SCREENS);
 let prevType = null, current = null;

@@ -1,0 +1,106 @@
+event.nun_1.title|Beloa
+event.nun_1.text|Belo beltzeko moja batek tokia egiten dizu aitorlekuan. «Kontatu zor duzuna», dio Ahizpak. «Hemen dena esaten da, inork entzuten ez badu ere.»
+event.nun_1.a|Aitortu
+event.nun_1.b|Isildu
+event.nun_1.ra|Gau oso bat dirudien denboran hitz egiten duzu. Arinago irteten zara… eta kontua pixka bat luzeagoarekin. Berak zerbait apuntatzen du bere errosarioaren aleetan.
+event.nun_1.rb|Poliki baiezkoa egiten du. «Isiltasuna ere zor bat da», dio, eta kandela bat pizten du ezer eskatu gabe.
+event.nun_2.title|Bataioa
+event.nun_2.text|«Bat denbora gehiegi bataiatu nuen», xuxurlatzen du Ahizpak ur-ontziari begira. «Orain behean bizi da eta ez da lehortzen.» Kandelak lurrerantz makurtzen dira.
+event.nun_2.a|Berari buruz galdetu
+event.nun_2.b|Berarekin erreza
+event.nun_2.ra|«Zorra zuen eta ura eskaini nion. Onartu zuen. Ordainduta dago, berak sinetsi ez arren.» Azkenik ulertzen duzu zer gertatu zitzaion Itotakoari.
+event.nun_2.rb|Hitzik gabe errezatzen duzue. Ez dagoen esku baten pisua sentitzen duzu. Beldur gutxiagorekin irteten zara eta oinetako hezeekin.
+event.nun_2.h|Krupierraren izenaz galdetu
+event.nun_2.rh|Ahizpak kurutzea egiten du. «Badakit. Behin aitortu zuen, orain dela asko, lehen eskuaren aurretik.» Ezpainak estutzen ditu: ez dizu esango. Baina orain badakizu izen bat izan zela.
+event.nun_3.title|Azken aitormena
+event.nun_3.text|Oraingoan Ahizpa da belaunikatzen dena. «Nik aitortu nuen lehenengo», dio. «Eta absoluzioa eman nion barkatzeko ezer izan aurretik.»
+event.nun_3.a|Absolbitu
+event.nun_3.b|Errezatzen utzi
+event.nun_3.ra|Ikasi duzula gogoratzen ez duzun hitzak esaten dituzu. Berak zarata gabe negar egiten du eta, zutitzean, galdu duzula ere gogoratzen ez duzun zerbait luzatzen dizu.
+event.nun_3.rb|Haren marmarra atzean duzula aldentzen zara. Limosna-kutxan txanpon batzuk daude; ez dakizu zureak ala berarenak diren.
+event.chapel_candles.title|Mila kandela
+event.chapel_candles.text|Kandelak nonahi daude eta bat ere ez da gastatzen. Bakoitzak argizariz idatzitako izen bat darama. Zurea piztu gabe dago.
+event.chapel_candles.a|Zurea piztu
+event.chapel_candles.b|Besteak itzali
+event.chapel_candles.ra|Garra hotza eta tinkoa da. Zerbaitek hasperen egiten du kaperan. Kandela-zati bat gordetzen duzu geroagorako.
+event.chapel_candles.rb|Banan-banan putz egiten duzu. Iluntasunean, kapera handiagoa eta zureagoa dirudi. Eskaintzako txanponak aurkitzen dituzu lurrean.
+event.pianist_1.title|Organo-jolea
+event.pianist_1.text|Ukabil hutsak dituen piano-jole batek kaperako organoa jotzen du. Ez dago eskurik bere mahukatan, baina musika entzuten da. «Gogoratzen dudan pieza bakarra da», dio itzuli gabe.
+event.pianist_1.a|Amaierara arte entzun
+event.pianist_1.b|Beste bat eskatu
+event.pianist_1.ra|Irauten duen artean irauten du. Arin sentitzen zara, ia barkatuta. Txanpon bat uzten duzu bere fraken poltsikoan.
+event.pianist_1.rb|«Hori bakarrik dakit.» Berriro jotzen du, berdin perfektu. Amaitzen duenean, ukabil huts bat luzatzen dizu: barruan utzi duzula gogoratzen ez duzun txanpon batzuk daude.
+event.pianist_1.h|Bere eskuez galdetu
+event.pianist_1.rh|«Ordainketa gisa utzi nituen», dio. «Krupierrak bere lehen sortarako nahi zituen. Orain Artxibozainak irekitzen ez den tiradera batean gordetzen ditu.» Eta jotzen jarraitzen du.
+event.pianist_2.title|Dantza
+event.pianist_2.text|Gorriz Jantzitako Emakumeak bakarrik dantzatzen du bankuen artean organoaren erritmoan. Piano-joleak gelditzen balitz, zer izango litzateke harekin? Eskularruz jantzitako esku bat luzatzen dizu.
+event.pianist_2.a|Berarekin dantzatu
+event.pianist_2.b|Urrunetik begiratu
+event.pianist_2.ra|Biratzen duzue lurrak zu ahazten zaituen arte. Hobeto sentitzen zara, eta okerrago. Berak xuxurlatzen du: «Eskerrik asko ez nauzulako askatu».
+event.pianist_2.rb|Hitz egin gabe elkarri begiratzen diozue. Haren soinekoa haizerik gabe uhintzen da. Piano-joleak baxuago jotzen du, barkamena eskatzen balu bezala.
+event.cook_1.title|Eguneko zopa
+event.cook_1.text|Sukaldean, mantal zikinarekin gizon batek lapiko erraldoi bat nahasten du. «Jan», dio Sukaldariak, «hemen dena aprobetxatzen da». Ez dakizu zerez den zopa.
+event.cook_1.a|Jan
+event.cook_1.b|Baztertu
+event.cook_1.ra|Beroa da eta bizi gabe gogoratzen duzun zerbaiten zaporea du. Hobeto sentitzen zara; kontuak ere nabaritzen du.
+event.cook_1.rb|Sorbaldak altxatzen ditu. «Gehiago Haurrarentzat», dio, eta inork jasotzera etortzen ez den plater bat apartatzen du.
+event.cook_2.title|Potoak
+event.cook_2.text|Despentsan etiketadun poto-apalak daude: urtebetetze bat, agur bat, edozein astelehen. «Kontserbako oroitzapenak», azaltzen du Sukaldariak. «Nire anaiak soberan geratzen direnak eramaten ditu.»
+event.cook_2.a|Poto bat ireki
+event.cook_2.b|Zure oroitzapen bat utzi
+event.cook_2.ra|Euriaren usaina du eta ez den beste sukalde batena. Une batez ulertzen duzu nola hobetu zure eskuak. Oroitzapena lurrunduz doa, eta etiketa harekin batera.
+event.cook_2.rb|Zure oroitzapenetako bat aukeratzen duzu eta poto huts batean gordetzen du. «Prezio ona», dio, eta txanpon batzuk kontatzen dizkizu. Ez duzu ezer faltan botatzen. Hori da arraroa.
+event.cook_3.title|Saltzailearentzako agindu bat
+event.cook_3.text|Sukaldariak sokaz lotutako kaxa bat ematen dizu. «Nire anaiarentzat», dio. «Nik gordetzen dudana saltzen duenarentzat. Ez ireki.»
+event.cook_3.a|Ireki gabe eraman
+event.cook_3.b|Ireki
+event.cook_3.ra|Saltzaileak eskerrik eman gabe jasotzen du eta ordaintzen dizu. «Nire anaiak ondo sukaldatzen du», dio. «Kobratzen ez duen gauza bakarra da.» Ez zaitu jada axolagabekeriaz begiratzen.
+event.cook_3.rb|Barruan lerro bakarreko ohar bat dago eta ikusi duzula gogoratzen ez duzun karta bat. Sukaldariak badaki despentsatik irten aurretik.
+event.kitchen_fire.title|Sutondoa
+event.kitchen_fire.text|Lapiko handiaren azpian paper zaharrak erretzen dira: ordainagiriak, kontuak, promesak. Sukaldaria ez dago. Suak goseak begiratzen dizu.
+event.kitchen_fire.a|Ordainagiri bat bota
+event.kitchen_fire.b|Lapikoa nahasi
+event.kitchen_fire.ra|Zure sinadura duen bat aukeratzen duzu eta botatzen duzu. Urdin erretzen da. Zorra arintzen da… eta zure barruan zerbait ere bai.
+event.kitchen_fire.rb|Poliki nahasten duzu. Une batez salda zure aurpegia dirudi. Kazu bat zerbitzatzen duzu; ondo egiten dizu, eta etxeak kobratzen du horregatik.
+event.nurse_1.title|Erizaintza
+event.nurse_1.text|Maskara berdea duen erizain batek gortina bat zabaltzen du. «Eseri, laztana. Aurpegi txarra duzu. Hemen inor ez da sendatzen, baina guztiak pixka bat hobetzen dira.» Orratz bat dauka, hariaz janzita.
+event.nurse_1.a|Josten utzi
+event.nurse_1.b|Uko egin
+event.nurse_1.ra|Ez du minik ematen. Baduzula jakin gabe zenituen zauriak ixten dizkizu eta beste batzuk irekita uzten ditu. «Kito», dio. «Orain, ohera.» Ez zara gelditzen.
+event.nurse_1.rb|Denbora luzez begiratzen dizu. «Nahi duzun bezala.» Orratza beste dozena bat dituen erretilu batean uzten du. Ez da lehen aldia ezetz esaten diotena.
+event.nurse_2.title|Erretilua
+event.nurse_2.text|Erretiluan orratzak, hari beltza eta kristalezko begi bat daude. «Neskarena da», dio Erizainak. «Josi nion ikusteari utz ziezaion. Orain gauero josteko eskatzen dit.»
+event.nurse_2.a|Neskari buruz galdetu
+event.nurse_2.b|Haria hartu
+event.nurse_2.ra|«Karta-sortaren atzean dagoena ikusten zuen. Krupierrak adeitasunez eskatu zidan.» Ulertzen duzu zergatik gezurretan ari den Neska: josi ez zioten gauza bakarra da.
+event.nurse_2.rb|Hari beltza hatzetan nahasten zaizu eta zure kartetako bat josturaz markatuta geratzen da. Betidanik horrela egon dela dirudi.
+event.nurse_3.title|Dosia
+event.nurse_3.text|Aulkiko Gizona erizaintzako pasabidean zain dago. Xiringa bat dago bere altzoan. «Nire dosia», xuxurlatzen du. «Zutitu ez nadin.» Erizainak atetik begiratzen zaitu.
+event.nurse_3.a|Bere aulkia bultzatu
+event.nurse_3.b|Dosia aldatu
+event.nurse_3.ra|Poliki zeharkatzen duzu pasabidea. Etxea gela bakarra eta mahai bakarra zenean hitz egiten du. «Besteen zain geratu nintzen», errepikatzen du. Eta besteak iritsi ziren.
+event.nurse_3.rb|Etiketa aldatzen duzu. Berak ez du protestatzen; Erizainak ere ez. «Zutitzen bada, ikusiko dugu nor esertzen den», dio azkenean. Zerbait dago jada kobratzen ez dizutena.
+event.puppet_1.title|Txotxongiloa
+event.puppet_1.text|Bentrilokoaren txotxongilo bat aulki huts baten gainean dago. Inork mugitu gabe, masailezurra jaisten da: «Ongi etorri», dio lehen entzun duzun ahots batekin. «Zure zain geunden.»
+event.puppet_1.a|Berarekin hitz egin
+event.puppet_1.b|Sokak moztu
+event.puppet_1.ra|Esaldi osoak errepikatzen ditu: Krupierrak aurrekoei esandako berberak. Pausa bat nabaritzen duzu bakoitzaren aurretik, norbaitek atzetik gidoia xuxurlatuko balu bezala.
+event.puppet_1.rb|Egurrezko kolpe batekin erortzen da bizirik gabe. Bere poltsikoan txanpon batzuk eta sinatu gabeko ohar bat daude: «Jarraitu atzera begiratu gabe».
+event.puppet_2.title|Gidoia
+event.puppet_2.text|Txotxongiloak berriro hitz egiten du. Oraingoan ez du Krupierra errepikatzen: zure esaldiak irakurtzen dizkizu, zuk esan aurretik. «Hogeita hamargarren orrialdea», iragartzen du. «Hemen zalantzan jartzen zara.»
+event.puppet_2.a|Gidoia jarraitu
+event.puppet_2.b|Gidoia hautsi
+event.puppet_2.ra|Idatzita zegoena zehazki esaten duzu eta dena ondo ateratzen da, gehiegi ondo. Kontua arintzen da. Krupierrak, nonbaitetik, irribarre egiten duela dirudi.
+event.puppet_2.rb|Ez zegoen esaldi bat esaten duzu. Txotxongiloak ahoa zabalik geratzen da. Une batez, etxe osoak inprobisatu behar du.
+event.wall_notes.title|Oharrak horman
+event.wall_notes.text|Norbaitek horman idatzi du, klariona, ikatza, odolarekin: «Erizainak begia josi zuen.» «Sukaldariak oroitzapenak gordetzen ditu.» «Saltzaileak saltzen ditu.» «Ahizpak badaki izena.» «Piano-joleak eskuekin ordaindu zuen.» Azpian, txikiago: «Inork ez du gogoratzen nork idazten duen hau.»
+event.wall_notes.a|Irakurtzen jarraitu
+event.wall_notes.b|Begiak estali
+event.wall_notes.ra|Gehiago dago: apustuak, zorrak, txiste pare bat. Zirriborroen artean, arrakala batean ahaztutako diru apur bat.
+event.wall_notes.rb|Diotenez, osorik irakurtzen duenak hemen bizitzen geratzen da. Nahiago duzu ez egiaztatzea.
+event.staff_room.title|Langile-gela
+event.staff_room.text|Armairuak eta txanda-taula bat dituen gela bat: Krupierra, Artxibozaina, Saltzailea, Sukaldaria, Erizaina, Ahizpa, Piano-jolea… Zure izena duen hutsune bat dago gauaren azken txandan.
+event.staff_room.a|Txandak begiratu
+event.staff_room.b|Zure izena ezabatu
+event.staff_room.ra|Guztiek ez joan ziren gonbidatuen txandak betetzen dituzte. Zerbait deserosoa ulertzen duzu: haietako bakoitzak lehen jokatu zuen. Guztiek.
+event.staff_room.rb|Hatza zure izenean pasatzen duzu eta ezabatzen da. Gelaren beste aldean berriro agertzen da. Gutxienez ahaztutako txanpon batzuk daude armairu batean.

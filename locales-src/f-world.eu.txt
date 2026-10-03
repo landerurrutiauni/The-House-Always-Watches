@@ -1,0 +1,44 @@
+char.nun|Beloaren Ahizpa
+char.cook|Sukaldaria
+char.nurse|Erizaina
+char.puppet|Txotxongiloa
+char.pianist|Eskurik Gabeko Piano-jolea
+bio.dealer|Ez du izenik. Kontu-liburua darama eta berrogeita hamabi kartako sorta banatzen du… eta falta den bat.
+bio.girl|Ia beti gezurretan ari da. Erizainak ezkerreko begia josi zion ikusi behar ez zuena ikusteari utz ziezaion; berak eskatzen dio gauero berriro josteko.
+bio.chair|Etxea sortu zuen eta besteen zain esertzera joan zen. Erizainak dosia aldatzen dio «bere onerako» zutitu ez dadin.
+bio.child|Zuk berak baino hobeto gogoratzen zaitu. Sukaldariak beti berotutako plater bat gordetzen dio, inork jaten ikusi ez duena.
+bio.merchant|Oroitzapenak potoetan saltzen ditu. Bere anaiarengandik lortzen ditu, Sukaldariarengandik, potoetan kontserbatzen dituenarengandik.
+bio.woman|Dagoeneko kentzen ez duen soineko batekin dantzatzen du. Piano-joleak berarentzat jotzen du eta berak ez dio inoiz gelditzeko eskatzen.
+bio.drowned|Bere zorra urarekin ordaindu zuen. Ahizpak denbora gehiegi bataiatu zuen eta orain behean bizi da.
+bio.archivist|Izen guztiak eta ate guztiak artxibatzen ditu. Irekitzen ez den tiradera batean Piano-jolearen eskuak gordetzen ditu.
+bio.nun|Guztien aitormena entzuten du, baita Krupierrarena ere. Badaki nola deitzen zen; aitormena sakratua da eta ez du esango.
+bio.cook|Etxeak zor duenarekin sukaldatzen du eta oroitzapenak potoetan kontserbatzen ditu. Mantala eta zorrak partekatzen ditu bere anaiarekin, Saltzailearekin.
+bio.nurse|Gelditzen den guztiaz arduratzen da. Neskaren begia josi zuen eta Aulkiko Gizona eserita mantentzen du; haietako inork ez dio eskerrik eman.
+bio.pianist|Krupierrarentzat jo zuen dena hasi zenean eta eskuekin ordaindu zuen. Oraindik gogoratzen duen pieza bakarra jotzen du.
+wing.capilla.name|Kapera
+wing.capilla.desc|Itzaltzen ez diren kandelak, aulki hutsak eta dena entzuten duen Ahizpa bat.
+wing.cocinas.name|Sukaldeak
+wing.cocinas.desc|Hemen etxeak zor duena sukaldatzen da. Burdinaren eta zopa-usaina dago.
+wing.enfermeria.name|Erizaintza
+wing.enfermeria.desc|Ohe egindak, gortinak itxita eta inoiz sendatu den inor ez.
+wings.req.runs|Itxita. Amaitutako jaitsierak behar dira: {n}.
+wings.req.cleared|Itxita. Garaitutako zaindariak behar dira: {n}.
+boss.nun.a|«Aitortu zure eskuak jokatu aurretik. Errepikatzen dena gogoratzen da, eta gogoratzen dena ordaintzen da.»
+boss.nun.w|«Barkatzen dizut zor didazuna. Krupierrarena beste kontu bat da. Pasa.»
+boss.nun.l|«Erreza, haur. Etxeak ez du entzuten, baina apuntatzen du.»
+boss.cook.a|«Hemen gosea da. Jarri gehiago mahai gainean eta ez kexatu lurrunagatik.»
+boss.cook.w|«Platera garbi utzi duzu. Hartu zerbait nire anaiak saldu aurretik.»
+boss.cook.l|«Zorrik gabe ez dago etxerik. Eseri, hoztu egiten da.»
+boss.nurse.a|«Hartu arnasa sakon, laztana. Begiek ez dizute ezertarako balioko hemen, eta airea amaitzen da.»
+boss.nurse.w|«Sendatuta zaude. Zer arraroa; hemen inor ez dago. Joan iritzia aldatu aurretik.»
+boss.nurse.l|«Lasai, ziztada bat besterik ez da. Guztiek gauza bera diote eta guztiak ohera itzultzen dira.»
+know.k_nun_name.name|Krupierraren izena
+know.k_nun_name.text|Ahizpak badaki nola deitzen zen Krupierra eta ez du esango. Baina badakizu izena izan zuela. Jokaldiak errepikatzeagatiko haren zigorrak ez zaitu iristen jada.
+know.k_nurse_eye.name|Begi josia
+know.k_nurse_eye.text|Erizainak Neskaren begia josi zuen gehiegi ikusten zuelako. Badakizu zer ezkutatzen duten haren gezurrek, eta Begiek berriro balio dizute Erizainaren aurka.
+know.k_cook_jars.name|Potoak
+know.k_cook_jars.text|Sukaldariak oroitzapenak potoetan kontserbatzen ditu eta Saltzaileak saltzen ditu. Badakizu nondik datorren haren gosea: ez dizu gehiegi eskatzen jada.
+know.k_puppet_script.name|Gidoia
+know.k_puppet_script.text|Txotxongiloak Krupierraren gidoia errepikatzen du. Hemen esaten den guztia idatzita dago; zeinek idatzi duen jakitea falta da.
+know.k_pianist_hands.name|Piano-jolearen eskuak
+know.k_pianist_hands.text|Piano-joleak eskuekin ordaindu zuen etxeko lehen sorta. Artxibozainak irekitzen ez den tiradera batean gordetzen ditu.

@@ -3,6 +3,7 @@
 import { t } from '../i18n.js';
 import { h, act, modal, closeTopModal } from '../ui.js';
 import { openHelp } from './table.js';
+import * as G from '../game.js';
 
 const SECTIONS = 9;
 export function openHowTo() {
@@ -21,4 +22,4 @@ export function openHowTo() {
     h('button', { class: 'btn primary', type: 'button', onclick: () => closeTopModal() }, t('ui.close'))));
   return modal(body, { title: t('howto.title'), cls: 'howto-modal' });
 }
-act.howto = () => openHowTo();
+act.howto = () => { try { G.markHint('guide'); } catch (e) { /* sin partida */ } openHowTo(); };

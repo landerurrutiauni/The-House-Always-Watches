@@ -1,0 +1,82 @@
+mission.btn|MISIOAK {n}/{m}
+mission.title|Misioak · {wing}
+mission.progress|{n}/{m}
+mission.reward_label|Saria: {r}
+mission.done|Misioa beteta: {name} ({reward})
+mission.note|Misioak jaitsiera bakoitzean berrabiarazten dira. Betetzeak sari txikiak ematen ditu.
+mission.reward.money|+{n} Diru
+mission.reward.sanity|+{n} Zentzutasun
+mission.reward.health|+{n} Osasun
+mission.reward.card|karta berezi bat
+mission.reward.mod|karta-hobekuntza bat
+mission.reward.level|esku-maila bat
+mission.reward.joker|komodin bat
+mission.salon_win2|Irabazi 2 karta-txanda
+mission.salon_straight|Jokatu Eskala bat, Kolore-eskala bat edo Eskala erreala bat
+mission.salon_duel|Irabazi eskopeta-dueloa
+mission.pasillo_events|Ebatzi 3 gertaera
+mission.pasillo_clean|Irabazi txanda bat baztertu gabe
+mission.pasillo_buy|Erosi zerbait Saltzaileari
+mission.sotano_rest|Atseden hartu behin
+mission.sotano_big|Puntuatu 300 edo gehiago jokaldi bakarrarekin
+mission.sotano_win3|Irabazi 3 karta-txanda
+mission.capilla_events|Ebatzi 2 gertaera
+mission.capilla_flush|Jokatu Kolore bat, Kolore-eskala bat edo Eskala erreala bat
+mission.capilla_listen|Entzun ganbera bat duelo batean
+mission.cocinas_buy2|Erosi 2 gauza Saltzaileari
+mission.cocinas_full|Jokatu Full bat edo esku hobea (Pokerra, Kolore-eskala, Eskala erreala, Repokerra)
+mission.cocinas_win2|Irabazi 2 karta-txanda
+mission.enf_rest2|Atseden hartu 2 aldiz
+mission.enf_low|Irabazi txanda bat 40 baino Zentzutasun gutxiagorekin
+mission.enf_duel|Irabazi eskopeta-dueloa
+egg.unlocked|Sekretua aurkitua: {name}
+egg.ojos.name|Begirada itzultzen dizu
+egg.ojos.text|Zazpi aldiz Krupierraren begietara begiratu zenion. Berak, lehen aldiz, kliskatzen du.
+egg.ojos.hint|Menuan, Krupierraren begiek ez dizute begirada kentzen. Ukitu, behin eta berriz.
+egg.konami.name|Kode zaharra
+egg.konami.text|Beste garai bateko konbinazio zahar bat. Krupierrak ikusi ez duela egiten du.
+egg.konami.hint|Beste garai bateko tekla-kode bat, menuan idatzia.
+egg.paciencia.name|Pazientzia
+egg.paciencia.text|Minutu oso bat itxaron zenuen ezer ukitu gabe. Etxeak eskertzen du itxaroten dakienari; ia inoiz ez dio itzultzen.
+egg.paciencia.hint|Etxeak gau osoa du. Agian zuk ere bai.
+egg.poliglota.name|Etxeak hizkuntza guztiak hitz egiten ditu
+egg.poliglota.text|Gaztelania, ingelesa, frantsesa, alemana eta euskara: zorra berdin ulertzen da bostetan.
+egg.poliglota.hint|Bost hizkuntza, zor bakarra.
+egg.real.name|Eskala erreala
+egg.real.text|Hamarra, Jota, Erregina, Errege eta Asa palu berekoak. Krupierrak segundo batez nahasteari uzten dio… eta berriro nahasten du.
+egg.real.hint|Sorta osoko esku nobleena, 10etik Asera.
+egg.ases.name|Lau Asak
+egg.ases.text|Lau As esku batean. Inork ez du horrela banatzen kasualitatez.
+egg.ases.hint|As guztiak, jokaldi bakarrean.
+egg.limite.name|Ile-puntan
+egg.limite.text|Zure azken jokaldian irabazi zenuen, etxeak dagoeneko irribarre egiten zuela.
+egg.limite.hint|Inolako marjinarik gabe irabazi: azken jokaldian.
+egg.mesa3.name|Mahaia isiltzen da
+egg.mesa3.text|Hiru aldiz jarraian probokatu zenuen Mahaia eta hirurak isildu zen. Inork ez zion inoiz horrela hitz egin.
+egg.mesa3.hint|Duelo batean, probokatu Mahaia eta ez dezala erantzun… hiru aldiz jarraian.
+egg.cinco.name|Bost pailazo
+egg.cinco.text|Komodinen gorte oso batek marmar egiten du zure atzean. Jaia ordaindu beharko duzu.
+egg.cinco.hint|Esku batek bost hatz ditu; gorte batek, bost komodin.
+egg.arrepentido.name|Erosi eta damutu
+egg.arrepentido.text|Komodin bat erosi eta bisita berean saldu zenuen. Saltzaileak hasperen egiten du: «Beti itzultzen dira».
+egg.arrepentido.hint|Erosi eta saldu, dendatik irten gabe.
+egg.colapso.name|Zentzutasuna zero
+egg.colapso.text|Zure burua erabat apurtu zen. Etxeak irribarrez idazten du eta jarraitzeko beharrezkoa dena itzultzen dizu.
+egg.colapso.hint|Ez dena denbora gehiegiz begiratzea.
+egg.jackpot.name|Hiru zazpiko
+egg.jackpot.text|Hiru zazpi esku batean. Existitzen ez diren kanpaiak jotzen dira.
+egg.jackpot.hint|Hiru zenbaki zoriontsu, elkarrekin, esku batean.
+archive.eggs|Sekretuak
+archive.missions|Betetako misioak
+archive.hint|Pista
+archive.char_locked|Oraindik ez duzu pertsonaia hau topatu.
+rotate.text|Biratu gailua: jokoa horizontalean jokatzeko pentsatuta dago. Bertikalean jarraitu nahi baduzu, eszenatokia biratuko da.
+rotate.play|BERTIKALEAN JOKATU
+archive.tab.endings|Amaierak eta oroitzapenak
+archive.tab.chars|Pertsonaiak
+archive.tab.eggs|Sekretuak
+archive.tab.know|Ezagutza
+archive.tab.stats|Datuak
+archive.page|{n}/{m} orrialdea
+archive.prev|Aurrekoa
+archive.next|Hurrengoa
