@@ -272,20 +272,33 @@ export function discard(R, uids) {
   return true;
 }
 
-export function stash(R, uid) {
-  if (R.over || R.rule.includes('watched') || R.pocket.length >= R.mods.pocket) return false;
-  const k = R.hand.findIndex(c => c.uid === uid);
-  if (k < 0 || R.hidden.has(uid)) return false;
-  R.pocket.push(R.hand.splice(k, 1)[0]);
-  refill(R);
-  return true;
+// Bolsillo. Cabe `R.mods.pocket` (2) y las cartas guardadas se pueden jugar igual que las de la mano; guardar una roba otra en su lugar.
+// stashMany mete de una vez las cartas elegidas que estén en la mano y no estén ocultas por la Niebla, EN EL ORDEN en que se eligieron y
+// hasta donde quepa (el máximo posible), y repone la mano una sola vez. Devuelve los uid que se guardaron ([] si no se pudo nada).
+export function stashMany(R, uids) {
+  if (R.over || R.rule.includes('watched')) return [];
+  let free = R.mods.pocket - R.pocket.length; const moved = [];
+  for (const uid of uids) {
+    if (free <= 0) break;
+    if (moved.includes(uid) || R.hidden.has(uid)) continue;
+    const k = R.hand.findIndex(c => c.uid === uid); if (k < 0) continue;
+    R.pocket.push(R.hand.splice(k, 1)[0]); moved.push(uid); free--;
+  }
+  if (moved.length) refill(R);
+  return moved;
 }
-export function unstash(R, uid) {
-  const k = R.pocket.findIndex(c => c.uid === uid);
-  if (k < 0 || R.hand.length >= R.handSize + R.mods.pocket) return false;
-  R.hand.push(R.pocket.splice(k, 1)[0]);
-  return true;
+export const stash = (R, uid) => stashMany(R, [uid]).length === 1;
+// unstashMany devuelve a la mano las cartas pedidas (en orden) mientras quepan (la mano puede pasar de su tamaño hasta en `R.mods.pocket`).
+export function unstashMany(R, uids) {
+  const moved = [];
+  for (const uid of uids) {
+    if (R.hand.length >= R.handSize + R.mods.pocket) break;
+    const k = R.pocket.findIndex(c => c.uid === uid); if (k < 0 || moved.includes(uid)) continue;
+    R.hand.push(R.pocket.splice(k, 1)[0]); moved.push(uid);
+  }
+  return moved;
 }
+export const unstash = (R, uid) => unstashMany(R, [uid]).length === 1;
 
 // Herramienta "sal": anula la regla del oponente durante la ronda.
 export function useSalt(R) {

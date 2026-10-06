@@ -97,7 +97,7 @@ intro.6|Eseri. Hemen nola jokatzen den erakutsiko dizut.
 tut.r1|Ukitu kartak aukeratzeko (5era arte) eta sakatu JOKATU. Bikoteek gehiago puntuatzen dute: probatu bi 8ak.
 tut.r2|Palu bakoitzak bere efektua du. Begiek fitxak ematen dituzte eta sortako kartak agerian uzten dituzte. Hiru Begik BEGIRADA osatzen dute.
 tut.r3|Odolak biderkatzailea ematen du, baina Osasuna kostatzen du. Begiratu beti jokaldi batek zer kostatzen duen egin aurretik.
-tut.r4|Karta txarrak BAZTERTU ditzakezu edo bat POLTSIKOAN gorde. Apustuak jokaldia biderkatzen du… baina etxeak kobratzen du.
+tut.r4|Karta txarrak BAZTERTU ditzakezu edo bi arte POLTSIKOAN batera gorde. Apustuak jokaldia biderkatzen du… baina etxeak kobratzen du.
 tut.r5|Heldu helburura jokaldiak amaitu aurretik. Lortzen ez baduzu, ordaindu egiten duzu.
 tut.done|«Ondo. Etxeak badaki nola jokatzen duzun.»
 tut.retry|«Berriz. Hemen galtzeak ez du ezer kostatzen… oraindik.»

@@ -19,7 +19,7 @@
 //  'event'        {id, who, bg, phase:'choose', title, text, options:[{k:'a'|'b'|'h', key, hidden}]}      → game.eventChoose(k)
 //                 {…, phase:'result', textKey, outcomes:[{k,v|id|isNew|won}], redo:[{via,cost}]}         → game.eventRedo(via) | game.eventContinue()
 //  'round'        {R, opp:{id,rule[],nameKey}, kind:'game'|'boss'|'final', tutorial, hintKey, odds, target, row}
-//                    acciones: roundPreview(uids,stake) roundPlay(uids,stake) roundDiscard(uids) roundStash(uid) roundUnstash(uid) roundSalt()
+//                    acciones: roundPreview(uids,stake) roundPlay(uids,stake) roundDiscard(uids) roundStash(uid) roundUnstash(uid) roundStashMany(uids) roundUnstashMany(uids) roundSalt()
 //                    cuando R.over ≠ null → game.roundFinish()
 //  'round_result' {won, rewards, costs, lineKey}      → game.resultContinue()
 //  'reward'       {choices:[{type,id|hand|uid,mod}], boss}   → game.rewardPick(i) | game.rewardSkip()
@@ -321,7 +321,7 @@ export const bossRules = id => {
   return rules;
 };
 export const bossWeakened = id => BOSSES[id] ? BOSSES[id].rule.filter(r => !bossRules(id).includes(r)) : [];
-const oppNameKey = id => (String(id).startsWith('gambler') ? 'opp.' + id : 'char.' + id);
+const oppNameKey = id => (String(id).startsWith('gambler') ? 'opp.' + id : id === 'final' ? 'char.dealer' : 'char.' + id);   // el duelo final es contra el Crupier
 
 function startRoundCtx(ctx) {
   // ctx: { kind:'game'|'boss'|'final', node, opp:{id,rule[]}, row, tutorial }
@@ -374,6 +374,9 @@ export function roundPlay(uids, stake = 'none') {
 export function roundDiscard(uids) { const ok = G.R && C.discard(G.R, uids); if (ok) { G.tut.discards++; sfx('card_discard'); } else sfx('deny'); return !!ok; }
 export function roundStash(uid) { const ok = G.R && C.stash(G.R, uid); sfx(ok ? 'card_flip' : 'deny'); return !!ok; }
 export function roundUnstash(uid) { const ok = G.R && C.unstash(G.R, uid); sfx(ok ? 'card_flip' : 'deny'); return !!ok; }
+// Varias de golpe (hasta donde quepan). Devuelven los uid movidos; [] si no se movió ninguna.
+export function roundStashMany(uids) { const moved = G.R ? C.stashMany(G.R, uids) : []; sfx(moved.length ? 'card_flip' : 'deny'); return moved; }
+export function roundUnstashMany(uids) { const moved = G.R ? C.unstashMany(G.R, uids) : []; sfx(moved.length ? 'card_flip' : 'deny'); return moved; }
 export function roundSalt() {
   const R = G.R; if (!R || R.over || !hasTool('sal')) { sfx('deny'); return false; }
   if (!C.useSalt(R)) { sfx('deny'); return false; }

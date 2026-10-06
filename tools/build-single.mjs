@@ -22,8 +22,17 @@ fs.mkdirSync(path.join(dist, 'legal'), { recursive: true });
 const locales = Object.fromEntries(LANGS.map(l => [l, JSON.parse(read(`locales/${l}.json`))]));
 
 // ---- Juego ----
+// src/i18n.js importa de forma estática locales/en.js (el inglés es el idioma de reserva y siempre está). En el archivo único el inglés ya
+// viaja en window.__LOCALES__.en, así que se sustituye ese módulo por una referencia a él (si no, el inglés iría dos veces en el archivo).
+const stubEnglish = {
+  name: 'ingles-incrustado',
+  setup(b) {
+    b.onResolve({ filter: /(^|[\\/])locales[\\/]en\.js$/ }, a => ({ path: a.path, namespace: 'en-incrustado' }));
+    b.onLoad({ filter: /.*/, namespace: 'en-incrustado' }, () => ({ contents: 'export default (typeof window !== "undefined" && window.__LOCALES__ && window.__LOCALES__.en) || {};', loader: 'js' }));
+  }
+};
 const bundle = await build({
-  entryPoints: [path.join(root, 'src/main.js')], bundle: true, minify: true, format: 'iife', target: ['es2020'],
+  entryPoints: [path.join(root, 'src/main.js')], bundle: true, minify: true, format: 'iife', target: ['es2020'], plugins: [stubEnglish],
   write: false, legalComments: 'none', define: { 'import.meta.url': 'location.href' }, logLevel: 'warning'
 });
 const js = bundle.outputFiles[0].text;
@@ -53,7 +62,7 @@ for (const pg of ['privacy']) {
 // ---- Comprobaciones del resultado ----
 const out = fs.readFileSync(path.join(dist, GAME_FILE), 'utf8');
 must(!/(src|href)="(src|assets|locales)\//.test(out), 'quedan referencias a ficheros externos en el HTML generado');
-must(!/\bimport\s*\(/.test(js.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, '')) || true, '');
+must(!js.includes('"menu.new":' + JSON.stringify(locales.en['menu.new'])), 'el inglés está duplicado dentro del JS (el módulo locales/en.js no se ha sustituido)');
 const kb = f => (fs.statSync(f).size / 1024).toFixed(0) + ' KB';
 console.log('✓ dist/' + GAME_FILE + '  ' + kb(path.join(dist, GAME_FILE)) + '  (JS ' + (js.length / 1024).toFixed(0) + ' KB · CSS ' + (css.length / 1024).toFixed(0) + ' KB · traducciones ' + (json(locales).length / 1024).toFixed(0) + ' KB)');
 for (const pg of ['privacy']) console.log('✓ dist/legal/' + pg + '.html  ' + kb(path.join(dist, 'legal', pg + '.html')));

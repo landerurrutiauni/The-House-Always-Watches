@@ -6,12 +6,23 @@ import * as S from '../src/shotgun.js';
 import { gs, bus, replaceState } from '../src/state.js';
 import { mulberry32 } from '../src/rng.js';
 import { resetProgress } from '../src/save.js';
+import EN from '../locales/en.js';
 
 const N = +process.argv[2] || 30, SEED = +process.argv[3] || 1;
 const rnd = mulberry32(SEED); Math.random = rnd;
 const pickR = a => a[Math.floor(rnd() * a.length)];
 const seen = {}, errs = [], sfxSeen = new Set(), endings = {}; let views = 0, deaths = 0, stuck = 0;
 bus.on('sfx', e => sfxSeen.add(e.name));
+// Claves de texto que viajan en las vistas y en los eventos del bus (avisos, pancartas, narración…): todas deben existir en el idioma de reserva (inglés).
+// Así una clave inventada/mal escrita en cualquier rama del juego sale aquí, en miles de partidas simuladas, y no en pantalla.
+const NS = new Set(Object.keys(EN).map(k => k.split('.')[0])), KEYRE = /^[a-z][a-z0-9_]*(\.[A-Za-z0-9_]+)+$/, badKeys = new Map(); let keysChecked = 0;
+function scanKeys(o, where, depth = 0) {
+  if (o == null || depth > 7) return;
+  if (typeof o === 'string') { if (KEYRE.test(o) && NS.has(o.split('.')[0])) { keysChecked++; if (!(o in EN)) badKeys.set(o, where); } return; }
+  if (Array.isArray(o)) { for (let i = 0; i < o.length && i < 80; i++) scanKeys(o[i], where, depth + 1); return; }
+  if (typeof o === 'object') for (const k of Object.keys(o)) { if (k === 'R' || k === 'D' || k === 'hand' || k === 'deck') continue; scanKeys(o[k], where + '.' + k, depth + 1); }
+}
+{ const emit = bus.emit.bind(bus); bus.emit = (e, d) => { scanKeys(d, 'bus:' + e); return emit(e, d); }; }
 const noEvent = process.argv.includes('--quiet');
 const FORCE_WING = (process.argv.find(a => a.startsWith('--wing=')) || '').slice(7) || null;   // fuerza el ala (desbloqueándola); «all» las rota todas para recorrer también las nuevas
 const ALL_WINGS = ['salon', 'pasillo', 'sotano', 'capilla', 'cocinas', 'enfermeria', 'teatro', 'vigilancia']; let wingRot = 0;
@@ -77,7 +88,7 @@ for (let run = 0; run < N; run++) {
   let doneRun = false;
   while (!doneRun && guard++ < 6000) {
     try { v = step(v); } catch (e) { errs.push(e.stack.split('\n').slice(0, 4).join(' | ')); break; }
-    views++; seen[v.type] = (seen[v.type] || 0) + 1; steps++;
+    views++; seen[v.type] = (seen[v.type] || 0) + 1; steps++; scanKeys(v, 'vista:' + v.type);
     const key = v.type + JSON.stringify(v.hud || {}) + (v.phase || '');
     if (key === lastKey) { if (++same > 25) { stuck++; errs.push('ATASCADO en ' + v.type); break; } } else { same = 0; lastKey = key; }
     if (v.type === 'menu' && guard > 3) doneRun = true;
@@ -89,5 +100,7 @@ for (let run = 0; run < N; run++) {
 console.log('vistas visitadas:', views, JSON.stringify(seen));
 console.log('muertes:', deaths, 'finales:', JSON.stringify(endings), 'meta:', JSON.stringify({ endings: gs.meta.endings, mem: gs.meta.memories.length, know: gs.meta.knowledge.length }));
 console.log('sfx usados:', [...sfxSeen].sort().join(','));
+console.log('claves de texto comprobadas en vistas y eventos:', keysChecked);
+for (const [k, w] of badKeys) errs.push('CLAVE QUE NO EXISTE en inglés: ' + k + ' (en ' + w + ')');
 if (errs.length) { console.log('ERRORES (' + errs.length + '):'); [...new Set(errs)].slice(0, 8).forEach(e => console.log(' -', e)); process.exit(1); }
 console.log('OK sin errores');

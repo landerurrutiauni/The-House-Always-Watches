@@ -1,5 +1,6 @@
-// Verifica i18n: paridad de claves entre idiomas, textos vacíos, variables {x} iguales,
-// y cobertura de las claves que usa el código (literales t('x'), data-i18n y claves derivadas del contenido).
+// Verifica i18n: paridad de claves entre idiomas, textos vacíos, variables {x} iguales, valores que parecen nombres de clave,
+// que locales/<l>.js (el que carga el juego) sea idéntico a locales/<l>.json, y cobertura de las claves que usa el código
+// (literales t('x'), espacios de nombres, familias dinámicas completas, y que cada t('x', {…}) aporte las variables que pide el texto).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -17,6 +18,22 @@ const vars = s => (s.match(/\{\w+\}/g) || []).sort().join(',');
 for (const k of all) {
   for (const l of LANGS) { const v = L[l][k]; if (v === undefined) continue; if (!String(v).trim()) err(`vacío ${l}: ${k}`); if (/TODO:|FIXME|XXX|\?\?\?\?/.test(v) && !/^(menu\.secret|archive\.(title|unknown)|char\.unknown)$/.test(k)) warn(`marcador en ${l}: ${k}`); }
   const ref = vars(L.es[k] || ''); for (const l of LANGS) if (L[l][k] !== undefined && vars(L[l][k]) !== ref) err(`variables distintas en ${l}: ${k} (${vars(L[l][k])} ≠ ${ref})`);
+}
+
+// 1b) ningún texto puede ser el nombre de una clave (ni un {marcador} suelto): es justo lo que se vería como «menu.new» en pantalla
+const KEYLIKE = /^[a-z][a-z0-9_]*(\.[a-zA-Z0-9_]+)+$/;
+for (const l of LANGS) for (const [k, v] of Object.entries(L[l])) {
+  if (v === k || KEYLIKE.test(String(v).trim())) err(`el texto de ${l}:${k} parece el nombre de una clave: ${JSON.stringify(v)}`);
+  if (/^\{\w+\}$/.test(String(v).trim())) err(`el texto de ${l}:${k} es solo un marcador: ${v}`);
+  if ((String(v).match(/\{/g) || []).length !== (String(v).match(/\}/g) || []).length) err(`llaves descuadradas en ${l}:${k}`);
+}
+// 1c) lo que carga el juego (locales/<l>.js) debe ser idéntico a lo que se edita/valida (locales/<l>.json)
+for (const l of LANGS) {
+  const f = path.join(root, 'locales', l + '.js');
+  if (!fs.existsSync(f)) { err(`falta locales/${l}.js (npm run build lo genera)`); continue; }
+  const M = (await import(pathToFileURL(f).href + '?x=' + Date.now())).default;
+  const a = Object.keys(M), b = Object.keys(L[l]);
+  if (a.length !== b.length || a.some(k => M[k] !== L[l][k])) err(`locales/${l}.js no coincide con locales/${l}.json (ejecuta npm run build)`);
 }
 
 // 2) claves que exige el contenido
@@ -48,6 +65,25 @@ const MIS = await import('../src/missions.js'), ACHV = await import('../src/achi
 MIS.MISSION_IDS.forEach(id => need.add(`mission.${id}`));
 ACHV.EGGS.forEach(id => { need.add(`egg.${id}.name`); need.add(`egg.${id}.text`); need.add(`egg.${id}.hint`); });
 C.CHARACTERS.forEach(id => { need.add(`char.${id}`); need.add(`bio.${id}`); });
+// 2b) familias de claves que el código construye con un id (t('x.' + id + '.name')): cada miembro del dominio, con todos sus sufijos
+const JK = await import(pathToFileURL(path.join(root, 'src/jokers.js')));
+const fam = (prefix, ids, sufs = ['']) => ids.forEach(i => sufs.forEach(s => need.add(prefix + i + s)));
+fam('joker.', JK.JOKER_IDS, ['.name', '.desc']);
+fam('rarity.', [...new Set(Object.values(JK.JOKERS).map(j => j.rarity))]);
+fam('opp.', C.GAMBLERS);
+fam('shop.', ['heal', 'level', 'remove', 'loan'], ['.name', '.desc']);
+fam('rest.', ['heal', 'calm', 'pay', 'study'], ['.name', '.desc']); fam('rest.done.', ['heal', 'calm', 'pay', 'study']);
+fam('node.', ['game', 'event', 'merchant', 'rest', 'shotgun', 'secret', 'boss']); fam('map.info.', ['event', 'merchant', 'rest', 'secret']);
+fam('hud.', ['health', 'sanity', 'money', 'debt', 'lives', 'deck'], ['.tip']);
+fam('door.req.', C.ENDING_ORDER);
+fam('duel.stake.', ['money', 'sanity', 'debt', 'card'], ['.name', '.win', '.lose']); fam('duel.h.', ['title', 'p_foe', 'p_table', 'f_p', 'f_table', 'cham', 'skip']);
+fam('mission.reward.', ['money', 'sanity', 'health', 'card', 'mod', 'level', 'joker']);
+fam('whisper.', [1, 2, 3, 4, 5, 6, 7, 8]); fam('finale.stage', [1, 2]);
+const SRT = await import(pathToFileURL(path.join(root, 'src/sorting.js')));
+fam('rank.', [1, 11, 12, 13]); fam('deck.sort.', SRT.SORT_MODES);
+for (const id of MIS.MISSION_IDS) need.add(`mission.${id}`);
+// los reward de las misiones salen de los datos: cada tipo de recompensa usado debe tener su texto
+for (const w of Object.values(MIS.MISSIONS)) for (const m of w) for (const [k] of m.reward) need.add('mission.reward.' + k);
 for (const k of need) if (!(k in L.en)) err(`el contenido exige la clave: ${k}`);
 
 // 3) claves literales en el código y el HTML
@@ -64,6 +100,49 @@ for (const f of files) {
   for (const m of s.matchAll(/\bt\(\s*`([a-z0-9_.]+\.)\$\{/g)) dyn.add(m[1]);
 }
 for (const pre of dyn) if (![...all].some(k => k.startsWith(pre))) err(`prefijo dinámico sin claves: ${pre}*`);
-console.log(`${all.size} claves · ${files.length} ficheros revisados · ${dyn.size} prefijos dinámicos`);
+
+// 4) cada t('clave', { … }) con literal debe aportar TODAS las variables {x} que pide el texto; t('clave') a secas no puede pedir ninguna.
+//    (si no, la persona vería «{name}» en pantalla). Llamadas con variables ya construidas (t(k, v)) o con ...spread no se pueden comprobar.
+const NSET = new Set(Object.keys(L.en).map(k => k.split('.')[0]));
+function balanced(str, i, open, close) {          // devuelve el índice del cierre que equilibra str[i] === open
+  let d = 0, q = null;
+  for (let j = i; j < str.length; j++) {
+    const c = str[j];
+    if (q) { if (c === '\\') j++; else if (c === q) q = null; continue; }
+    if (c === '"' || c === "'" || c === '`') { q = c; continue; }
+    if (c === open) d++; else if (c === close) { d--; if (d === 0) return j; }
+  }
+  return -1;
+}
+function topKeys(body) {                          // nombres de propiedad de primer nivel de un literal de objeto «{ a: 1, b, c: f(x, y) }»
+  const keys = []; let d = 0, q = null, start = 0, spread = false;
+  const flush = end => { const seg = body.slice(start, end).trim(); if (!seg) return; if (seg.startsWith('...')) { spread = true; return; } const m = seg.match(/^(?:\[[^\]]*\]|['"]?([A-Za-z_$][\w$]*)['"]?)\s*(?::|$|\()/); if (m && m[1]) keys.push(m[1]); else spread = true; };
+  for (let j = 0; j < body.length; j++) {
+    const c = body[j];
+    if (q) { if (c === '\\') j++; else if (c === q) q = null; continue; }
+    if (c === '"' || c === "'" || c === '`') { q = c; continue; }
+    if ('([{'.includes(c)) d++; else if (')]}'.includes(c)) d--;
+    else if (c === ',' && d === 0) { flush(j); start = j + 1; }
+  }
+  flush(body.length);
+  return { keys, spread };
+}
+let callSites = 0;
+for (const f of files) {
+  const s = fs.readFileSync(f, 'utf8'), rel = path.relative(root, f);
+  if (rel.startsWith('legal')) continue;                       // la página de privacidad tiene su propio t() y sustituye {lang} con .replace()
+  for (const m of s.matchAll(/(?<![\w$.])t\(\s*(['"])([a-z0-9_]+(?:\.[a-zA-Z0-9_]+)+)\1\s*([,)])/g)) {
+    const key = m[2]; if (!(key in L.en)) { if (!NSET.has(key.split('.')[0])) err(`${rel}: t('${key}') usa un espacio de nombres que no existe`); continue; }
+    const need_ = [...new Set((L.en[key].match(/\{(\w+)\}/g) || []).map(x => x.slice(1, -1)))]; callSites++;
+    if (m[3] === ')') { if (need_.length) err(`${rel}: t('${key}') sin variables pero el texto pide {${need_.join('}, {')}}`); continue; }
+    const after = s.slice(m.index + m[0].length).trimStart();
+    if (!after.startsWith('{')) continue;                         // variables que vienen de otra parte
+    const open = s.indexOf('{', m.index + m[0].length), close = balanced(s, open, '{', '}'); if (close < 0) continue;
+    const { keys, spread } = topKeys(s.slice(open + 1, close)); if (spread) continue;
+    const missingV = need_.filter(v => !keys.includes(v));
+    if (missingV.length) err(`${rel}: t('${key}', {…}) no aporta {${missingV.join('}, {')}} (aporta: ${keys.join(', ') || 'nada'})`);
+  }
+}
+console.log(`${all.size} claves · ${files.length} ficheros revisados · ${dyn.size} prefijos dinámicos · ${need.size} claves exigidas por el contenido · ${callSites} llamadas t() con variables comprobadas`);
 console.log(errors ? `✗ ${errors} error(es), ${warns} aviso(s)` : `✓ i18n correcto (${warns} aviso(s))`);
 process.exit(errors ? 1 : 0);

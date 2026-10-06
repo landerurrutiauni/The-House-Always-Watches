@@ -41,5 +41,8 @@ fs.mkdirSync(out, { recursive: true });
 for (const l of ALL) {
   const sorted = Object.fromEntries(Object.keys(data[l]).sort().map(k => [k, data[l][k]]));
   fs.writeFileSync(path.join(out, l + '.json'), JSON.stringify(sorted, null, 1) + '\n');
+  // Mismo contenido como módulo ES: el juego lo carga con import() (inglés, de forma estática). Un import() comparte la vía de carga del
+  // propio código del juego, así que no depende de fetch() ni de CORS y se reintenta igual que cualquier módulo.
+  fs.writeFileSync(path.join(out, l + '.js'), '// Generado por tools/build-locales.mjs a partir de locales-src/. No editar a mano.\nexport default ' + JSON.stringify(sorted).replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029') + ';\n');
 }
 console.log(`✓ locales: ${Object.keys(owner).length} claves × ${ALL.length} idiomas (${lines} líneas; euskera: ${euN}/${Object.keys(owner).length})`);

@@ -114,6 +114,59 @@ T('bolsillo: guardar y sacar', () => {
   const u = R.hand[0].uid; assert.ok(C.stash(R, u)); assert.equal(R.pocket.length, 1); assert.equal(R.hand.length, 7);
   assert.ok(C.unstash(R, u)); assert.equal(R.pocket.length, 0);
 });
+const pocketRound = key => { replaceState({}); gs.deck = baseDeck(); gs.run = { seed: 6 }; return C.startRound({ key, target: 500 }); };
+const countAll = R => R.drawPile.length + R.hand.length + R.pocket.length + R.discard.length + R.used.length;
+T('bolsillo: varias cartas de una vez (el máximo), en el orden elegido, y la mano se repone UNA vez', () => {
+  const R = pocketRound('t4b'), before = countAll(R), a = R.hand[0].uid, b = R.hand[1].uid, size = R.handSize;
+  const moved = C.stashMany(R, [b, a]);
+  assert.deepEqual(moved, [b, a], 'entran las dos, en el orden en que se eligieron');
+  assert.deepEqual(R.pocket.map(c => c.uid), [b, a]);
+  assert.equal(R.pocket.length, R.mods.pocket, 'el bolsillo queda lleno');
+  assert.equal(R.hand.length, size, 'la mano se repone hasta su tamaño');
+  assert.equal(countAll(R), before, 'no se pierde ni se duplica ninguna carta');
+  assert.equal(new Set(R.hand.concat(R.pocket, R.drawPile).map(c => c.uid)).size, R.hand.length + R.pocket.length + R.drawPile.length, 'sin uids repetidos');
+});
+T('bolsillo: si eliges más de las que caben, entran las primeras y el resto se queda en la mano', () => {
+  const R = pocketRound('t4c'), [a, b, c] = R.hand.slice(0, 3).map(x => x.uid);
+  assert.deepEqual(C.stashMany(R, [c, a, b]), [c, a]);
+  assert.ok(R.hand.some(x => x.uid === b), 'la tercera sigue en la mano');
+  assert.equal(R.pocket.length, 2);
+});
+T('bolsillo: con un solo hueco entra una; lleno no entra ninguna; cartas repetidas en la petición solo cuentan una vez', () => {
+  const R = pocketRound('t4d'), [a, b, c] = R.hand.slice(0, 3).map(x => x.uid);
+  assert.deepEqual(C.stashMany(R, [a, a]), [a], 'la misma carta dos veces entra una sola vez');
+  assert.deepEqual(C.stashMany(R, [b, c]), [b], 'queda un hueco: solo entra la primera');
+  assert.deepEqual(C.stashMany(R, [c]), [], 'lleno: no entra nada');
+  assert.equal(C.stash(R, c), false);
+});
+T('bolsillo: no entran las cartas ocultas por la Niebla, ni las que ya están en el bolsillo, ni nada con la regla Vigilado', () => {
+  const R = pocketRound('t4e'), [a, b, c] = R.hand.slice(0, 3).map(x => x.uid);
+  R.hidden.add(a);
+  assert.deepEqual(C.stashMany(R, [a]), [], 'una carta oculta no se guarda');
+  assert.deepEqual(C.stashMany(R, [a, b]), [b], 'las ocultas se saltan y se guardan las demás');
+  assert.deepEqual(C.stashMany(R, [b]), [], 'una carta que ya está en el bolsillo no está en la mano');
+  assert.deepEqual(C.stashMany(R, [999999]), [], 'un uid que no existe no hace nada');
+  const W = pocketRound('t4f'); W.rule = ['watched'];
+  assert.deepEqual(C.stashMany(W, [W.hand[0].uid]), [], 'con Vigilado no hay bolsillo');
+  assert.equal(W.pocket.length, 0);
+});
+T('bolsillo: sacar varias de golpe respeta el límite de la mano (tamaño + hueco del bolsillo)', () => {
+  const R = pocketRound('t4g'), [a, b] = R.hand.slice(0, 2).map(x => x.uid);
+  C.stashMany(R, [a, b]);
+  assert.deepEqual(C.unstashMany(R, [a, b]), [a, b], 'caben las dos: la mano pasa de 7 a 9');
+  assert.equal(R.hand.length, R.handSize + 2); assert.equal(R.pocket.length, 0);
+  C.stashMany(R, [a, b]); R.hand.push(R.drawPile.pop());
+  assert.equal(R.hand.length, R.handSize + 1);
+  assert.deepEqual(C.unstashMany(R, [a, b]), [a], 'solo cabe una: la mano ya tiene una de más');
+  assert.equal(R.pocket.length, 1);
+  assert.equal(C.unstash(R, b), false, 'ya no caben más');
+});
+T('bolsillo: las cartas guardadas se pueden jugar y descartar desde el bolsillo', () => {
+  const R = pocketRound('t4h'), [a, b] = R.hand.slice(0, 2).map(x => x.uid);
+  C.stashMany(R, [a, b]);
+  assert.ok(C.discard(R, [a]), 'se descarta desde el bolsillo'); assert.equal(R.pocket.length, 1);
+  assert.ok(C.play(R, [b], 'none'), 'se juega desde el bolsillo'); assert.equal(R.pocket.length, 0);
+});
 T('estimateWin no muta jugador ni mazo', () => {
   replaceState({}); gs.deck = baseDeck(); gs.run = { seed: 7 };
   const R = C.startRound({ key: 't5', target: 120 });

@@ -1,6 +1,6 @@
 {
   "name": "the-house-always-watches",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "THE HOUSE ALWAYS WATCHES — roguelike de cartas + casino maldito + terror pixel art (vertical slice jugable en el navegador).",
   "type": "module",
@@ -17,7 +17,10 @@
     "test:features": "python3 tools/test-features.py",
     "test:single": "python3 tools/test-single.py",
     "balance": "node tools/sim-balance.mjs",
-    "test:logic-extras": "node tools/test-extras.mjs"
+    "test:logic-extras": "node tools/test-extras.mjs",
+    "test:i18n": "python3 tools/test-i18n.py --langs en,es,fr,de,eu",
+    "test:i18n-load": "python3 tools/test-i18n-load.py",
+    "test:round3": "python3 tools/test-ui-round3.py"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"

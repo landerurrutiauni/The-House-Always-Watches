@@ -24,3 +24,13 @@ settings.game|Partida
 settings.to_menu|Hasierara itzuli
 settings.to_menu_safe|Zure aurrerapena gordetzen da eta hasierako pantailara itzultzen zara. Handik partida berrartu ahal izango duzu.
 settings.to_menu_warn|Gela baten erdian zaude: abandonatutzat joko da. Amaitutako azken gelara arteko aurrerapena gordetzen da.
+i18n.load_error|Ezin izan da {lang} hizkuntza kargatu. Ingelesez erakusten da; berriro saiatuko da.
+duel.stake.card.win|Irabazten baduzu: karta berezi bat
+duel.stake.card.lose|Galtzen baduzu: zure sortako karta bat
+table.stash_tip|Gorde aukeratutako kartak Poltsikoan ({n} gehiagorentzat tokia) eta atera beste batzuk haien ordez.
+table.stash_pick|Aukeratu gorde nahi dituzun kartak: Poltsikoan {n} gehiagorentzat toki dago.
+table.stash_none|Karta horiek ezin dira gorde: dagoeneko Poltsikoan daude edo Lainoak ezkutatzen ditu.
+table.stash_full|Poltsikoa beteta dago. Atera karta bat besteak gordetzeko.
+table.stashed|Poltsikoan gordeta: {n}
+table.unstashed|Eskura itzulita: {n}
+table.unstash_tip|Itzuli eskura Poltsikoko aukeratutako kartak (bat ere aukeratu ez baduzu, sartzen diren guztiak).

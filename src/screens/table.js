@@ -103,6 +103,11 @@ function tableScreen(v) {
   main.append(h('div', { class: 'dock' }, hand, ctrl));
 
   const selCards = () => st.sel.map(find).filter(Boolean);
+  // Bolsillo: se guardan de una vez TODAS las cartas elegidas que estén en la mano y no estén ocultas, hasta donde quepa (en el orden en que se eligieron)
+  const inHand = u => R.hand.some(c => c.uid === u), inPocket = u => R.pocket.some(c => c.uid === u);
+  const pocketFree = () => Math.max(0, R.mods.pocket - R.pocket.length);
+  const stashable = () => st.sel.filter(u => inHand(u) && !R.hidden.has(u)).slice(0, pocketFree());
+  const unstashTargets = () => { const s = st.sel.filter(inPocket); return s.length ? s : R.pocket.map(c => c.uid); };   // sin elegir ninguna del Bolsillo: todas
   const markHand = type => side.querySelectorAll('.hrow').forEach(r => r.classList.toggle('cur', !!type && r.dataset.hand === type));
   function updatePreview() {
     const cards = selCards(); let curHand = null;
@@ -124,7 +129,10 @@ function tableScreen(v) {
     markHand(curHand);
     const n = st.sel.length;
     playB.disabled = st.busy || !n || R.playsLeft <= 0; discB.disabled = st.busy || !n || R.discardsLeft <= 0;
-    stashB.disabled = st.busy || n !== 1 || R.rule.includes('watched') || R.pocket.length >= R.mods.pocket || R.hidden.has(st.sel[0]);
+    const sk = stashable().length, watched = R.rule.includes('watched');
+    stashB.disabled = st.busy || watched || !sk;
+    stashB.textContent = t('table.stash') + (sk ? ' (' + sk + ')' : '');
+    stashB.title = watched ? t('rule.watched.desc') : !pocketFree() ? t('table.stash_full') : !n ? t('table.stash_pick', { n: pocketFree() }) : !sk ? t('table.stash_none') : t('table.stash_tip', { n: pocketFree() });
     playB.textContent = t('table.play') + (n ? ' (' + n + '/5)' : '');
     const label = t(`stake.${st.stake}.name`);
     stakeB.replaceChildren(h('span', null, label), h('small', null, st.stake === 'none' ? t('stake.none.desc') : t(`stake.${st.stake}.desc`)));
@@ -134,7 +142,7 @@ function tableScreen(v) {
   function drawHand() {
     hand.style.setProperty('--n', String(Math.max(5, R.hand.length)));
     hand.replaceChildren(...(settings.handSort ? sortCards(R.hand, settings.handSort, R.hidden) : R.hand).map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid), hidden: R.hidden.has(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }));
-    fill(pocket, h('span', null, ico('pocket'), ' ' + t('table.pocket') + ' ' + R.pocket.length + '/' + R.mods.pocket), ...R.pocket.map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }), R.pocket.length ? h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'tb_unstash' }, t('table.unstash')) : null);
+    fill(pocket, h('span', null, ico('pocket'), ' ' + t('table.pocket') + ' ' + R.pocket.length + '/' + R.mods.pocket), ...R.pocket.map(c => { const el = cardEl(c, { sel: st.sel.includes(c.uid) }); el.dataset.act = 'tb_card'; el.dataset.arg = c.uid; return el; }), R.pocket.length ? h('button', { type: 'button', class: 'btn small ghost', 'data-act': 'tb_unstash', title: t('table.unstash_tip') }, t('table.unstash') + ' (' + unstashTargets().length + ')') : null);
     peek.replaceChildren(); if (R.peekN > 0) { peek.append(h('span', null, ico('eye'), ' ' + t('table.peek'))); R.drawPile.slice(-R.peekN).reverse().forEach(c => peek.append(cardEl(c, { static: true, noname: true }))); }
     info.replaceChildren(st.info ? h('span', null, h('b', null, st.info.name), ' — ', st.info.desc) : h('span', { class: 'muted' }, t('table.tap_info')));
   }
@@ -148,8 +156,16 @@ function tableScreen(v) {
     audio.playSFX('card_flip', { vol: 0.6 }); refresh();
   };
   act.tb_stake = () => { let k = STAKE_ORDER.indexOf(st.stake); for (let n = 0; n < STAKE_ORDER.length; n++) { k = (k + 1) % STAKE_ORDER.length; if (C.stakeAllowed(R, STAKE_ORDER[k])) break; } st.stake = STAKE_ORDER[k]; audio.playSFX('bet', { vol: 0.5 }); updatePreview(); };
-  act.tb_stash = () => { if (st.busy || st.sel.length !== 1) return; if (G.roundStash(st.sel[0])) { st.sel = []; G.roundView(); } };
-  act.tb_unstash = () => { const uid = st.sel.find(u => R.pocket.some(c => c.uid === u)) || (R.pocket[0] && R.pocket[0].uid); if (uid && G.roundUnstash(uid)) { st.sel = st.sel.filter(u => u !== uid); G.roundView(); } };
+  act.tb_stash = () => {
+    if (st.busy) return;
+    const moved = G.roundStashMany(stashable()); if (!moved.length) return;
+    st.sel = st.sel.filter(u => !moved.includes(u)); announce(t('table.stashed', { n: moved.length })); G.roundView();
+  };
+  act.tb_unstash = () => {
+    if (st.busy || !R.pocket.length) return;
+    const moved = G.roundUnstashMany(unstashTargets()); if (!moved.length) return;
+    st.sel = st.sel.filter(u => !moved.includes(u)); announce(t('table.unstashed', { n: moved.length })); G.roundView();
+  };
   act.tb_salt = () => { if (st.busy) return; if (G.roundSalt()) G.roundView(); };
   act.tb_discard = () => { if (st.busy || !st.sel.length) return; const uids = st.sel.slice(); if (G.roundDiscard(uids)) { st.sel = []; if (R.over) G.roundFinish(); else G.roundView(); } };
   act.tb_play = async () => {

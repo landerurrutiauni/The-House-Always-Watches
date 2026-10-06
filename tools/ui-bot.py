@@ -11,9 +11,12 @@ ap.add_argument('--url', default='http://localhost:8080/index.html?test'); ap.ad
 ap.add_argument('--w', type=int, default=1280); ap.add_argument('--h', type=int, default=720); ap.add_argument('--seed', type=int, default=1)
 ap.add_argument('--shots', default=''); ap.add_argument('--lang', default=''); ap.add_argument('--mobile', action='store_true')
 ap.add_argument('--fuzz', action='store_true', help='clics aleatorios sobre cualquier botón visible'); ap.add_argument('--consent', default='reject')
-ap.add_argument('--fresh', action='store_true'); ap.add_argument('--wing', default='', help='abre las 6 alas y empieza en esta (capilla | cocinas | enfermeria | …)'); ap.add_argument('--jump', default='', help='finale | boss: salta a ese punto de la partida'); ap.add_argument('--budget', type=float, default=1e9, help='segundos máximos de juego'); ap.add_argument('--fast', action='store_true', help='sin animaciones (reduceEffects) y sin música: recorre partidas largas')
+ap.add_argument('--dump-used', default='', help='guarda en este fichero JSON las claves i18n pedidas (cobertura)'); ap.add_argument('--fresh', action='store_true'); ap.add_argument('--wing', default='', help='abre las 6 alas y empieza en esta (capilla | cocinas | enfermeria | …)'); ap.add_argument('--jump', default='', help='finale | boss: salta a ese punto de la partida'); ap.add_argument('--budget', type=float, default=1e9, help='segundos máximos de juego'); ap.add_argument('--fast', action='store_true', help='sin animaciones (reduceEffects) y sin música: recorre partidas largas')
 A = ap.parse_args(); rnd = random.Random(A.seed)
-KEY_RE = re.compile(r'\b(?:ui|menu|table|duel|map|node|rest|shop|reward|result|boss|finale|door|ending|death|archive|hud|settings|cookies|ads|help|wings|event|card|suit|hand|combo|rule|stake|item|tool|char|opp|mem|know|wing|tut|dlg|log|fx|whisper|debug|legal)\.[a-z0-9_]+(?:\.[a-z0-9_]+)*\b')
+def _key_re():   # detecta CUALQUIER clave i18n a la vista: todos los espacios de nombres de locales/en.json (no una lista fija)
+    here = os.path.dirname(os.path.abspath(__file__)); ns = sorted({k.split('.')[0] for k in json.load(open(os.path.join(here, '..', 'locales', 'en.json'), encoding='utf-8'))}, key=len, reverse=True)
+    return re.compile(r'(?<![\w.])(?:' + '|'.join(map(re.escape, ns)) + r')\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)*\b')
+KEY_RE = _key_re()
 
 def main():
     errors, seen = [], {}
@@ -24,6 +27,9 @@ def main():
         if A.lang: init['lang'] = A.lang
         if A.fast: init.update(reduceEffects=True, muteMusic=True, muteSfx=True, quality='low')
         if init: ctx.add_init_script("if(!localStorage.getItem('thaw.settings.v1')) localStorage.setItem('thaw.settings.v1', JSON.stringify(%s))" % json.dumps(init))
+        here = os.path.dirname(os.path.abspath(__file__))
+        ctx.add_init_script('window.__KEY_NS__ = ' + json.dumps(sorted({k.split('.')[0] for k in json.load(open(os.path.join(here, '..', 'locales', 'en.json'), encoding='utf-8'))})) + ';')
+        ctx.add_init_script(path=os.path.join(here, 'i18n-observer.js'))
         pg = ctx.new_page(); logs = []
         pg.on('console', lambda m: logs.append((m.type, m.text)) if m.type in ('error', 'warning') else None)
         pg.on('pageerror', lambda e: errors.append('PAGEERROR: ' + str(e)))
@@ -44,7 +50,7 @@ def main():
             txt = pg.evaluate("document.body.innerText")
             for m in KEY_RE.findall(txt):
                 if not re.match(r'^(v\d|\d)', m) and '.com' not in m: errors.append(f'CLAVE i18n visible en {v}: {m}')
-            dead = pg.evaluate("""() => [...document.querySelectorAll('#view button, #hud button')].filter(b => b.offsetParent && !b.disabled && !b.dataset.act && !b.onclick && !b.closest('.modal')).map(b => b.className + ':' + b.textContent.slice(0,20))""")
+            dead = pg.evaluate("""() => [...document.querySelectorAll('#view button, #hud button')].filter(b => b.offsetParent && !b.disabled && !b.dataset.act && !b.dataset.dir && !b.onclick && !b.closest('.modal')).map(b => b.className + ':' + b.textContent.slice(0,20))""")
             for d in dead: errors.append(f'BOTÓN sin acción en {v}: {d}')
         G = lambda code, arg=None: pg.evaluate("async (arg) => { const T = window.__HOUSE_TEST; const G = T.G, C = T.C, S = T.S, st = T.st; " + code + "}", arg)
         if A.wing:
@@ -60,6 +66,12 @@ def main():
             v = view()
             if step % 25 == 0: print(f'[{step}] vista={v} t={time.time()-t0:.0f}s errores={len(errors)}', flush=True)
             key = v + str(pg.evaluate('document.querySelector("#hud")?.innerText?.length||0'))
+            if rnd.random() < 0.6:   # pasa el ratón por lo que tenga descripción emergente (comodines, habilidades, recursos, mazo, escudo, herramientas…)
+                try:
+                    for e in rnd.sample(pg.query_selector_all('#view .joker, #view .ruletag, #hud .stat, #hud .hud-deck, #view .shieldchip, #hud .chip.tool, .modal .joker, #view .card'), k=min(5, len(pg.query_selector_all('#view .joker, #view .ruletag, #hud .stat, #hud .hud-deck, #view .shieldchip, #hud .chip.tool, .modal .joker, #view .card')))):
+                        if e.is_visible(): e.hover(timeout=600); pg.wait_for_timeout(30)
+                    pg.mouse.move(2, 2)
+                except Exception: pass
             shot('ui_' + v + ('_m' if A.mobile else '')); check_dom(v); seen[('ui_' + v + ('_m' if A.mobile else ''))] = 1; seen[v] = seen.get(v, 0) + 1
             if v == last: same += 1
             else: same = 0
@@ -157,6 +169,14 @@ def main():
             if not u.startswith(('data:', 'blob:')) and urlparse(u).netloc != base: errors.append('PETICIÓN FUERA DEL ORIGEN: ' + u[:120])
         for t, m in logs:
             if t == 'error' or 'Failed' in m: errors.append('CONSOLA ' + t + ': ' + m[:200])
+        try:
+            for k, vw in pg.evaluate("[...window.__leaks.entries()]"): errors.append('TEXTO SOSPECHOSO (%s): %s' % (vw, k))
+            print('textos observados:', pg.evaluate('window.__seenText'))
+            if A.dump_used:
+                json.dump(pg.evaluate("window.__HOUSE_TEST.usedKeys()"), open(A.dump_used, 'w')); json.dump(pg.evaluate('[...window.__strings]'), open(A.dump_used + '.strings', 'w'))
+            mk = pg.evaluate("window.__HOUSE_TEST ? window.__HOUSE_TEST.missingKeys() : []")
+            for k in mk: errors.append('CLAVE PEDIDA QUE NO EXISTE (t() devolvió el nombre del campo): ' + k)
+        except Exception: pass
         b.close()
     print('vistas vistas:', {k: v for k, v in seen.items() if not k.startswith('ui_')})
     uniq = list(dict.fromkeys(errors))

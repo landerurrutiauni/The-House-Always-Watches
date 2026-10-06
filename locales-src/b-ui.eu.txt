@@ -100,7 +100,7 @@ help.combos|Konbinazio bereziak
 help.stakes_title|Apustuak
 help.stakes|Apustuak jokaldia biderkatzen du, baina Osasuna, Zentzutasuna, Dirua edo Zorra kostatzen du. Arau batzuek debekatu egiten dituzte.
 help.tips_title|Aholkuak
-help.tips|Baztertu karta txarrak, gorde bat Poltsikoan jokaldi perfektuarako eta zaindu Zentzutasuna: jaisten bada, pantaila distortsionatzen da eta, 0ra iristen bada, erori egiten zara (+25 Zentzutasun, −20 Osasun).
+help.tips|Baztertu karta txarrak, gorde bi arte batera Poltsikoan jokaldi perfektuarako eta zaindu Zentzutasuna: jaisten bada, pantaila distortsionatzen da eta, 0ra iristen bada, erori egiten zara (+25 Zentzutasun, −20 Osasun).
 duel.title|ESKOPETA
 duel.final|AZKEN BALA
 duel.setup.sub|Zer jartzen duzu mahai gainean?
@@ -292,7 +292,7 @@ howto.s2.t|Gela bakoitza nodo bat da. Ukitu bat zer den ikusteko eta ukitu berri
 howto.s3.h|Zure baliabideak
 howto.s3.t|• Osasuna: 0ra iristen bada, hil egiten zara. Kandela gehigarri batek behin altxatzen zaitu, Osasunaren %40rekin.\n• Zentzutasuna: kartekin, apustuekin eta gertaerekin jaisten da. Gutxirekin, pantaila distortsionatzen da eta xuxurlak agertzen dira; 0ra iristen bada, erori egiten zara: 25 Zentzutasun berreskuratzen dituzu eta 20 Osasun galtzen dituzu.\n• Dirua: dendan erosteko eta zorra ordaintzeko balio du.\n• Zorra: mailegu eta apustuekin igotzen da, eta gela bakoitzaren ondoren %1,4ko interesa gehitzen zaio. Zor askorekin, Etxeak mahaien helburua %5 igotzen du 200tik gorako 100 bakoitzeko (%25era arte).\n• Ezkutua: kartek Osasunean duten kostua xurgatzen du.
 howto.s4.h|Karta-mahaiak
-howto.s4.t|Aukeratu zure eskuko 1etik 5era karta eta jokatu: eskuak (bikotea, hirukotea, eskala…) fitxak × biderkatzailea ematen du, eta karta eta konbinazio bakoitzak gehiago gehitzen du. Heldu helburura jokaldirik gabe gelditu aurretik; bestela, Osasunarekin, Zentzutasunarekin eta Zorrarekin ordaintzen duzu.\nBaztertu dezakezu, karta bat Poltsikoan gorde edo apustu egin (jokaldia biderkatzen du, baina kostatzen du). Arerio bakoitzak bere araua dakar, mahaian ikusgai. Begiratu beti kostua jokatu aurretik.
+howto.s4.t|Aukeratu zure eskuko 1etik 5era karta eta jokatu: eskuak (bikotea, hirukotea, eskala…) fitxak × biderkatzailea ematen du, eta karta eta konbinazio bakoitzak gehiago gehitzen du. Heldu helburura jokaldirik gabe gelditu aurretik; bestela, Osasunarekin, Zentzutasunarekin eta Zorrarekin ordaintzen duzu.\nBaztertu dezakezu, bi karta arte batera Poltsikoan gorde (handik jokatu daitezke eta eskua berriro betetzen da) edo apustu egin (jokaldia biderkatzen du, baina kostatzen du). Arerio bakoitzak bere araua dakar, mahaian ikusgai. Begiratu beti kostua jokatu aurretik.
 howto.s5.h|Gertaerak
 howto.s5.t|Bi aukerako erabakiak dira: BAZTERTU (← edo A) edo ONARTU (→ edo D); mugikorrean, irristatu. Batzuetan hirugarren aukera ezkutu bat agertzen da (H), dakizunaren edo daramazunaren arabera. Zure erabakiak aldatzen duena amaieran erakusten da, eta tresna batzuek berregiteko aukera ematen dute.
 howto.s6.h|Eskopeta-dueloa

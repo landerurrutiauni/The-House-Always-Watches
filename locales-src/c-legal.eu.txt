@@ -10,3 +10,4 @@ legal.privacy.s3.h|3. Ostatatzea
 legal.privacy.s3.t|Edozein web gunek bezala, jokoa argitaratzen den ostatatzeak (gaur egun GitHub Pages) bisiten datu teknikoak erregistra ditzake, hala nola IP helbidea, bere baldintzen arabera. Jokoak ez ditu datu horiek jasotzen.
 legal.privacy.s4.h|4. Edukiaren oharra
 legal.privacy.s4.t|THE HOUSE ALWAYS WATCHES beldurrezko fikziozko lan bat da: pertsonaiak, lekuak eta gertaerak imajinarioak dira.\nJokoko dirua, fitxak, apustuak eta zorrak fikziozkoak dira: ez dute balio errealik, ez dira diru errealagatik erosten edo trukatzen, eta jokoa ez da zorizko jokoen zerbitzu bat.\nKliskatze- eta astinaldi-efektuak ditu, eta distortsio bisuala Zentzutasuna jaisten denean. Murriztu ditzakezu EZARPENAK → Efektuak murriztu aukeran. Epilepsia fotosentikorra edo bestelako eragozpenak badituzu, kontsultatu profesional batekin jokatu aurretik.
+legal.load_error|Ezin izan da testua {lang} hizkuntzan kargatu. Ingelesez erakusten da.
