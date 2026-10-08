@@ -75,7 +75,10 @@ function setView(v) {
 export const getView = () => G.view;
 
 // ---------------- Menú / nueva partida / continuar ----------------
+let bootLoaded = false;
 export function menuState() {
+  // Al abrir el juego el estado aún está vacío: se lee la partida guardada UNA vez para que el menú (Archivo, Continuar…) refleje el progreso real.
+  if (!bootLoaded) { bootLoaded = true; if (!gs.run && gs.deaths === 0 && hasSave()) loadGame(); }
   return {
     hasSave: hasSave(), runInProgress: !!(gs.run), deaths: gs.deaths, endings: gs.meta.endings.slice(), run: gs.runNumber,
     secretButton: archiveUnlocked(), archive: archiveUnlocked(), introSeen: gs.meta.introSeen

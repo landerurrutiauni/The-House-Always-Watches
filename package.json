@@ -1,6 +1,6 @@
 {
   "name": "the-house-always-watches",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "description": "THE HOUSE ALWAYS WATCHES — roguelike de cartas + casino maldito + terror pixel art (vertical slice jugable en el navegador).",
   "type": "module",

@@ -2,7 +2,7 @@
 // Puedes sobreescribir cualquier valor definiendo window.HOUSE_CONFIG ANTES de cargar main.js
 // (por ejemplo en un <script> de index.html), sin tocar los módulos.
 const base = {
-  VERSION: '0.2.1',
+  VERSION: '0.2.2',
   GAME_TITLE: 'THE HOUSE ALWAYS WATCHES',
   SAVE_KEY: 'thaw.save.v1',
   SETTINGS_KEY: 'thaw.settings.v1',

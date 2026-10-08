@@ -175,6 +175,18 @@ with sync_playwright() as p:
     pg.evaluate("""async () => { const S = await import('/src/sprites.js'); document.body.innerHTML = ''; document.body.style.cssText = 'background:#2a2420;display:grid;grid-template-columns:repeat(9,auto);gap:6px;padding:8px;overflow:visible;height:auto'; for (const id of S.characterIds()) document.body.appendChild(S.characterEl(id, { scale: 3 })); }""")
     pg.wait_for_timeout(300); shot(pg, 'sprites_todos')
     ctx.close()
+
+    # ============ ARCHIVO: sigue abierto al salir y volver a entrar ============
+    ctx, pg = boot(b); pg.evaluate(PREP)
+    pg.evaluate("""async () => { const T = window.__HOUSE_TEST, G = T.G; G.beginRun('salon'); const FX = await import('/src/effects.js'); FX.registerDeath(); G.saveGame(); G.toMenu(); }""")
+    pg.reload(); pg.wait_for_selector('body[data-ready="1"]'); pg.wait_for_timeout(500)
+    st = pg.evaluate("() => ({ locked: !!document.querySelector('[data-act=\"menu_archive_locked\"]'), open: !!document.querySelector('[data-act=\"menu_archive\"]') })")
+    check('A1 tras morir una vez, cerrar y volver a abrir el juego, el botón ARCHIVO sigue abierto', st['open'] and not st['locked'], st)
+    ctx.close()
+    ctx, pg = boot(b)
+    st = pg.evaluate("() => ({ locked: !!document.querySelector('[data-act=\"menu_archive_locked\"]') })")
+    check('A2 con una partida nueva el Archivo sigue bloqueado', st['locked'], st)
+    ctx.close()
     b.close()
 
 bad = [n for n, ok in res if not ok]
